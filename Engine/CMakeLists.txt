@@ -10,6 +10,7 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/Component"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Logic"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Net"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel"
 )
 
 if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
@@ -23,6 +24,7 @@ set(iEngineComponent
 set(Interface
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iLogic.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iNet.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iTimeWheel.h"
 )
 
 set(Logic
@@ -45,6 +47,17 @@ elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
 
 endif()
 
+set(TimeWheel
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel/Header.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel/TimeBase.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel/TimeBase.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel/TimeBaseList.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel/TimeBaseList.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel/TimeGear.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel/TimeGear.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel/TimeWheel.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel/TimeWheel.cpp"
+)
 
 set(Engine
     "${CMAKE_CURRENT_SOURCE_DIR}/Engine.h"
@@ -57,6 +70,7 @@ source_group(Interface FILES ${Interface})
 source_group(\\Utils FILES ${Utils})
 source_group(\\Component\\Logic FILES ${Logic})
 source_group(\\Component\\Net FILES ${Net})
+source_group(\\Component\\TimeWheel FILES ${TimeWheel})
 source_group(\\ FILES ${Engine})
 
 add_executable(XEngine
@@ -65,6 +79,7 @@ add_executable(XEngine
     ${Interface}
     ${Logic}
     ${Net}
+    ${TimeWheel}
     ${Utils}
     ${Engine}
 )

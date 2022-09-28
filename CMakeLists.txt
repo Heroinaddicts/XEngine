@@ -14,10 +14,10 @@ if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
 elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
     message(STATUS "os : linux")
     option(USE_32BITS "Compile for 32bits processors(linux only)" OFF)
-    set(CMAKE_CXX_FLAGS "-g -fuse-ld=gold -std=c++11 -Wall -lpthread -rdynamic -ldl -Dlinux")
-    set(CMAKE_CXX_FLAGS_DEBUG "-g -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -Dlinux")
-    set(CMAKE_CXX_FLAGS_RELWITHDEBUGINFO "-g -o2 -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -Dlinux")
-    set(CMAKE_CXX_FLAGS_RELEASE "-g -o3 -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -Dlinux")
+    set(CMAKE_CXX_FLAGS "-g -fuse-ld=gold -std=c++11 -Wall -lpthread -rdynamic -ldl -DLinux")
+    set(CMAKE_CXX_FLAGS_DEBUG "-g -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -DLinux")
+    set(CMAKE_CXX_FLAGS_RELWITHDEBUGINFO "-g -o2 -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -DLinux")
+    set(CMAKE_CXX_FLAGS_RELEASE "-g -o3 -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -DLinux")
     set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/linux/")
     set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/linux/")
 
@@ -36,6 +36,7 @@ include_directories(
 set(Api
     "${PROJECT_SOURCE_DIR}/Api/iComponent.h"
     "${PROJECT_SOURCE_DIR}/Api/iNetApi.h"
+    "${PROJECT_SOURCE_DIR}/Api/iTimerApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iEngine.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.cpp"
@@ -50,6 +51,8 @@ set(Utils
     "${PROJECT_SOURCE_DIR}/Utils/SafeFile.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/SafeTime.h"
     "${PROJECT_SOURCE_DIR}/Utils/SafeTime.cpp"
+    "${PROJECT_SOURCE_DIR}/Utils/SafeThread.h"
+    "${PROJECT_SOURCE_DIR}/Utils/SafeThread.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/SafeSystem.h"
     "${PROJECT_SOURCE_DIR}/Utils/SafeSystem.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/XBuffer.h"
