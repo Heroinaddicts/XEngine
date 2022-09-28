@@ -8,6 +8,8 @@ namespace XEngine {
     public:
         virtual ~Logic() {}
 
+        static iLogic* GetInstance();
+
         // Í¨¹ý iLogic ¼Ì³Ð
         virtual bool Initialize(Api::iEngine* const engine) override;
         virtual bool Launch(Api::iEngine* const engine) override;
@@ -15,6 +17,9 @@ namespace XEngine {
         virtual void EarlyUpdate(Api::iEngine* const engine) override;
         virtual void Update(Api::iEngine* const engine) override;
         virtual void LaterUpdate(Api::iEngine* const engine) override;
+
+    private:
+        Logic() {}
 
     private:
         std::string _ComponentPath;

@@ -5,11 +5,15 @@
 
 namespace XEngine {
     namespace Api {
+        class iNetApi;
+
         class iEngine {
         public:
             virtual ~iEngine() {}
 
             virtual const char* GetLaunchParameter(const std::string& name) = 0;
+
+            virtual iNetApi* GetNetApi() = 0;
 
             virtual void LogAsync(const std::string& log) = 0;
             virtual void LogSync(const std::string& log) = 0;

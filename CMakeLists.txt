@@ -35,6 +35,7 @@ include_directories(
 
 set(Api
     "${PROJECT_SOURCE_DIR}/Api/iComponent.h"
+    "${PROJECT_SOURCE_DIR}/Api/iNetApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iEngine.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.cpp"
@@ -49,6 +50,10 @@ set(Utils
     "${PROJECT_SOURCE_DIR}/Utils/SafeFile.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/SafeTime.h"
     "${PROJECT_SOURCE_DIR}/Utils/SafeTime.cpp"
+    "${PROJECT_SOURCE_DIR}/Utils/SafeSystem.h"
+    "${PROJECT_SOURCE_DIR}/Utils/SafeSystem.cpp"
+    "${PROJECT_SOURCE_DIR}/Utils/XBuffer.h"
+    "${PROJECT_SOURCE_DIR}/Utils/XPool.h"
 )
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/Engine)

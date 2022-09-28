@@ -11,8 +11,12 @@ namespace XEngine {
 
         virtual ~Engine() {}
         virtual const char* GetLaunchParameter(const std::string& name);
+
+        virtual Api::iNetApi* GetNetApi();
+
         virtual void LogAsync(const std::string& log);
         virtual void LogSync(const std::string& log);
+
         virtual void Shutdown();
 
     public:

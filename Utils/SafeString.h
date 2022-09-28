@@ -37,6 +37,18 @@ namespace SafeString {
 
         return res.size();
     }
+
+    inline int64 StringToInt64(const std::string& str) {
+        return atoll(str.c_str());
+    }
+
+    inline int StringToInt(const std::string& str) {
+        return atol(str.c_str());
+    }
+
+    inline float StringToFloat(const std::string& str) {
+        return atof(str.c_str());
+    }
 }
 
 #endif //__SafeString_h__

@@ -1,6 +1,7 @@
 #include "Logic.h"
 #include "SafeFile.h"
 #include "SafeString.h"
+#include "SafeTime.h"
 #include "MultiSys.h"
 #include <vector>
 
@@ -13,6 +14,11 @@
 namespace XEngine {
     typedef Api::iComponent* (*__GetComponents)(void);
 
+
+    iLogic* Logic::GetInstance() {
+        static Logic static_logic;
+        return &static_logic;
+    }
 
     bool Logic::Initialize(Api::iEngine* const engine) {
         const char* component_path = engine->GetLaunchParameter("component_path");
@@ -74,8 +80,10 @@ namespace XEngine {
 
     }
 
+    int64 tick = SafeTime::GetMilliSecond();
     void Logic::Update(Api::iEngine* const engine) {
-
+        XLOG(engine, "%lld", SafeTime::GetMilliSecond() - tick);
+        tick = SafeTime::GetMilliSecond();
     }
 
     void Logic::LaterUpdate(Api::iEngine* const engine) {
