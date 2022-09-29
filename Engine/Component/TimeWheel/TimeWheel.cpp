@@ -20,7 +20,7 @@ namespace XEngine {
         }
     };
 
-    typedef std::unordered_map<TimerContext, TimeBase*, T_Hash<TimerContext>> TIMEBASE_MAP;
+    typedef std::unordered_map<TimerContext, TimeBase*, SafeTools::T_Hash<TimerContext>> TIMEBASE_MAP;
     typedef std::unordered_map<Api::iTimer*, TIMEBASE_MAP> TIME_MAP;
     static TIME_MAP static_timer_map;
 

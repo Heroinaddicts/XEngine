@@ -8,8 +8,7 @@
 #include <string>
 
 namespace XEngine {
-#define MIN_INTERVAL 4
-#define JIFF 4
+#define JIFF 2
 
     enum {
         tq_tvn_bits = 6,

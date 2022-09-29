@@ -2,6 +2,8 @@
 #include "MultiSys.h"
 #include "Logic/Logic.h"
 #include "TimeWheel/TimeWheel.h"
+#include "Navigation/Navigation.h"
+
 #include "SafeString.h"
 #include "SafeSystem.h"
 #include <map>
@@ -16,6 +18,7 @@ static std::map<std::string, std::string> static_parameter_map;
 XEngine::iLogic* g_logic = nullptr;
 XEngine::iNet* g_net = nullptr;
 XEngine::iTimeWheel* g_timewheel = nullptr;
+XEngine::iNavigation* g_navigation = nullptr;
 
 namespace XEngine {
     Engine* Engine::GetInstance() {
@@ -37,6 +40,10 @@ namespace XEngine {
 
     Api::iTimerApi* Engine::GetTimerApi() {
         return g_timewheel;
+    }
+
+    Api::iNavigationApi* Engine::GetNavigationApi() {
+        return g_navigation;
     }
 
     void Engine::LogAsync(const std::string& log) {
@@ -94,38 +101,49 @@ int main(int argc, const char** args, const char** env) {
     int fixedTimeStep = 33333;
     const char* fixedTimeStepStr = engine->GetLaunchParameter("fixedTimeStep");
     if (fixedTimeStepStr) {
-        fixedTimeStep = SafeString::StringToFloat(fixedTimeStepStr) * 1000;
+        fixedTimeStep = XEngine::SafeString::StringToFloat(fixedTimeStepStr) * 1000;
     }
 
     {
         g_logic = XEngine::Logic::GetInstance();
         g_net = XEngine::Net::GetInstance();
         g_timewheel = XEngine::TimeWheel::GetInstance();
+        g_navigation = XEngine::Navigation::GetInstance();
     }
 
 
     { // Initialize
+        g_navigation->Initialize(engine);
+        g_timewheel->Initialize(engine);
         g_net->Initialize(engine);
         g_logic->Initialize(engine);
     }
 
     { // Launche
+        g_navigation->Launch(engine);
+        g_timewheel->Launch(engine);
         g_net->Launch(engine);
         g_logic->Launch(engine);
     }
 
-    unsigned_int64 tick = SafeSystem::GetMicroSecond();
+    unsigned_int64 tick = XEngine::SafeSystem::GetMicroSecond();
     while (!engine->isShutdown()) {
+        g_navigation->EarlyUpdate(engine);
+        g_timewheel->EarlyUpdate(engine);
         g_net->EarlyUpdate(engine);
         g_logic->EarlyUpdate(engine);
 
+        g_navigation->Update(engine);
+        g_timewheel->Update(engine);
         g_net->Update(engine);
         g_logic->Update(engine);
 
+        g_navigation->LaterUpdate(engine);
+        g_timewheel->LaterUpdate(engine);
         g_net->LaterUpdate(engine);
         g_logic->LaterUpdate(engine);
 
-        unsigned_int64 tick2 = SafeSystem::GetMicroSecond();
+        unsigned_int64 tick2 = XEngine::SafeSystem::GetMicroSecond();
         if (tick2 - tick >= fixedTimeStep) {
             tick += fixedTimeStep;
         }

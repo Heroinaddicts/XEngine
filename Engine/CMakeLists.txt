@@ -11,6 +11,12 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Logic"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Net"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Contrib"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourTileCache"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast"
 )
 
 if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
@@ -25,6 +31,7 @@ set(Interface
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iLogic.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iNet.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iTimeWheel.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iNavigation.h"
 )
 
 set(Logic
@@ -59,6 +66,66 @@ set(TimeWheel
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/TimeWheel/TimeWheel.cpp"
 )
 
+set(Recast
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Contrib/stb_truetype.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Contrib/fastlz/fastlz.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Contrib/fastlz/fastlz.c"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourAlloc.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourAlloc.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourAssert.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourAssert.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourCommon.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourCommon.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourMath.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourNavMesh.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourNavMesh.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourNavMeshBuilder.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourNavMeshBuilder.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourNavMeshQuery.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourNavMeshQuery.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourNode.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourNode.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Detour/DetourStatus.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourCrowd.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourCrowd.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourLocalBoundary.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourLocalBoundary.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourObstacleAvoidance.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourObstacleAvoidance.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourPathCorridor.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourPathCorridor.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourPathQueue.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourPathQueue.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourProximityGrid.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd/DetourProximityGrid.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourTileCache/DetourTileCache.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourTileCache/DetourTileCache.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourTileCache/DetourTileCacheBuilder.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourTileCache/DetourTileCacheBuilder.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/Recast.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/Recast.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastAlloc.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastAlloc.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastArea.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastAssert.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastAssert.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastContour.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastFilter.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastLayers.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastMesh.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastMeshDetail.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastRasterization.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast/RecastRegion.cpp"
+)
+
+set(Navigation
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Header.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Navmesh.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Navmesh.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Navigation.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Navigation.h"
+)
+
 set(Engine
     "${CMAKE_CURRENT_SOURCE_DIR}/Engine.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Engine.cpp"
@@ -67,10 +134,13 @@ set(Engine
 source_group(Api FILES ${Api})
 source_group(Interface FILES ${iEngineComponent})
 source_group(Interface FILES ${Interface})
-source_group(\\Utils FILES ${Utils})
-source_group(\\Component\\Logic FILES ${Logic})
-source_group(\\Component\\Net FILES ${Net})
-source_group(\\Component\\TimeWheel FILES ${TimeWheel})
+source_group(Utils\\Geometry FILES ${Geometry})
+source_group(Utils FILES ${Utils})
+source_group(Component\\Logic FILES ${Logic})
+source_group(Component\\Net FILES ${Net})
+source_group(Component\\TimeWheel FILES ${TimeWheel})
+source_group(Component\\Navigation\\Recast FILES ${Recast})
+source_group(Component\\Navigation FILES ${Navigation})
 source_group(\\ FILES ${Engine})
 
 add_executable(XEngine
@@ -80,6 +150,9 @@ add_executable(XEngine
     ${Logic}
     ${Net}
     ${TimeWheel}
+    ${Recast}
+    ${Navigation}
+    ${Geometry}
     ${Utils}
     ${Engine}
 )

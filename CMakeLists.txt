@@ -31,15 +31,21 @@ endif()
 include_directories(
     "${PROJECT_SOURCE_DIR}/Api"
     "${PROJECT_SOURCE_DIR}/Utils"
+    "${PROJECT_SOURCE_DIR}/Utils/Geometry"
 )
 
 set(Api
     "${PROJECT_SOURCE_DIR}/Api/iComponent.h"
     "${PROJECT_SOURCE_DIR}/Api/iNetApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iTimerApi.h"
+    "${PROJECT_SOURCE_DIR}/Api/iNavigationApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iEngine.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.cpp"
+)
+
+set(Geometry
+    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Vector3.h"
 )
 
 set(Utils
@@ -55,6 +61,7 @@ set(Utils
     "${PROJECT_SOURCE_DIR}/Utils/SafeSystem.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/SafeTools.h"
     "${PROJECT_SOURCE_DIR}/Utils/SafeTools.cpp"
+    "${PROJECT_SOURCE_DIR}/Utils/SafeQueue.h"
     "${PROJECT_SOURCE_DIR}/Utils/XBuffer.h"
     "${PROJECT_SOURCE_DIR}/Utils/XPool.h"
 )

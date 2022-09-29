@@ -3,8 +3,10 @@
 
 #include <string>
 
-namespace SafeFile {
-    const char* GetApplicationPath();
+namespace XEngine {
+    namespace SafeFile {
+        const char* GetApplicationPath();
+    }
 }
 
 #endif //__SafeFile_h__

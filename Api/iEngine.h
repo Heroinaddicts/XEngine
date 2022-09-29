@@ -7,6 +7,7 @@ namespace XEngine {
     namespace Api {
         class iNetApi;
         class iTimerApi;
+        class iNavigationApi;
 
         class iEngine {
         public:
@@ -16,6 +17,7 @@ namespace XEngine {
 
             virtual iNetApi* GetNetApi() = 0;
             virtual iTimerApi* GetTimerApi() = 0;
+            virtual iNavigationApi* GetNavigationApi() = 0;
 
             virtual void LogAsync(const std::string& log) = 0;
             virtual void LogSync(const std::string& log) = 0;

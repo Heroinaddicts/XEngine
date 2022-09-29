@@ -4,15 +4,17 @@
 #include <windows.h>
 #endif //WIN32
 
-namespace SafeSystem {
-    void MillisecondSleep(const int millisecond) {
+namespace XEngine {
+    namespace SafeSystem {
+        void MillisecondSleep(const int millisecond) {
 #ifdef WIN32
-        Sleep(millisecond);
+            Sleep(millisecond);
 #endif //WIN32
 
 #ifdef Linux
-        sleep(millisecond);
+            sleep(millisecond);
 #endif //Linux
+        }
     }
 }
 

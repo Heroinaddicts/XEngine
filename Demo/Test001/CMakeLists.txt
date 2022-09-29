@@ -15,11 +15,13 @@ set(Test001
 )
 
 source_group(Api FILES ${Api})
+source_group(Utils\\Geometry FILES ${Geometry})
 source_group(Utils FILES ${Utils})
 source_group(\\ FILES ${Test001})
 
 add_library(Test001 SHARED
     ${Api}
+    ${Geometry}
     ${Utils}
     ${Test001}
 )

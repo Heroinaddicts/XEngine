@@ -167,7 +167,10 @@ namespace XEngine {
     }
 
     bool Tcper::AsyncSend() {
-        XASSERT(_sending == false, "tcper AsyncSend state error");
+        if (_sending) {
+            return true;
+        }
+
         if (_send_buff.Length() == 0) {
             return _recving;
         }
