@@ -1,88 +1,86 @@
-#include "tgear.h"
-#include "tlist.h"
-#include "timermgr.h"
-#include "tbase.h"
+#include "TimeGear.h"
+#include "TimeBaseList.h"
+#include "TimeWheel.h"
 
-namespace tcore {
-    tgear::tgear(int maxMoveDst, tgear* nextGear)
-        : _timerVec(nullptr)
-        , _nextGear(nextGear)
-        , _curMoveDst(0)
-        , _maxMoveDst(maxMoveDst) {
+namespace XEngine {
+    TimeGear::TimeGear(int maxMoveDst, TimeGear* nextGear)
+        : _timer_vec(nullptr),
+        _next(nextGear),
+        _cur_move_dst(0),
+        _max_move_dst(maxMoveDst) {
 
-        _timerVec = tnew tlist[_maxMoveDst];
+        _timer_vec = x_new TimeBaseList[_max_move_dst];
     }
 
-    tgear::~tgear() {
-        if (_timerVec) {
-            tdel[] _timerVec;
-            _timerVec = nullptr;
+    TimeGear::~TimeGear() {
+        if (_timer_vec) {
+            x_del[] _timer_vec;
+            _timer_vec = nullptr;
         }
     }
 
-    tlist * tgear::getTimerList(int index) {
-        tassert(index < _maxMoveDst, "index out of range");
-
-        return _timerVec + index;
+    TimeBaseList* TimeGear::GetTimerList(int index) {
+        XASSERT(index < _max_move_dst, "index out of range");
+        return _timer_vec + index;
     }
 
-    void tgear::checkHighGear() {
-        if (_curMoveDst >= _maxMoveDst)
-            _curMoveDst = 0;
+    void TimeGear::CheckHighGear() {
+        if (_cur_move_dst >= _max_move_dst)
+            _cur_move_dst = 0;
 
-        if (_curMoveDst == 0) {
-            if (_nextGear){
-                _nextGear->updateToLowGear();
+        if (_cur_move_dst == 0) {
+            if (_next) {
+                _next->UpdateToLowGear();
             }
         }
     }
 
-    void tgear::update() {
-        if (_curMoveDst >= _maxMoveDst)
-            _curMoveDst = 0;
+    void TimeGear::Update() {
+        if (_cur_move_dst >= _max_move_dst)
+            _cur_move_dst = 0;
 
-        tlist* currentList = &_timerVec[_curMoveDst];
+        TimeBaseList* currentList = &_timer_vec[_cur_move_dst];
         if (!currentList) {
-            _curMoveDst++;
+            _cur_move_dst++;
             return;
         }
 
-        while (!currentList->empty()) {
-            tbase * base = currentList->popFront();
+        while (!currentList->Empty()) {
+            TimeBase* base = currentList->PopFront();
             if (!base)
                 continue;
 
-            timermgr::getInstance()->moveToRunning(base);
+            dynamic_cast<TimeWheel*>(TimeWheel::GetInstance())->MoveToRunning(base);
         }
 
-        ++_curMoveDst;
-        if (_curMoveDst == _maxMoveDst)
-            _curMoveDst = 0;
+        ++_cur_move_dst;
+        if (_cur_move_dst == _max_move_dst)
+            _cur_move_dst = 0;
     }
 
-    void tgear::updateToLowGear() {
-        if (_curMoveDst >= _maxMoveDst)
-            _curMoveDst = 0;
+    void TimeGear::UpdateToLowGear() {
+        if (_cur_move_dst >= _max_move_dst)
+            _cur_move_dst = 0;
 
-        if (_curMoveDst == 0) {
-            if (_nextGear)
-                _nextGear->updateToLowGear();
+        if (_cur_move_dst == 0) {
+            if (_next)
+                _next->UpdateToLowGear();
         }
 
-        tlist* currentList = &_timerVec[_curMoveDst];
+        TimeBaseList* currentList = &_timer_vec[_cur_move_dst];
         if (!currentList) {
-            ++_curMoveDst;
+            ++_cur_move_dst;
             return;
         }
 
-        while (!currentList->empty()) {
-            tbase * base = currentList->popFront();
+        while (!currentList->Empty()) {
+            TimeBase* base = currentList->PopFront();
             if (!base)
                 continue;
 
-            timermgr::getInstance()->schedule(base);
+            dynamic_cast<TimeWheel*>(TimeWheel::GetInstance())->Schedule(base);
         }
 
-        ++_curMoveDst;
+        ++_cur_move_dst;
     }
 }

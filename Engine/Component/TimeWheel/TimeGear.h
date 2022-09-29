@@ -1,29 +1,26 @@
-#ifndef __tgear_h__
-#define __tgear_h__
+#ifndef __TimeGear_h__
+#define __TimeGear_h__
 
-#include "multisys.h"
+#include "Header.h"
 
-namespace tcore {
-    class tlist;
-    class tgear {
+namespace XEngine {
+    class TimeBaseList;
+    class TimeGear {
     public:
-        tgear(int maxMoveDst, tgear* nextGear);
-        ~tgear();
+        TimeGear(int maxMoveDst, TimeGear* nextGear);
+        ~TimeGear();
 
-        tlist * getTimerList(int index);
-        void checkHighGear();
-        void update();
-        void updateToLowGear();
+        TimeBaseList* GetTimerList(int index);
+        void CheckHighGear();
+        void Update();
+        void UpdateToLowGear();
 
     private:
-        tgear(tgear&);
-        tgear& operator =(tgear&);
-
-        tlist * _timerVec;//
-        tgear * _nextGear;//
-        int _curMoveDst;//
-        int _maxMoveDst;//
+        TimeBaseList* _timer_vec;//
+        TimeGear* _next;//
+        int _cur_move_dst;//
+        int _max_move_dst;//
     };
 }
 
-#endif //__tgear_h__
+#endif //__TimeGear_h__

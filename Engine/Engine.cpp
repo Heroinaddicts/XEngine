@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include "MultiSys.h"
 #include "Logic/Logic.h"
-#include "SafeTime.h"
+#include "TimeWheel/TimeWheel.h"
 #include "SafeString.h"
 #include "SafeSystem.h"
 #include <map>
@@ -15,6 +15,7 @@ static std::map<std::string, std::string> static_parameter_map;
 
 XEngine::iLogic* g_logic = nullptr;
 XEngine::iNet* g_net = nullptr;
+XEngine::iTimeWheel* g_timewheel = nullptr;
 
 namespace XEngine {
     Engine* Engine::GetInstance() {
@@ -32,6 +33,10 @@ namespace XEngine {
 
     Api::iNetApi* Engine::GetNetApi() {
         return g_net;
+    }
+
+    Api::iTimerApi* Engine::GetTimerApi() {
+        return g_timewheel;
     }
 
     void Engine::LogAsync(const std::string& log) {
@@ -95,6 +100,7 @@ int main(int argc, const char** args, const char** env) {
     {
         g_logic = XEngine::Logic::GetInstance();
         g_net = XEngine::Net::GetInstance();
+        g_timewheel = XEngine::TimeWheel::GetInstance();
     }
 
 
@@ -108,7 +114,7 @@ int main(int argc, const char** args, const char** env) {
         g_logic->Launch(engine);
     }
 
-    unsigned_int64 tick = SafeTime::GetMicroSecond();
+    unsigned_int64 tick = SafeSystem::GetMicroSecond();
     while (!engine->isShutdown()) {
         g_net->EarlyUpdate(engine);
         g_logic->EarlyUpdate(engine);
@@ -119,7 +125,7 @@ int main(int argc, const char** args, const char** env) {
         g_net->LaterUpdate(engine);
         g_logic->LaterUpdate(engine);
 
-        unsigned_int64 tick2 = SafeTime::GetMicroSecond();
+        unsigned_int64 tick2 = SafeSystem::GetMicroSecond();
         if (tick2 - tick >= fixedTimeStep) {
             tick += fixedTimeStep;
         }

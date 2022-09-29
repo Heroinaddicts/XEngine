@@ -1,50 +1,50 @@
-#include "tlist.h"
-#include "tbase.h"
+#include "TimeBaseList.h"
+#include "TimeBase.h"
 
-namespace tcore {
-    void tlist::pushBack(tbase * p) {
-        p->setList(this);
-        p->setNext(nullptr);
-        p->setPrev(_tail);
+namespace XEngine {
+    void TimeBaseList::PushBack(TimeBase* p) {
+        p->SetList(this);
+        p->SetNext(nullptr);
+        p->SetPrev(_tail);
         if (_tail)
-            _tail->setNext(p);
+            _tail->SetNext(p);
         else
             _head = p;
 
         _tail = p;
     }
 
-    tbase* tlist::popFront() {
-        tbase* p = _head;
+    TimeBase* TimeBaseList::PopFront() {
+        TimeBase* p = _head;
         if (_head) {
-            _head = _head->getNext();
+            _head = _head->GetNext();
             if (!_head)
                 _tail = nullptr;
             else
-                _head->setPrev(nullptr);
+                _head->SetPrev(nullptr);
 
-            p->setNext(nullptr);
-            p->setPrev(nullptr);
-            p->setList(nullptr);
+            p->SetNext(nullptr);
+            p->SetPrev(nullptr);
+            p->SetList(nullptr);
         }
         return p;
     }
 
-    void tlist::remove(tbase* p) {
-        if (p->getPrev())
-            p->getPrev()->setNext(p->getNext());
+    void TimeBaseList::Remove(TimeBase* p) {
+        if (p->GetPrev())
+            p->GetPrev()->SetNext(p->GetNext());
 
-        if (p->getNext())
-            p->getNext()->setPrev(p->getPrev());
+        if (p->GetNext())
+            p->GetNext()->SetPrev(p->GetPrev());
 
         if (p == _head)
-            _head = _head->getNext();
+            _head = _head->GetNext();
 
         if (p == _tail)
-            _tail = _tail->getPrev();
+            _tail = _tail->GetPrev();
 
-        p->setNext(nullptr);
-        p->setPrev(nullptr);
-        p->setList(nullptr);
+        p->SetNext(nullptr);
+        p->SetPrev(nullptr);
+        p->SetList(nullptr);
     }
 }

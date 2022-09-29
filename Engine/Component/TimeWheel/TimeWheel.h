@@ -1,81 +1,56 @@
-#ifndef __timermgr_h__
-#define __timermgr_h__
+#ifndef __TimeWheel_h__
+#define __TimeWheel_h__
 
-#include "multisys.h"
-#include "api.h"
-#include <string.h>
+#include "Header.h"
 
-namespace tcore {
-    using namespace api;
+namespace XEngine {
 
-#define min_interval 4
+    class TimeBase;
+    class TimeBaseList;
+    class TimeGear;
 
-#define jiffies_interval 4
-    class tlist;
-    class tbase;
-    class tgear;
-    class timermgr {
-        enum
-        {
-            tq_tvn_bits = 6,
-            tq_tvr_bits = 8,
-            tq_tvn_size = 1 << tq_tvn_bits,//64
-            tq_tvr_size = 1 << tq_tvr_bits,//256
-            tq_tvn_mask = tq_tvn_size - 1,//63
-            tq_tvr_mask = tq_tvr_size - 1,//255
-        };
 
+    class TimeWheel : public iTimeWheel {
     public:
-        static timermgr* getInstance() {
-            static timermgr* instance = nullptr;
+        static iTimeWheel* GetInstance();
 
-            if (instance == nullptr) {
-                instance = tnew timermgr;
-                if (!instance->launch()) {
-                    tdel instance;
-                    instance = nullptr;
-                }
-            }
+        // Í¨¹ý iTimeWheel ¼Ì³Ð
+        virtual bool Initialize(Api::iEngine* const engine) override;
+        virtual bool Launch(Api::iEngine* const engine) override;
+        virtual void Release(Api::iEngine* const engine) override;
 
-            return instance;
+        virtual void EarlyUpdate(Api::iEngine* const engine) override;
+        virtual void Update(Api::iEngine* const engine) override;
+        virtual void LaterUpdate(Api::iEngine* const engine) override;
+
+        virtual void StartTimer(Api::iTimer* timer, const int id, const int delay, const int count, const int interval, void* const context, const char* const file, const int line) override;
+        virtual void KillTimer(Api::iTimer* timer, const int id, void* const context = nullptr) override;
+        virtual void PauseTimer(Api::iTimer* timer, const int id, void* const context = nullptr) override;
+        virtual void ResumeTimer(Api::iTimer* timer, const int id, void* const context = nullptr) override;
+
+        TimeBase* CreateTimerBase(Api::iTimer* timer, const int id, void* const context, int count, int interval, const char* file, const int line);
+        void RemoveTimerBase(TimeBase* base, Api::iTimer* timer, const int id, void* const context);
+        TimeBase* FindTimerBase(Api::iTimer* timer, const int id, void* const context);
+
+        void Schedule(TimeBase* base);
+        void MoveToRunning(TimeBase* base);
+        inline unsigned_int64 Jiff() const { return _jiff; }
+    private:
+        TimeWheel() : _jiff(0) {
+            SafeMemory::Memset(_time_gears, sizeof(_time_gears), 0, sizeof(_time_gears));
         }
+        ~TimeWheel() {}
 
-
-        bool launch();
-        void update();
-        void shutdown();
-
-        tbase* createTimerBase(iTimer* timer, const int id, const iContext& context, int count, int64 interval, const char* file, const int line);
-        void removeTimerBase(tbase* base, iTimer* timer, const int id, const iContext& context);
-        tbase* findTimerBase(iTimer* timer, const int id, const iContext& context);
-
-        void startTimer(iTimer* timer, const int id, const iContext& context, const int64 delay, const int count, const int64 interval, const char* file, const int line);
-        void killTimer(iTimer* timer, const int id, const iContext& context);
-        void pauseTimer(iTimer* timer, const int id, const iContext& context);
-        void resumeTimer(iTimer* timer, const int id, const iContext& context);
-        virtual void traceTimer();
-
-        void schedule(tbase* base);
-        void moveToRunning(tbase* base);
-
-        uint64 jiffies() const { return _jiffies; }
+        TimeBaseList* FindTimerList(unsigned_int64 expire);
+        void _Update_();
+        void Remove(TimeBase* base);
 
     private:
-        timermgr() : _jiffies(0) {
-            memset(_timerGear, 0, sizeof(_timerGear));
-        }
-        ~timermgr() {}
-
-        tlist* findTimerList(uint64 expire);
-        void _update();
-        void del(tbase* base);
-
-    private:
-        uint64 _jiffies;
-        tgear* _timerGear[5];
-        tlist* _running;
-        tlist* _suspended;
+        unsigned_int64 _jiff;
+        TimeGear* _time_gears[5];
+        TimeBaseList* _running;
+        TimeBaseList* _suspended;
     };
 }
 
-#endif //__timermgr_h__
+#endif //__TimeWheel_h__

@@ -1,7 +1,6 @@
 #include "Logic.h"
 #include "SafeFile.h"
 #include "SafeString.h"
-#include "SafeTime.h"
 #include "MultiSys.h"
 #include <vector>
 
@@ -80,10 +79,10 @@ namespace XEngine {
 
     }
 
-    int64 tick = SafeTime::GetMilliSecond();
+    int64 tick = SafeSystem::GetMilliSecond();
     void Logic::Update(Api::iEngine* const engine) {
-        XLOG(engine, "%lld", SafeTime::GetMilliSecond() - tick);
-        tick = SafeTime::GetMilliSecond();
+        XLOG(engine, "%lld", SafeSystem::GetMilliSecond() - tick);
+        tick = SafeSystem::GetMilliSecond();
     }
 
     void Logic::LaterUpdate(Api::iEngine* const engine) {

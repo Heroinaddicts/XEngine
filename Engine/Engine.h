@@ -13,6 +13,7 @@ namespace XEngine {
         virtual const char* GetLaunchParameter(const std::string& name);
 
         virtual Api::iNetApi* GetNetApi();
+        virtual Api::iTimerApi* GetTimerApi();
 
         virtual void LogAsync(const std::string& log);
         virtual void LogSync(const std::string& log);

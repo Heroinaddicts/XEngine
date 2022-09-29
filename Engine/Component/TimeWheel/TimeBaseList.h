@@ -1,28 +1,28 @@
-#ifndef __tlist_h__
-#define __tlist_h__
+#ifndef __TimeBaseList_h__
+#define __TimeBaseList_h__
 
-#include "multisys.h"
+#include "Header.h"
 
-namespace tcore {
-    class tbase;
-    class tlist {
+namespace XEngine {
+    class TimeBase;
+    class TimeBaseList {
     public:
-        tlist() : _head(nullptr), _tail(nullptr) {}
-        virtual ~tlist() {}
+        TimeBaseList() : _head(nullptr), _tail(nullptr) {}
+        virtual ~TimeBaseList() {}
 
-        void pushBack(tbase * p);
-        tbase* popFront();
-        void remove(tbase* p);
+        void PushBack(TimeBase* p);
+        TimeBase* PopFront();
+        void Remove(TimeBase* p);
 
-        inline bool empty() { return _head == nullptr; }
+        inline bool Empty() { return _head == nullptr; }
 
     private:
-        tlist(tlist&);
-        tlist & operator=(tlist &);
+        TimeBaseList(TimeBaseList&);
+        TimeBaseList& operator=(TimeBaseList&);
 
-        tbase * _head;
-        tbase * _tail;
+        TimeBase* _head;
+        TimeBase* _tail;
     };
 }
 
-#endif //__tlist_h__
+#endif //__TimeBaseList_h__

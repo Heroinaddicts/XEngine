@@ -1,75 +1,74 @@
 #ifndef __TimeBase_h__
 #define __TimeBase_h__
 
+#include "Header.h"
 
-namespace tcore {
-	using namespace api;
+namespace XEngine {
+    class TimeBaseList;
 
-	class tlist;
-	class tbase {
-	public:
-		const int _id;
-		const int64 _interval;
-		const iContext _context;
-		const std::string _file;
-		const int _line;
+    class TimeBase {
+    public:
+        static TimeBase* Create(Api::iTimer* timer, const int id, void* const context, const int count, const int interval, const char* file, const int line);
 
-		typedef tpool<tbase> TIMER_BASE_POOL;
+        void OnTimer();
+        void ForceEnd();
+        void Pause(unsigned_int32 jiff);
+        void Resume(unsigned_int32 jiff);
 
-		static tbase* Create(iTimer* timer, const int id, const iContext& context, int count, int64 interval, const char* file, const int line);
+        void Release();
 
-		void onTimer();
-		void forceEnd();
+        inline bool IsValid() const { return _valid; }
+        inline bool IsPolling() const { return _polling; }
 
-		void pause(uint64 jiffies);
-		void resume(uint64 jiffies);
+        inline bool IsPaused() const { return _paused; }
 
-		void release();
+        inline unsigned_int64 GetExpire() const { return _expire; }
+        inline void SetExpire(unsigned_int64 expire) { _expire = expire; }
+        void AdjustExpire(unsigned_int64 now);
 
-		inline bool isValid() const { return _valid; }
-		inline bool isPolling() const { return _polling; }
+        inline void SetNext(TimeBase* next) { _next = next; }
+        inline TimeBase* GetNext() const { return _next; }
 
-		inline bool isPaused() const { return _paused; }
+        inline void SetPrev(TimeBase* prev) { _prev = prev; }
+        inline TimeBase* GetPrev() const { return _prev; }
 
-		inline uint64 getExpire() const { return _expire; }
-		inline void setExpire(uint64 expire) { _expire = expire; }
-		void adjustExpire(uint64 now);
+        inline void SetList(TimeBaseList* list) { _list = list; }
+        inline TimeBaseList* GetList() const { return _list; }
 
-		inline void setNext(tbase* next) { _next = next; }
-		inline tbase* getNext() const { return _next; }
+        inline Api::iTimer* GetTimer() const { return _timer; }
 
-		inline void setPrev(tbase* prev) { _prev = prev; }
-		inline tbase* getPrev() const { return _prev; }
+    public:
+        const int _id;
+        const int _interval;
+        void* const _context;
 
-		inline void setList(tlist* list) { _list = list; }
-		inline tlist* getList() const { return _list; }
+#ifdef _DEBUG
+        const std::string _file;
+        const int _line;
+#endif //_DEBUG
 
-		inline iTimer* getTimer() const { return _timer; }
+    private:
+        friend XPool<TimeBase>;
+        TimeBase(Api::iTimer* timer, const int id, void* const context, int count, int interval, const char* file, const int line);
 
-	private:
-		friend TIMER_BASE_POOL;
-		tbase(iTimer* timer, const int id, const iContext& context, int count, int64 interval, const char* file, const int line);
-		virtual ~tbase() {}
+    private:
+        TimeBaseList* _list;
+        TimeBase* _next;
+        TimeBase* _prev;
 
-	private:
-		tlist* _list;
-		tbase* _next;
-		tbase* _prev;
+        Api::iTimer* const _timer;
 
-		iTimer* const _timer;
+        bool _valid;
+        bool _polling;
 
-		bool _valid;
-		bool _polling;
+        unsigned_int64 _expire;
+        int _count;
+        bool _started;
 
-		uint64 _expire;
-		int _count;
-		bool _started;
-
-		uint64 _pauseTick;
-		bool _paused;
-
-	};
+        unsigned_int64 _pause_tick;
+        bool _paused;
+    };
 }
 
-#endif //__tbase_h__
+#endif //__TimeBase_h__
 
