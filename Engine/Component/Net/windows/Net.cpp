@@ -65,6 +65,10 @@ namespace XEngine {
     void Net::Update(Api::iEngine* const engine) {
     }
 
+    void Net::FixedUpdate(Api::iEngine* const engine) {
+
+    }
+
     void Net::LaterUpdate(Api::iEngine* const engine) {
         for (auto i = _tcp_need_send.begin(); i != _tcp_need_send.end(); i++) {
             (*i)->AsyncSend();

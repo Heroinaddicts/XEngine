@@ -3,6 +3,8 @@
 #include "Logic/Logic.h"
 #include "TimeWheel/TimeWheel.h"
 #include "Navigation/Navigation.h"
+#include "Physics/Physics.h"
+#include "Fbxer/Fbxer.h"
 
 #include "SafeString.h"
 #include "SafeSystem.h"
@@ -19,6 +21,10 @@ XEngine::iLogic* g_logic = nullptr;
 XEngine::iNet* g_net = nullptr;
 XEngine::iTimeWheel* g_timewheel = nullptr;
 XEngine::iNavigation* g_navigation = nullptr;
+XEngine::iPhysics* g_physics = nullptr;
+XEngine::iFbxer* g_fbxer = nullptr;
+
+static int static_fixed_time_step = 33333;
 
 namespace XEngine {
     Engine* Engine::GetInstance() {
@@ -44,6 +50,14 @@ namespace XEngine {
 
     Api::iNavigationApi* Engine::GetNavigationApi() {
         return g_navigation;
+    }
+
+    Api::iPhysicsApi* Engine::GetPhysicsApi() {
+        return g_physics;
+    }
+
+    float Engine::GetFixedTimeStep() {
+        return static_fixed_time_step / 1000.0f;
     }
 
     void Engine::LogAsync(const std::string& log) {
@@ -95,13 +109,10 @@ int main(int argc, const char** args, const char** env) {
         return 0;
     }
 
-
     XEngine::Engine* engine = XEngine::Engine::GetInstance();
-
-    int fixedTimeStep = 33333;
     const char* fixedTimeStepStr = engine->GetLaunchParameter("fixedTimeStep");
     if (fixedTimeStepStr) {
-        fixedTimeStep = XEngine::SafeString::StringToFloat(fixedTimeStepStr) * 1000;
+        static_fixed_time_step = XEngine::SafeString::StringToFloat(fixedTimeStepStr) * 1000;
     }
 
     {
@@ -109,10 +120,14 @@ int main(int argc, const char** args, const char** env) {
         g_net = XEngine::Net::GetInstance();
         g_timewheel = XEngine::TimeWheel::GetInstance();
         g_navigation = XEngine::Navigation::GetInstance();
+        g_physics = XEngine::Physics::GetInstance();
+        g_fbxer = XEngine::Fbxer::GetInstance();
     }
 
 
     { // Initialize
+        g_fbxer->Initialize(engine);
+        g_physics->Initialize(engine);
         g_navigation->Initialize(engine);
         g_timewheel->Initialize(engine);
         g_net->Initialize(engine);
@@ -120,6 +135,8 @@ int main(int argc, const char** args, const char** env) {
     }
 
     { // Launche
+        g_fbxer->Launch(engine);
+        g_physics->Launch(engine);
         g_navigation->Launch(engine);
         g_timewheel->Launch(engine);
         g_net->Launch(engine);
@@ -132,20 +149,28 @@ int main(int argc, const char** args, const char** env) {
         g_timewheel->EarlyUpdate(engine);
         g_net->EarlyUpdate(engine);
         g_logic->EarlyUpdate(engine);
+        g_physics->EarlyUpdate(engine);
 
         g_navigation->Update(engine);
         g_timewheel->Update(engine);
         g_net->Update(engine);
         g_logic->Update(engine);
+        g_physics->Update(engine);
 
         g_navigation->LaterUpdate(engine);
         g_timewheel->LaterUpdate(engine);
         g_net->LaterUpdate(engine);
         g_logic->LaterUpdate(engine);
+        g_physics->LaterUpdate(engine);
 
         unsigned_int64 tick2 = XEngine::SafeSystem::GetMicroSecond();
-        if (tick2 - tick >= fixedTimeStep) {
-            tick += fixedTimeStep;
+        if (tick2 - tick >= static_fixed_time_step) {
+            g_navigation->FixedUpdate(engine);
+            g_timewheel->FixedUpdate(engine);
+            g_net->FixedUpdate(engine);
+            g_logic->FixedUpdate(engine);
+            g_physics->FixedUpdate(engine);
+            tick += static_fixed_time_step;
         }
     }
 

@@ -22,16 +22,17 @@ namespace XEngine {
 
         static iNavigation* GetInstance();
 
-        // 通过 iEngineComponent 继承
+        // 閫氳繃 iEngineComponent 缁ф壙
         virtual bool Initialize(Api::iEngine* const engine) override;
         virtual bool Launch(Api::iEngine* const engine) override;
         virtual void Release(Api::iEngine* const engine) override;
 
         virtual void EarlyUpdate(Api::iEngine* const engine) override;
         virtual void Update(Api::iEngine* const engine) override;
+        virtual void FixedUpdate(Api::iEngine* const engine) override;
         virtual void LaterUpdate(Api::iEngine* const engine) override;
 
-        // 通过 iNavigationApi 继承
+        // 閫氳繃 iNavigationApi 缁ф壙
         virtual Api::iNavmesh* LoadNavmeshSync(const std::string& file) override;
         virtual void LoadNavmeshAsync(const std::string& file, void(* const func)(Api::iNavmesh* mesh)) override;
         virtual void ReleaseNavmesh(Api::iNavmesh* mesh) override;

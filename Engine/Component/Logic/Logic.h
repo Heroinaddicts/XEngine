@@ -10,12 +10,13 @@ namespace XEngine {
 
         static iLogic* GetInstance();
 
-        // Í¨¹ý iLogic ¼Ì³Ð
+        // é€šè¿‡ iLogic ç»§æ‰¿
         virtual bool Initialize(Api::iEngine* const engine) override;
         virtual bool Launch(Api::iEngine* const engine) override;
         virtual void Release(Api::iEngine* const engine) override;
         virtual void EarlyUpdate(Api::iEngine* const engine) override;
         virtual void Update(Api::iEngine* const engine) override;
+        virtual void FixedUpdate(Api::iEngine* const engine) override;
         virtual void LaterUpdate(Api::iEngine* const engine) override;
 
     private:

@@ -26,6 +26,10 @@ namespace XEngine {
     void Navigation::Update(Api::iEngine* const engine) {
     }
 
+    void Navigation::FixedUpdate(Api::iEngine* const engine) {
+
+    }
+
     void Navigation::LaterUpdate(Api::iEngine* const engine) {
         AsyncMeshLoader loader;
         while (_loaded_queue.Pull(loader)) {

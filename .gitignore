@@ -28,3 +28,6 @@
 
 # build dir
 build/*
+
+Engine/Library/Debug/FbxSDK/libfbxsdk-mt.lib
+Engine/Library/Debug/FbxSDK/libfbxsdk-md.lib

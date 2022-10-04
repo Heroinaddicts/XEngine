@@ -14,13 +14,14 @@ namespace XEngine {
     public:
         static iTimeWheel* GetInstance();
 
-        // Í¨¹ý iTimeWheel ¼Ì³Ð
+        // é€šè¿‡ iTimeWheel ç»§æ‰¿
         virtual bool Initialize(Api::iEngine* const engine) override;
         virtual bool Launch(Api::iEngine* const engine) override;
         virtual void Release(Api::iEngine* const engine) override;
 
         virtual void EarlyUpdate(Api::iEngine* const engine) override;
         virtual void Update(Api::iEngine* const engine) override;
+        virtual void FixedUpdate(Api::iEngine* const engine) override;
         virtual void LaterUpdate(Api::iEngine* const engine) override;
 
         virtual void StartTimer(Api::iTimer* timer, const int id, const int delay, const int count, const int interval, void* const context, const char* const file, const int line) override;

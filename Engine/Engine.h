@@ -15,6 +15,9 @@ namespace XEngine {
         virtual Api::iNetApi* GetNetApi();
         virtual Api::iTimerApi* GetTimerApi();
         virtual Api::iNavigationApi* GetNavigationApi();
+        virtual Api::iPhysicsApi* GetPhysicsApi();
+
+        virtual float GetFixedTimeStep();
 
         virtual void LogAsync(const std::string& log);
         virtual void LogSync(const std::string& log);

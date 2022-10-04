@@ -9,8 +9,8 @@ set_property(GLOBAL PROPERTY USE_FOLDERS On)
 if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
     message(STATUS "os : windows")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
-    set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/windows/")
-    set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/windows/")
+    set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/Bin/Windows/")
+    set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/Bin/Windows/")
 elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
     message(STATUS "os : linux")
     option(USE_32BITS "Compile for 32bits processors(linux only)" OFF)
@@ -18,8 +18,8 @@ elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
     set(CMAKE_CXX_FLAGS_DEBUG "-g -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -DLinux")
     set(CMAKE_CXX_FLAGS_RELWITHDEBUGINFO "-g -o2 -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -DLinux")
     set(CMAKE_CXX_FLAGS_RELEASE "-g -o3 -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -DLinux")
-    set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/linux/")
-    set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/bin/linux/")
+    set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/Bin/Linux/")
+    set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/Bin/Linux/")
 
     if (CMAKE_BUILD_TYPE STREQUAL Debug)
         add_definitions(
@@ -39,6 +39,7 @@ set(Api
     "${PROJECT_SOURCE_DIR}/Api/iNetApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iTimerApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iNavigationApi.h"
+    "${PROJECT_SOURCE_DIR}/Api/iPhysicsApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iEngine.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.cpp"

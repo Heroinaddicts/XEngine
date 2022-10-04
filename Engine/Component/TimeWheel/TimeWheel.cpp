@@ -86,6 +86,10 @@ namespace XEngine {
         }
     }
 
+    void TimeWheel::FixedUpdate(Api::iEngine* const engine) {
+
+    }
+
     void TimeWheel::LaterUpdate(Api::iEngine* const engine) {
 
     }

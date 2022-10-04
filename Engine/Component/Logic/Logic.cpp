@@ -85,6 +85,10 @@ namespace XEngine {
         tick = SafeSystem::GetMilliSecond();
     }
 
+    void Logic::FixedUpdate(Api::iEngine* const engine) {
+
+    }
+
     void Logic::LaterUpdate(Api::iEngine* const engine) {
 
     }

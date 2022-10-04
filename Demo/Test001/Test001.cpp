@@ -5,7 +5,7 @@ class TcpSession : public iTcpSession, public iTimer {
 public:
     virtual ~TcpSession() {}
 
-    // 通过 iTcpSession 继承
+    // 閫氳繃 iTcpSession 缁ф壙
     virtual int OnReceive(const char* content, const int size) override {
         //Send(content, size);
         return size;
@@ -23,7 +23,7 @@ public:
     }
 
 
-    // 通过 iTimer 继承
+    // 閫氳繃 iTimer 缁ф壙
     virtual void OnStart(const int id, void* const context, const int64 timestamp) override {
     }
 

@@ -3,6 +3,7 @@
 #define __iEngineComponent_h__
 
 #include "iEngine.h"
+#include "MultiSys.h"
 
 namespace XEngine {
     class iEngineComponent {
@@ -15,6 +16,7 @@ namespace XEngine {
 
         virtual void EarlyUpdate(Api::iEngine* const engine) = 0;
         virtual void Update(Api::iEngine* const engine) = 0;
+        virtual void FixedUpdate(Api::iEngine* const engine) = 0;
         virtual void LaterUpdate(Api::iEngine* const engine) = 0;
     };
 }

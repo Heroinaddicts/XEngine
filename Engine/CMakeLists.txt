@@ -17,6 +17,10 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourCrowd"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/DetourTileCache"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physx4"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Fbxer"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Fbxer/SDK"
 )
 
 if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
@@ -32,6 +36,8 @@ set(Interface
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iNet.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iTimeWheel.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iNavigation.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iPhysics.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iFbxer.h"
 )
 
 set(Logic
@@ -126,6 +132,20 @@ set(Navigation
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Navigation.h"
 )
 
+set(Physics
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Header.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxScene.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxScene.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physics.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physics.cpp"
+)
+
+set(Fbxer
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Fbxer/Header.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Fbxer/Fbxer.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Fbxer/Fbxer.cpp"
+)
+
 set(Engine
     "${CMAKE_CURRENT_SOURCE_DIR}/Engine.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Engine.cpp"
@@ -141,6 +161,8 @@ source_group(Component\\Net FILES ${Net})
 source_group(Component\\TimeWheel FILES ${TimeWheel})
 source_group(Component\\Navigation\\Recast FILES ${Recast})
 source_group(Component\\Navigation FILES ${Navigation})
+source_group(Component\\Physics FILES ${Physics})
+source_group(Component\\FbxSDK FILES ${Fbxer})
 source_group(\\ FILES ${Engine})
 
 add_executable(XEngine
@@ -152,7 +174,39 @@ add_executable(XEngine
     ${TimeWheel}
     ${Recast}
     ${Navigation}
+    ${Fbxer}
+    ${Physics}
     ${Geometry}
     ${Utils}
     ${Engine}
+)
+
+set(LibFBX
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libfbxsdk.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libfbxsdk-md.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libfbxsdk-mt.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libxml2-md.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libxml2-mt.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/zlib-md.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/zlib-mt.lib"
+)
+
+set(LibPhysx4
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXCooking_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXExtensions_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXFoundation_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXPvdSDK_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXTask_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXVehicle_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/LowLevel_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/LowLevelAABB_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/LowLevelDynamics_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysX_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXCharacterKinematic_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXCommon_64.lib"
+)
+
+target_link_libraries(XEngine
+    ${LibFBX}
+    ${LibPhysx4}
 )
