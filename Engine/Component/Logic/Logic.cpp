@@ -81,7 +81,10 @@ namespace XEngine {
 
     int64 tick = SafeSystem::GetMilliSecond();
     void Logic::Update(Api::iEngine* const engine) {
-        XLOG(engine, "%lld", SafeSystem::GetMilliSecond() - tick);
+        int64 temp = SafeSystem::GetMilliSecond() - tick;
+        if (temp > 5) {
+            XLOG(engine, "%lld", temp);
+        }
         tick = SafeSystem::GetMilliSecond();
     }
 

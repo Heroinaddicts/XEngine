@@ -35,7 +35,7 @@ namespace XEngine {
         }
 
         virtual void reportError(PxErrorCode::Enum code, const char* message, const char* file, int line) {
-            XERROR(Engine::GetInstance(), "physx error, code %d, message %s, file %s, line %d", code, message, file, line);
+            XLOG(Engine::GetInstance(), "physx error, code %d, message %s, file %s, line %d", code, message, file, line);
         }
     };
 
@@ -44,6 +44,7 @@ namespace XEngine {
 
     extern PxFoundation* g_pxfoundation;
     extern PxPhysics* g_pxphysics;
+    extern PxCooking* g_cooking;
     extern PxDefaultCpuDispatcher* g_pxdispatcher;
     extern PxPvd* g_pxpvd;
     extern PxCudaContextManager* g_cuda_context_manager;

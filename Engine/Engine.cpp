@@ -4,7 +4,7 @@
 #include "TimeWheel/TimeWheel.h"
 #include "Navigation/Navigation.h"
 #include "Physics/Physics.h"
-#include "Fbxer/Fbxer.h"
+#include "MeshLoader/MeshLoader.h"
 
 #include "SafeString.h"
 #include "SafeSystem.h"
@@ -22,7 +22,7 @@ XEngine::iNet* g_net = nullptr;
 XEngine::iTimeWheel* g_timewheel = nullptr;
 XEngine::iNavigation* g_navigation = nullptr;
 XEngine::iPhysics* g_physics = nullptr;
-XEngine::iFbxer* g_fbxer = nullptr;
+XEngine::iMeshLoader* g_meshloader = nullptr;
 
 static int static_fixed_time_step = 33333;
 
@@ -54,6 +54,10 @@ namespace XEngine {
 
     Api::iPhysicsApi* Engine::GetPhysicsApi() {
         return g_physics;
+    }
+
+    Api::iMeshLoaderApi* Engine::GetMeshLoaderApi() {
+        return g_meshloader;
     }
 
     float Engine::GetFixedTimeStep() {
@@ -120,13 +124,13 @@ int main(int argc, const char** args, const char** env) {
         g_net = XEngine::Net::GetInstance();
         g_timewheel = XEngine::TimeWheel::GetInstance();
         g_navigation = XEngine::Navigation::GetInstance();
+        g_meshloader = XEngine::MeshLoader::GetInstance();
         g_physics = XEngine::Physics::GetInstance();
-        g_fbxer = XEngine::Fbxer::GetInstance();
     }
 
 
     { // Initialize
-        g_fbxer->Initialize(engine);
+        g_meshloader->Initialize(engine);
         g_physics->Initialize(engine);
         g_navigation->Initialize(engine);
         g_timewheel->Initialize(engine);
@@ -135,7 +139,7 @@ int main(int argc, const char** args, const char** env) {
     }
 
     { // Launche
-        g_fbxer->Launch(engine);
+        g_meshloader->Launch(engine);
         g_physics->Launch(engine);
         g_navigation->Launch(engine);
         g_timewheel->Launch(engine);

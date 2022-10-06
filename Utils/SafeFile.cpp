@@ -12,7 +12,7 @@
 
 namespace XEngine {
     namespace SafeFile {
-        const char* GetApplicationPath() {
+        const std::string& GetApplicationPath() {
 #define PATH_STRING_MAX_LEN 1024
             static std::string* static_path = nullptr;
 #ifdef WIN32
@@ -27,7 +27,7 @@ namespace XEngine {
                 SafeString::Replace(*static_path, "\\", "/");
             }
 #endif //WIN32
-            return static_path->c_str();
+            return *static_path;
         }
     }
 }

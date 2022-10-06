@@ -19,8 +19,8 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physx4"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Fbxer"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Fbxer/SDK"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/MeshLoader"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/MeshLoader/SDK"
 )
 
 if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
@@ -37,7 +37,7 @@ set(Interface
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iTimeWheel.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iNavigation.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iPhysics.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iFbxer.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iMeshLoader.h"
 )
 
 set(Logic
@@ -140,10 +140,10 @@ set(Physics
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physics.cpp"
 )
 
-set(Fbxer
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Fbxer/Header.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Fbxer/Fbxer.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Fbxer/Fbxer.cpp"
+set(MeshLoader
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/MeshLoader/Header.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/MeshLoader/MeshLoader.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/MeshLoader/MeshLoader.cpp"
 )
 
 set(Engine
@@ -162,7 +162,7 @@ source_group(Component\\TimeWheel FILES ${TimeWheel})
 source_group(Component\\Navigation\\Recast FILES ${Recast})
 source_group(Component\\Navigation FILES ${Navigation})
 source_group(Component\\Physics FILES ${Physics})
-source_group(Component\\FbxSDK FILES ${Fbxer})
+source_group(Component\\MeshLoader FILES ${MeshLoader})
 source_group(\\ FILES ${Engine})
 
 add_executable(XEngine
@@ -174,21 +174,18 @@ add_executable(XEngine
     ${TimeWheel}
     ${Recast}
     ${Navigation}
-    ${Fbxer}
+    ${MeshLoader}
     ${Physics}
     ${Geometry}
     ${Utils}
     ${Engine}
 )
 
-set(LibFBX
+set(LibFbxSDK
     debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libfbxsdk.lib"
     debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libfbxsdk-md.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libfbxsdk-mt.lib"
     debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libxml2-md.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libxml2-mt.lib"
     debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/zlib-md.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/zlib-mt.lib"
 )
 
 set(LibPhysx4
@@ -207,6 +204,6 @@ set(LibPhysx4
 )
 
 target_link_libraries(XEngine
-    ${LibFBX}
+    ${LibFbxSDK}
     ${LibPhysx4}
 )

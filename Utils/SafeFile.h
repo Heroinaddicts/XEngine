@@ -5,7 +5,7 @@
 
 namespace XEngine {
     namespace SafeFile {
-        const char* GetApplicationPath();
+        const std::string& GetApplicationPath();
     }
 }
 

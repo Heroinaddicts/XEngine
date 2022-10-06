@@ -31,6 +31,7 @@ endif()
 include_directories(
     "${PROJECT_SOURCE_DIR}/Api"
     "${PROJECT_SOURCE_DIR}/Utils"
+    "${PROJECT_SOURCE_DIR}/Utils/TinyXML"
     "${PROJECT_SOURCE_DIR}/Utils/Geometry"
 )
 
@@ -40,6 +41,7 @@ set(Api
     "${PROJECT_SOURCE_DIR}/Api/iTimerApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iNavigationApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iPhysicsApi.h"
+    "${PROJECT_SOURCE_DIR}/Api/iMeshLoaderApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iEngine.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.cpp"
@@ -47,6 +49,12 @@ set(Api
 
 set(Geometry
     "${PROJECT_SOURCE_DIR}/Utils/Geometry/Vector3.h"
+    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Quaternion.h"
+)
+
+set(TinyXML
+    "${PROJECT_SOURCE_DIR}/Utils/TinyXML/tinyxml2.h"
+    "${PROJECT_SOURCE_DIR}/Utils/TinyXML/tinyxml2.cpp"
 )
 
 set(Utils

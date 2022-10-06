@@ -7,6 +7,7 @@ namespace XEngine {
 
     PxFoundation* g_pxfoundation = nullptr;
     PxPhysics* g_pxphysics = nullptr;
+    PxCooking* g_cooking = nullptr;
     PxDefaultCpuDispatcher* g_pxdispatcher = nullptr;
     PxPvd* g_pxpvd = nullptr;
     PxCudaContextManager* g_cuda_context_manager = nullptr;
@@ -27,10 +28,13 @@ namespace XEngine {
             PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(pvd_host, SafeString::StringToInt(pvd_port), 10);
             g_pxpvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
         }
+        PxTolerancesScale scale;
+        scale.length = 1;        // typical length of an object
+        scale.speed = 9.81;         // typical speed of an object, gravity*1s is a reasonable choice
 
-        g_pxphysics = PxCreatePhysics(PX_PHYSICS_VERSION, *g_pxfoundation, PxTolerancesScale(), true, g_pxpvd);
+        g_pxphysics = PxCreatePhysics(PX_PHYSICS_VERSION, *g_pxfoundation, scale, true, g_pxpvd);
         XASSERT(g_pxphysics, "create physics error");
-
+        g_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *g_pxfoundation, PxCookingParams(PxTolerancesScale()));
         PxCudaContextManagerDesc ccm_desc;
         g_cuda_context_manager = PxCreateCudaContextManager(*g_pxfoundation, ccm_desc, PxGetProfilerCallback());
         return true;

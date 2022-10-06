@@ -15,12 +15,14 @@ set(TestPhysics
 )
 
 source_group(Api FILES ${Api})
+source_group(Utils\\TinyXML FILES ${TinyXML})
 source_group(Utils\\Geometry FILES ${Geometry})
 source_group(Utils FILES ${Utils})
 source_group(\\ FILES ${TestPhysics})
 
 add_library(TestPhysics SHARED
     ${Api}
+    ${TinyXML}
     ${Geometry}
     ${Utils}
     ${TestPhysics}

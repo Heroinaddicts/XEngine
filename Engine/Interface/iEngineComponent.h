@@ -1,11 +1,12 @@
-#include <string>
 #ifndef __iEngineComponent_h__
 #define __iEngineComponent_h__
 
 #include "iEngine.h"
 #include "MultiSys.h"
+#include <string>
 
 namespace XEngine {
+    class Api::iEngine;
     class iEngineComponent {
     public:
         virtual ~iEngineComponent() {}

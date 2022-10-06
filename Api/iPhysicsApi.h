@@ -3,6 +3,7 @@
 
 #include "MultiSys.h"
 #include "Geometry/Vector3.h"
+#include "Geometry/Quaternion.h"
 
 namespace XEngine {
     namespace Api {
@@ -99,9 +100,10 @@ namespace XEngine {
             virtual ~iPhysxScene() {}
 
             virtual iPhysxPlane* CreatePlane(const float nx, const float ny, const float nz, const float distance, void* const iPhysxContext = nullptr) = 0;
-            virtual iPhysxBox* CreateBox(const eRigType type, const Vector3& pos, const Vector3& size, void* const iPhysxContext = nullptr) = 0;
-            virtual iPhysxCapsule* CreateCapsule(const eRigType type, const Vector3& pos, const float radius, const float height, void* const iPhysxContext = nullptr) = 0;
-            virtual iPhysxConvexMesh* CreateConvexMesh(const eRigType type, void* const iPhysxContext = nullptr) = 0;
+            virtual iPhysxBox* CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, void* const iPhysxContext = nullptr) = 0;
+            virtual iPhysxCapsule* CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, void* const iPhysxContext = nullptr) = 0;
+            virtual iPhysxConvexMesh* CreateConvexMesh(const eRigType type, const Quaternion& qt, void* const iPhysxContext = nullptr) = 0;
+            virtual iPhysxTriangleMesh* CreateTriangleMesh(const eRigType type, const Vector3& pos, const Quaternion& qt, const float scale, const std::string& file, iPhysxContext* const data = nullptr) = 0;
 
             virtual void Simulate(float dt) = 0;
             virtual bool FetchResults(bool block) = 0;
