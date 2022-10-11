@@ -78,7 +78,7 @@ namespace XEngine {
         XASSERT(px_scene, "create physx scene error");
         px_scene->setCCDMaxPasses(0);
         if (px_scene) {
-            PhysxScene* scene = x_new PhysxScene(px_scene, static_friction, dynamic_friction, restitution);
+            PhysxScene* scene = xnew PhysxScene(px_scene, static_friction, dynamic_friction, restitution);
 
             PxPvdSceneClient* pvdClient = px_scene->getScenePvdClient();
             if (pvdClient) {

@@ -4,7 +4,6 @@
 #include "TimeWheel/TimeWheel.h"
 #include "Navigation/Navigation.h"
 #include "Physics/Physics.h"
-#include "MeshLoader/MeshLoader.h"
 
 #include "SafeString.h"
 #include "SafeSystem.h"
@@ -22,7 +21,6 @@ XEngine::iNet* g_net = nullptr;
 XEngine::iTimeWheel* g_timewheel = nullptr;
 XEngine::iNavigation* g_navigation = nullptr;
 XEngine::iPhysics* g_physics = nullptr;
-XEngine::iMeshLoader* g_meshloader = nullptr;
 
 static int static_fixed_time_step = 33333;
 
@@ -54,10 +52,6 @@ namespace XEngine {
 
     Api::iPhysicsApi* Engine::GetPhysicsApi() {
         return g_physics;
-    }
-
-    Api::iMeshLoaderApi* Engine::GetMeshLoaderApi() {
-        return g_meshloader;
     }
 
     float Engine::GetFixedTimeStep() {
@@ -124,13 +118,11 @@ int main(int argc, const char** args, const char** env) {
         g_net = XEngine::Net::GetInstance();
         g_timewheel = XEngine::TimeWheel::GetInstance();
         g_navigation = XEngine::Navigation::GetInstance();
-        g_meshloader = XEngine::MeshLoader::GetInstance();
         g_physics = XEngine::Physics::GetInstance();
     }
 
 
     { // Initialize
-        g_meshloader->Initialize(engine);
         g_physics->Initialize(engine);
         g_navigation->Initialize(engine);
         g_timewheel->Initialize(engine);
@@ -139,7 +131,6 @@ int main(int argc, const char** args, const char** env) {
     }
 
     { // Launche
-        g_meshloader->Launch(engine);
         g_physics->Launch(engine);
         g_navigation->Launch(engine);
         g_timewheel->Launch(engine);
@@ -147,7 +138,7 @@ int main(int argc, const char** args, const char** env) {
         g_logic->Launch(engine);
     }
 
-    unsigned_int64 tick = XEngine::SafeSystem::GetMicroSecond();
+    unsigned_int64 tick = XEngine::SafeSystem::Time::GetMicroSecond();
     while (!engine->isShutdown()) {
         g_navigation->EarlyUpdate(engine);
         g_timewheel->EarlyUpdate(engine);
@@ -167,7 +158,7 @@ int main(int argc, const char** args, const char** env) {
         g_logic->LaterUpdate(engine);
         g_physics->LaterUpdate(engine);
 
-        unsigned_int64 tick2 = XEngine::SafeSystem::GetMicroSecond();
+        unsigned_int64 tick2 = XEngine::SafeSystem::Time::GetMicroSecond();
         if (tick2 - tick >= static_fixed_time_step) {
             g_navigation->FixedUpdate(engine);
             g_timewheel->FixedUpdate(engine);

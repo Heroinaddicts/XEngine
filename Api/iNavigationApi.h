@@ -2,7 +2,7 @@
 #define __iNavigationApi_h__
 
 #include "MultiSys.h"
-#include "Vector3.h"
+#include "Vector.h"
 
 #include <string>
 #include <vector>

@@ -43,7 +43,7 @@ namespace XEngine {
     }
 
     void Net::EarlyUpdate(Api::iEngine* const engine) {
-        int64 tick = SafeSystem::GetMilliSecond();
+        int64 tick = SafeSystem::Time::GetMilliSecond();
         do {
             DWORD bytes = 0;
             SOCKET sock = INVALID_SOCKET;
@@ -59,7 +59,7 @@ namespace XEngine {
             }
 
             plus->_completer->OnCompleted(plus, plus->_type, err, bytes);
-        } while (SafeSystem::GetMilliSecond() - tick < 2);
+        } while (SafeSystem::Time::GetMilliSecond() - tick < 2);
     }
 
     void Net::Update(Api::iEngine* const engine) {

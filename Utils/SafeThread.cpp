@@ -33,22 +33,24 @@ namespace XEngine {
     }
 #endif //Linux
 
-    bool SafeThread::Start(void* context) {
-        ThreadArgs* p = x_new ThreadArgs;
+    bool SafeThread::Start(const int thread_count, void* context) {
+        ThreadArgs* p = xnew ThreadArgs;
         p->st = this;
         p->context = context;
+        for (int i = 0; i < thread_count; i++) {
 #ifdef WIN32
-        unsigned long long ret = _beginthreadex(nullptr, 0, ThreadProc, (void*)p, 0, nullptr);
-        if (ret == 0) {
-            return false;
-        }
+            unsigned long long ret = _beginthreadex(nullptr, 0, ThreadProc, (void*)p, 0, nullptr);
+            if (ret == 0) {
+                return false;
+            }
 #else
-        pthread_t ptid = 0;
-        int ret = pthread_create(&ptid, nullptr, threadProc, (void*)&args);
-        if (ret != 0) {
-            return false;
-        }
+            pthread_t ptid = 0;
+            int ret = pthread_create(&ptid, nullptr, threadProc, (void*)&args);
+            if (ret != 0) {
+                return false;
+            }
 #endif
+        }
         return true;
     }
 }

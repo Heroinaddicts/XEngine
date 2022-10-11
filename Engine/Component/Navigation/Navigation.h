@@ -11,6 +11,7 @@
 #include "Header.h"
 #include "SafeQueue.h"
 #include "SafeThread.h"
+#include "XLock.h"
 
 namespace XEngine {
 #define MESHLOAD_QUEUE_SIZE 1024
@@ -53,6 +54,9 @@ namespace XEngine {
         };
         SafeQueue::SpscQueue<AsyncMeshLoader> _load_queue;
         SafeQueue::SpscQueue<AsyncMeshLoader> _loaded_queue;
+
+        SpinLock _pull_lock;
+        SpinLock _push_lock;
     };
 }
 

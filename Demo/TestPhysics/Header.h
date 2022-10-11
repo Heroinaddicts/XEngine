@@ -5,7 +5,7 @@
 #include "iPhysicsApi.h"
 #include "iTimerApi.h"
 
-#include "Geometry/Vector3.h"
+#include "Geometry/Vector.h"
 
 #include "SafeString.h"
 #include "SafeSystem.h"

@@ -8,7 +8,7 @@ namespace XEngine {
     public:
         XBuffer(const unsigned int size) : _size(size), _in(0), _out(0) {
             XASSERT(size > 0, "wtf");
-            _data = x_new char[size];
+            _data = xnew char[size];
         }
 
         ~XBuffer() {
@@ -29,7 +29,7 @@ namespace XEngine {
                     _size *= 2;
                 }
 
-                _data = x_new char[_size];
+                _data = xnew char[_size];
 
                 if (_in - _out > 0) {
                     SafeMemory::Memcpy(_data, _size, old_data + _out, _in - _out);

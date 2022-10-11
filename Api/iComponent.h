@@ -42,7 +42,7 @@ namespace XEngine {
 class Factory##Component {\
 public:\
     Factory##Component(XEngine::Api::iComponent * & pComponent) {\
-        XEngine::Api::iComponent * p##Component = x_new Component(#Component, pComponent);\
+        XEngine::Api::iComponent * p##Component = xnew Component(#Component, pComponent);\
         pComponent = p##Component;\
     }\
 };\

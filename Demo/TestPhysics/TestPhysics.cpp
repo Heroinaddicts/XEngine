@@ -13,7 +13,7 @@ bool TestPhysics::Initialize(iEngine* const engine) {
 bool TestPhysics::Launch(iEngine* const engine) {
     iPhysxScene* scene = engine->GetPhysicsApi()->CreateScene(0.5f, 0.5f, 0.6f);
     scene->CreatePlane(0, 1, 0, 0, nullptr);
-    int64 tick = SafeSystem::GetMilliSecond();
+    int64 tick = SafeSystem::Time::GetMilliSecond();
 
     START_TIMER(engine, this, 0, 20 + SafeTools::Rand(500), 100, 50, scene);
     START_TIMER(engine, this, 1, SafeTools::Rand(500), Api::Unlimited, 17, scene);
@@ -38,9 +38,8 @@ bool TestPhysics::Launch(iEngine* const engine) {
 
         std::string file = SafeFile::GetApplicationPath() + "/TestPhysx/" + sceneObj->Attribute("SceneObj");
 
-        scene->CreateTriangleMesh(XEngine::Api::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), 1, file);
-        printf("Load %s, %.2f, %.2f, %.2f\n", file.c_str(), x, y, z);
-        sceneObj = sceneObj->NextSiblingElement("SceneObj");
+        //         scene->CreateTriangleMesh(XEngine::Api::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), 1, file);
+        //         sceneObj = sceneObj->NextSiblingElement("SceneObj");
     }
 
     scene->Simulate(1 / 60.0f);

@@ -30,14 +30,14 @@ namespace XEngine {
     }
 
     bool TimeWheel::Initialize(Api::iEngine* const engine) {
-        _time_gears[4] = x_new TimeGear(tq_tvn_size, 0);
-        _time_gears[3] = x_new TimeGear(tq_tvn_size, _time_gears[4]);
-        _time_gears[2] = x_new TimeGear(tq_tvn_size, _time_gears[3]);
-        _time_gears[1] = x_new TimeGear(tq_tvn_size, _time_gears[2]);
-        _time_gears[0] = x_new TimeGear(tq_tvr_size, _time_gears[1]);
+        _time_gears[4] = xnew TimeGear(tq_tvn_size, 0);
+        _time_gears[3] = xnew TimeGear(tq_tvn_size, _time_gears[4]);
+        _time_gears[2] = xnew TimeGear(tq_tvn_size, _time_gears[3]);
+        _time_gears[1] = xnew TimeGear(tq_tvn_size, _time_gears[2]);
+        _time_gears[0] = xnew TimeGear(tq_tvr_size, _time_gears[1]);
 
-        _running = x_new TimeBaseList;
-        _suspended = x_new TimeBaseList;
+        _running = xnew TimeBaseList;
+        _suspended = xnew TimeBaseList;
         return true;
     }
 
@@ -60,8 +60,8 @@ namespace XEngine {
     }
 
     void TimeWheel::Update(Api::iEngine* const engine) {
-        static int64 last = SafeSystem::GetMilliSecond();
-        int64 tick = SafeSystem::GetMilliSecond();
+        static int64 last = SafeSystem::Time::GetMilliSecond();
+        int64 tick = SafeSystem::Time::GetMilliSecond();
 
         int count = (int)(tick - last) / JIFF;
         for (int i = 0; i < count; ++i)

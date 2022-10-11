@@ -79,13 +79,13 @@ namespace XEngine {
 
     }
 
-    int64 tick = SafeSystem::GetMilliSecond();
+    int64 tick = SafeSystem::Time::GetMilliSecond();
     void Logic::Update(Api::iEngine* const engine) {
-        int64 temp = SafeSystem::GetMilliSecond() - tick;
+        int64 temp = SafeSystem::Time::GetMilliSecond() - tick;
         if (temp > 5) {
             XLOG(engine, "%lld", temp);
         }
-        tick = SafeSystem::GetMilliSecond();
+        tick = SafeSystem::Time::GetMilliSecond();
     }
 
     void Logic::FixedUpdate(Api::iEngine* const engine) {

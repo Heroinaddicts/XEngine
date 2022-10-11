@@ -28,7 +28,7 @@ public:
     }
 
     virtual void OnTimer(const int id, void* const context, const int64 timestamp) override {
-        std::string data = XEngine::SafeString::Int64ToString(XEngine::SafeSystem::GetMilliSecond()) + " ";
+        std::string data = XEngine::SafeString::Int64ToString(XEngine::SafeSystem::Time::GetMilliSecond()) + " ";
         for (int i = 0; i < 100; i++) {
             Send(data.c_str(), data.size());
         }
@@ -65,7 +65,7 @@ bool Test001::Destroy(iEngine* const engine) {
 }
 
 iTcpSession* Test001::OnMallocConnection(const char* remote_ip, const int remote_port) {
-    return x_new TcpSession;
+    return xnew TcpSession;
 }
 
 void Test001::OnError(iTcpSession* session) {

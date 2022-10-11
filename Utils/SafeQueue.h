@@ -39,7 +39,7 @@ namespace XEngine {
                 _read_count(0),
                 _write_count(0),
                 _size(size),
-                _queue(x_new QueueSpace<T>[size]) {
+                _queue(xnew QueueSpace<T>[size]) {
                 XASSERT(_queue, "Failed to allocate memory");
             }
 

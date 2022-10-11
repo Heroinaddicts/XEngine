@@ -1,5 +1,7 @@
 #pragma once
 
+#include <list>
+
 #include "iPhysics.h"
 #include "Engine.h"
 #include "PxPhysicsAPI.h"
@@ -7,10 +9,26 @@ using namespace physx;
 
 #include "SafeString.h"
 #include "SafeMemory.h"
+#include "SafeThread.h"
 
 namespace XEngine {
-    class PhysicsAllocator : public PxAllocatorCallback
-    {
+    class Face {
+    public:
+        Face() : u(0), v(0), w(0) {}
+
+        unsigned int u;
+        unsigned int v;
+        unsigned int w;
+    };
+
+    class MeshData {
+    public:
+        std::vector<Vector3> v;
+        std::list<std::list<Face>> f;
+        std::string name;
+    };
+
+    class PhysicsAllocator : public PxAllocatorCallback {
     public:
         void* allocate(size_t size, const char*, const char*, int) {
             void* p = _aligned_malloc(size, 16);
@@ -23,8 +41,7 @@ namespace XEngine {
         }
     };
 
-    class PhysicsErrorCallback : public PxErrorCallback
-    {
+    class PhysicsErrorCallback : public PxErrorCallback {
     public:
         PhysicsErrorCallback() {
 

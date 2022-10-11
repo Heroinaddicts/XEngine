@@ -9,7 +9,7 @@ namespace XEngine {
 
     void TimeBase::OnTimer() {
         XASSERT(_timer, "where is timer ???");
-        const int64 tick = SafeSystem::GetMilliSecond();
+        const int64 tick = SafeSystem::Time::GetMilliSecond();
         _polling = true;
         if (!_started) {
             _timer->OnStart(_id, _context, tick);
@@ -44,7 +44,7 @@ namespace XEngine {
         XASSERT(_valid, "timer is already invalid");
 
         _valid = false;
-        _timer->OnEnd(_id, _context, false, SafeSystem::GetMilliSecond());
+        _timer->OnEnd(_id, _context, false, SafeSystem::Time::GetMilliSecond());
     }
 
     void TimeBase::Pause(unsigned_int32 jiff) {
@@ -52,7 +52,7 @@ namespace XEngine {
             XASSERT(!_paused, "timer already is paused");
             _pause_tick = jiff;
             _paused = true;
-            _timer->OnPause(_id, _context, SafeSystem::GetMilliSecond());
+            _timer->OnPause(_id, _context, SafeSystem::Time::GetMilliSecond());
         }
     }
 
@@ -62,7 +62,7 @@ namespace XEngine {
 
             _expire = jiff + _expire - _pause_tick;
             _paused = false;
-            _timer->OnResume(_id, _context, SafeSystem::GetMilliSecond());
+            _timer->OnResume(_id, _context, SafeSystem::Time::GetMilliSecond());
         }
     }
 

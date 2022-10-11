@@ -26,7 +26,7 @@ namespace XEngine {
         }
 
         inline void SetSeed() {
-            SetSeed(SafeSystem::GetMilliSecond());
+            SetSeed(SafeSystem::Time::GetMilliSecond());
         }
 
         inline int Rand(int range) {
@@ -34,7 +34,7 @@ namespace XEngine {
                 return 0;
             }
             if (static_seed == 0) {
-                static_seed = SafeSystem::GetMilliSecond();
+                static_seed = SafeSystem::Time::GetMilliSecond();
             }
 
             static_seed = (((static_seed = static_seed * 214013L + 2531011L) >> 16) & 0x7fff);

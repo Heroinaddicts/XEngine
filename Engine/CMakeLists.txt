@@ -19,8 +19,6 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Navigation/Recast"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physx4"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/MeshLoader"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/MeshLoader/SDK"
 )
 
 if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
@@ -37,7 +35,6 @@ set(Interface
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iTimeWheel.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iNavigation.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iPhysics.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iMeshLoader.h"
 )
 
 set(Logic
@@ -134,16 +131,12 @@ set(Navigation
 
 set(Physics
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Header.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/TriangleMeshActor.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/TriangleMeshActor.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxScene.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxScene.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physics.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physics.cpp"
-)
-
-set(MeshLoader
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/MeshLoader/Header.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/MeshLoader/MeshLoader.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/MeshLoader/MeshLoader.cpp"
 )
 
 set(Engine
@@ -162,7 +155,6 @@ source_group(Component\\TimeWheel FILES ${TimeWheel})
 source_group(Component\\Navigation\\Recast FILES ${Recast})
 source_group(Component\\Navigation FILES ${Navigation})
 source_group(Component\\Physics FILES ${Physics})
-source_group(Component\\MeshLoader FILES ${MeshLoader})
 source_group(\\ FILES ${Engine})
 
 add_executable(XEngine
@@ -174,7 +166,6 @@ add_executable(XEngine
     ${TimeWheel}
     ${Recast}
     ${Navigation}
-    ${MeshLoader}
     ${Physics}
     ${Geometry}
     ${Utils}

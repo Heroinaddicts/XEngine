@@ -24,7 +24,7 @@ namespace XEngine {
     }
 
     bool Navmesh::Load() {
-        int64 tick = SafeSystem::GetMilliSecond();
+        int64 tick = SafeSystem::Time::GetMilliSecond();
         FILE* fp = fopen(_file.c_str(), "rb");
         if (!fp) return false;
 
@@ -99,7 +99,7 @@ namespace XEngine {
 
         fclose(fp);
         _query->init(_mesh, 2048);
-        XLOG(g_engine, "load navmesh %s use %lld", _file.c_str(), SafeSystem::GetMilliSecond() - tick);
+        XLOG(g_engine, "load navmesh %s use %lld", _file.c_str(), SafeSystem::Time::GetMilliSecond() - tick);
         return true;
     }
 

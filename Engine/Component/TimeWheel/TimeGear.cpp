@@ -9,7 +9,7 @@ namespace XEngine {
         _cur_move_dst(0),
         _max_move_dst(maxMoveDst) {
 
-        _timer_vec = x_new TimeBaseList[_max_move_dst];
+        _timer_vec = xnew TimeBaseList[_max_move_dst];
     }
 
     TimeGear::~TimeGear() {

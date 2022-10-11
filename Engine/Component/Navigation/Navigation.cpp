@@ -1,5 +1,6 @@
 #include "Navigation.h"
 #include "Navmesh.h"
+#include "SafeString.h"
 
 namespace XEngine {
     Api::iEngine* g_engine = nullptr;
@@ -13,7 +14,16 @@ namespace XEngine {
     }
 
     bool Navigation::Launch(Api::iEngine* const engine) {
-        Start(nullptr);
+        int thread_count = 4;
+        const char* navmesh_load_thread_count = engine->GetLaunchParameter("navmesh_load_thread_count");
+        if (navmesh_load_thread_count) {
+            thread_count = SafeString::StringToInt(navmesh_load_thread_count);
+            if (0 == thread_count) {
+                thread_count = 4;
+            }
+        }
+
+        Start(thread_count);
         return true;
     }
 
@@ -42,7 +52,7 @@ namespace XEngine {
     }
 
     Api::iNavmesh* Navigation::LoadNavmeshSync(const std::string& file) {
-        Navmesh* mesh = x_new Navmesh(file);
+        Navmesh* mesh = xnew Navmesh(file);
         if (!mesh->Load()) {
             x_del mesh;
             return nullptr;
@@ -59,7 +69,7 @@ namespace XEngine {
             return;
         }
 
-        Navmesh* mesh = x_new Navmesh(file);
+        Navmesh* mesh = xnew Navmesh(file);
         if (false == _load_queue.Push(AsyncMeshLoader(mesh, func))) {
             XERROR(g_engine, "async load mesh queue is full, load %s error", file.c_str());
             x_del mesh;
@@ -75,15 +85,23 @@ namespace XEngine {
     void Navigation::Run(void* constext) {
         AsyncMeshLoader loader;
         while (true) {
-            if (_load_queue.Pull(loader)) {
+            bool ret = false;
+            {
+                AUTO_LOCK(_pull_lock);
+                ret = _load_queue.Pull(loader);
+            }
+
+            if (ret) {
                 if (!loader.mesh->Load()) {
                     x_del loader.mesh;
                     loader.mesh = nullptr;
                 }
+
+                AUTO_LOCK(_push_lock);
                 _loaded_queue.Push(loader);
             }
             else {
-                SafeSystem::MillisecondSleep(1);
+                SafeSystem::Time::MillisecondSleep(1);
             }
         }
     }

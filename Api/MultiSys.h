@@ -31,12 +31,12 @@ typedef uint64_t unsigned_int64;
 #ifdef _DEBUG
 #define x_malloc malloc
 #define x_free free
-#define x_new new
+#define xnew new
 #define x_del delete
 #else
 #define x_malloc malloc
 #define x_free free
-#define x_new new
+#define xnew new
 #define x_del delete
 #endif //defined _DEBUG
 

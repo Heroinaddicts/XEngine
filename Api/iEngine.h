@@ -9,7 +9,6 @@ namespace XEngine {
         class iTimerApi;
         class iNavigationApi;
         class iPhysicsApi;
-        class iMeshLoaderApi;
 
         class iEngine {
         public:
@@ -21,7 +20,6 @@ namespace XEngine {
             virtual iTimerApi* GetTimerApi() = 0;
             virtual iNavigationApi* GetNavigationApi() = 0;
             virtual iPhysicsApi* GetPhysicsApi() = 0;
-            virtual iMeshLoaderApi* GetMeshLoaderApi() = 0;
 
             virtual float GetFixedTimeStep() = 0;
 

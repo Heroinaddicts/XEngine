@@ -16,7 +16,6 @@ namespace XEngine {
         virtual Api::iTimerApi* GetTimerApi();
         virtual Api::iNavigationApi* GetNavigationApi();
         virtual Api::iPhysicsApi* GetPhysicsApi();
-        virtual Api::iMeshLoaderApi* GetMeshLoaderApi();
 
         virtual float GetFixedTimeStep();
 

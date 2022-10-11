@@ -36,20 +36,22 @@ include_directories(
 )
 
 set(Api
+    "${PROJECT_SOURCE_DIR}/Api/iGameObject.h"
     "${PROJECT_SOURCE_DIR}/Api/iComponent.h"
     "${PROJECT_SOURCE_DIR}/Api/iNetApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iTimerApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iNavigationApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iPhysicsApi.h"
-    "${PROJECT_SOURCE_DIR}/Api/iMeshLoaderApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iEngine.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.h"
     "${PROJECT_SOURCE_DIR}/Api/MultiSys.cpp"
 )
 
 set(Geometry
-    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Vector3.h"
+    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Vector.h"
+    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Vector.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/Geometry/Quaternion.h"
+    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Quaternion.cpp"
 )
 
 set(TinyXML
@@ -73,6 +75,8 @@ set(Utils
     "${PROJECT_SOURCE_DIR}/Utils/SafeQueue.h"
     "${PROJECT_SOURCE_DIR}/Utils/XBuffer.h"
     "${PROJECT_SOURCE_DIR}/Utils/XPool.h"
+    "${PROJECT_SOURCE_DIR}/Utils/XLock.h"
+    "${PROJECT_SOURCE_DIR}/Utils/X3DObjFile.h"
 )
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/Engine)

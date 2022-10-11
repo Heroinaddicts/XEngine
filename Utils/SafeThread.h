@@ -2,24 +2,24 @@
 #define __SafeThread_h__
 
 namespace XEngine {
-	class SafeThread {
-	public:
-		virtual ~SafeThread() {}
+    class SafeThread {
+    public:
+        virtual ~SafeThread() {}
 
-		virtual bool Start(void* context);
+        virtual bool Start(const int thread_count, void* context = nullptr);
 
-	protected:
-		virtual void Run(void* constext) = 0;
+    protected:
+        virtual void Run(void* constext) = 0;
 
-	private:
+    private:
 #ifdef WIN32
-		static unsigned int __stdcall ThreadProc(void* lpParam);
+        static unsigned int __stdcall ThreadProc(void* lpParam);
 #endif //WIN32
 
 #ifdef Linux
-		static void* ThreadProc(void* pParam);
+        static void* ThreadProc(void* pParam);
 #endif //Linux
-	};
+    };
 }
 
 #endif //__SafeThread_h__

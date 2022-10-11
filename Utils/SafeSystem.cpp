@@ -6,14 +6,30 @@
 
 namespace XEngine {
     namespace SafeSystem {
-        void MillisecondSleep(const int millisecond) {
+        namespace Time {
+            void MillisecondSleep(const int millisecond) {
 #ifdef WIN32
-            Sleep(millisecond);
+                Sleep(millisecond);
 #endif //WIN32
 
 #ifdef Linux
-            sleep(millisecond);
+                sleep(millisecond);
 #endif //Linux
+            }
+        }
+
+        namespace Process {
+            unsigned_int64 GetCurrentProcessID() {
+#ifdef WIN32
+                return ::GetCurrentProcessId();
+#endif //WIN32
+            }
+
+            unsigned_int64 GetCurrentThreadID() {
+#ifdef WIN32
+                return ::GetCurrentThreadId();
+#endif //WIN32
+            }
         }
     }
 }
