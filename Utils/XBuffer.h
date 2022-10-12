@@ -12,7 +12,7 @@ namespace XEngine {
         }
 
         ~XBuffer() {
-            x_del[] _data;
+            xdel[] _data;
         }
 
         inline bool In(const void* data, const unsigned int size) {
@@ -37,7 +37,7 @@ namespace XEngine {
 
                 _in -= _out;
                 _out = 0;
-                x_del old_data;
+                xdel old_data;
 
             }
 

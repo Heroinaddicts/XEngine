@@ -29,15 +29,15 @@ typedef uint64_t unsigned_int64;
 #define IN
 
 #ifdef _DEBUG
-#define x_malloc malloc
-#define x_free free
+#define xmalloc malloc
+#define xfree free
 #define xnew new
-#define x_del delete
+#define xdel delete
 #else
-#define x_malloc malloc
-#define x_free free
+#define xmalloc malloc
+#define xfree free
 #define xnew new
-#define x_del delete
+#define xdel delete
 #endif //defined _DEBUG
 
 void __assert__(const char* file, int line, const char* funname, const char* format, ...);

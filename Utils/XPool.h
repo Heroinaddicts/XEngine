@@ -42,7 +42,7 @@ namespace XEngine {
                 auto tmp = _list_head;
                 _list_head = _list_head->next;
 
-                x_free(tmp);
+                xfree(tmp);
             }
         }
 
@@ -53,7 +53,7 @@ namespace XEngine {
         T* CreateObject() {
             Chunk* chunk = Create();
 #endif
-            T* t = new(chunk->buffer) T();
+            T* t = xnew(chunk->buffer) T();
             return t;
         }
 
@@ -65,7 +65,7 @@ namespace XEngine {
         T* CreateObject(Args... args) {
             Chunk* chunk = Create();
 #endif
-            T* t = new(chunk->buffer) T(args...);
+            T* t = xnew(chunk->buffer) T(args...);
             return t;
         }
 
@@ -114,10 +114,9 @@ namespace XEngine {
         }
 
         void AllocChunk(int count) {
-            for (int i = 0; i < count; ++i)
-            {
-                ChunkList* new_list = (ChunkList*)x_malloc(sizeof(ChunkList));
-                XASSERT(new_list, "new chunk faild");
+            for (int i = 0; i < count; ++i) {
+                ChunkList* new_list = (ChunkList*)xmalloc(sizeof(ChunkList));
+                XASSERT(new_list, "xnew chunk faild");
                 ArrangeChunkList(new_list);
 
                 new_list->next = _list_head;
@@ -144,7 +143,7 @@ namespace XEngine {
             if (_list_head == chunk_list)
                 _list_head = chunk_list->next;
 
-            x_free(chunk_list);
+            xfree(chunk_list);
             --_chunk_count;
         }
 

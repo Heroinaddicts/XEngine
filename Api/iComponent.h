@@ -10,19 +10,18 @@ namespace XEngine {
         class iComponent {
         public:
             virtual ~iComponent() {}
-            iComponent(const std::string& name, iComponent* const next) : _name(name), _next(next) {}
+            iComponent() : _name(""), _next(nullptr) {}
 
             virtual bool Initialize(iEngine* const engine) = 0;
             virtual bool Launch(iEngine* const engine) = 0;
             virtual bool Destroy(iEngine* const engine) = 0;
 
-            const std::string _name;
+            const char* const _name;
             iComponent* const _next;
         };
     }
 }
 
-#define DEFINE_COMPONENT_CONSTRUCTOR(Component) Component(const std::string & name, iComponent* const next) : iComponent(name, next) {}
 
 #ifdef WIN32
 #define DLL_INSTANCE \
@@ -42,8 +41,10 @@ namespace XEngine {
 class Factory##Component {\
 public:\
     Factory##Component(XEngine::Api::iComponent * & pComponent) {\
-        XEngine::Api::iComponent * p##Component = xnew Component(#Component, pComponent);\
-        pComponent = p##Component;\
+        XEngine::Api::iComponent * p = xnew Component();\
+        ((const char *)p->_name) = #Component;\
+        ((iComponent*)p->_next) = pComponent;\
+        pComponent = p;\
     }\
 };\
 Factory##Component factroy##Component(static_components);

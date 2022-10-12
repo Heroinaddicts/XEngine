@@ -19,7 +19,7 @@ namespace XEngine {
         XASSERT(p, "a null thread owner point");
         p->st->Run(p->context);
         _endthreadex(0);
-        x_del p;
+        xdel p;
         return 0;
     }
 #endif //WIN32

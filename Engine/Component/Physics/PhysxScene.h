@@ -18,7 +18,14 @@ namespace XEngine {
         virtual Api::iPhysxBox* CreateBox(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context);
         virtual Api::iPhysxCapsule* CreateCapsule(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context);
         virtual Api::iPhysxConvexMesh* CreateConvexMesh(const Api::eRigType type, const Quaternion& qt, Api::iPhysxContext* const context);
-        virtual Api::iPhysxTriangleMesh* CreateTriangleMesh(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const float scale, const Api::eMeshFileType meshfiletype, const std::string& file, Api::iPhysxContext* const data);
+        virtual Api::iPhysxTriangleMesh* CreateTriangleMesh(
+            const Api::eRigType type,
+            const Vector3& pos,
+            const Quaternion& qt,
+            const float scale,
+            const X3DObj* obj,
+            Api::iPhysxContext* const data
+        );
 
         virtual void Simulate(const float elapsed_time);
         virtual bool FetchResults(bool block);

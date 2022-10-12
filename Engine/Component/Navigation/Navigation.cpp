@@ -54,7 +54,7 @@ namespace XEngine {
     Api::iNavmesh* Navigation::LoadNavmeshSync(const std::string& file) {
         Navmesh* mesh = xnew Navmesh(file);
         if (!mesh->Load()) {
-            x_del mesh;
+            xdel mesh;
             return nullptr;
         }
 
@@ -72,7 +72,7 @@ namespace XEngine {
         Navmesh* mesh = xnew Navmesh(file);
         if (false == _load_queue.Push(AsyncMeshLoader(mesh, func))) {
             XERROR(g_engine, "async load mesh queue is full, load %s error", file.c_str());
-            x_del mesh;
+            xdel mesh;
             mesh = nullptr;
             func(nullptr);
         }
@@ -93,7 +93,7 @@ namespace XEngine {
 
             if (ret) {
                 if (!loader.mesh->Load()) {
-                    x_del loader.mesh;
+                    xdel loader.mesh;
                     loader.mesh = nullptr;
                 }
 

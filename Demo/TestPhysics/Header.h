@@ -13,6 +13,9 @@
 using namespace XEngine;
 using namespace XEngine::Api;
 
+#include "iObjLoader.h"
+
 extern iEngine* g_engine;
+extern iObjLoader* g_objloader;
 
 #endif //__Header_h__

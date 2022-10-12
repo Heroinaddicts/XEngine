@@ -2,6 +2,7 @@
 #define __Engine_h__
 
 #include "iEngine.h"
+#include "iComponent.h"
 #include <string>
 
 namespace XEngine {
@@ -26,6 +27,9 @@ namespace XEngine {
 
     public:
         bool isShutdown();
+
+    protected:
+        virtual Api::iComponent* FindComponent(const std::string& name) override;
 
     private:
         Engine() {}

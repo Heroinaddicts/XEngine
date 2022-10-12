@@ -1,16 +1,20 @@
 #include "TestPhysics.h"
 #include "tinyxml2.h"
-#include "SafeFile.h"
+#include "SafeSystem.h"
+#include "X3DObj.h"
 
 iEngine* g_engine = nullptr;
+iObjLoader* g_objloader = nullptr;
 
 bool TestPhysics::Initialize(iEngine* const engine) {
     g_engine = engine;
     return true;
 }
 
-
 bool TestPhysics::Launch(iEngine* const engine) {
+    g_objloader = engine->GetComponent<iObjLoader>("ObjLoader");
+    XASSERT(g_objloader, "GetComponent Error");
+
     iPhysxScene* scene = engine->GetPhysicsApi()->CreateScene(0.5f, 0.5f, 0.6f);
     scene->CreatePlane(0, 1, 0, 0, nullptr);
     int64 tick = SafeSystem::Time::GetMilliSecond();
@@ -19,7 +23,7 @@ bool TestPhysics::Launch(iEngine* const engine) {
     START_TIMER(engine, this, 1, SafeTools::Rand(500), Api::Unlimited, 17, scene);
 
     tinyxml2::XMLDocument doc;
-    if (tinyxml2::XMLError::XML_SUCCESS != doc.LoadFile((SafeFile::GetApplicationPath() + "/TestPhysx/SceneInfo.xml").c_str())) {
+    if (tinyxml2::XMLError::XML_SUCCESS != doc.LoadFile((SafeSystem::File::GetApplicationPath() + "/LostCity/SceneObjs.xml").c_str())) {
         XASSERT(false, "load xml error");
         return false;
     }
@@ -27,19 +31,19 @@ bool TestPhysics::Launch(iEngine* const engine) {
     tinyxml2::XMLElement* root = doc.RootElement();
     tinyxml2::XMLElement* sceneObj = root->FirstChildElement("SceneObj");
     while (nullptr != sceneObj) {
-        float x = SafeString::StringToFloat(sceneObj->Attribute("PositionX"));
-        float y = SafeString::StringToFloat(sceneObj->Attribute("PositionY"));
-        float z = SafeString::StringToFloat(sceneObj->Attribute("PositionZ"));
+        float x = SafeString::StringToFloat(sceneObj->Attribute("x"));
+        float y = SafeString::StringToFloat(sceneObj->Attribute("y"));
+        float z = SafeString::StringToFloat(sceneObj->Attribute("z"));
 
         float qx = SafeString::StringToFloat(sceneObj->Attribute("QuaternionX"));
         float qy = SafeString::StringToFloat(sceneObj->Attribute("QuaternionY"));
         float qz = SafeString::StringToFloat(sceneObj->Attribute("QuaternionZ"));
         float qw = SafeString::StringToFloat(sceneObj->Attribute("QuaternionW"));
 
-        std::string file = SafeFile::GetApplicationPath() + "/TestPhysx/" + sceneObj->Attribute("SceneObj");
-
-        //         scene->CreateTriangleMesh(XEngine::Api::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), 1, file);
-        //         sceneObj = sceneObj->NextSiblingElement("SceneObj");
+        std::string file = SafeSystem::File::GetApplicationPath() + "/LostCity/" + sceneObj->Attribute("SceneObj");
+        const X3DObj* obj = g_objloader->Get3DObj(file);
+        scene->CreateTriangleMesh(XEngine::Api::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), 1, obj);
+        sceneObj = sceneObj->NextSiblingElement("SceneObj");
     }
 
     scene->Simulate(1 / 60.0f);

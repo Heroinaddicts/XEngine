@@ -7,7 +7,7 @@
 
 namespace XEngine {
     namespace SafeString {
-        inline int Replace(std::string& target, const std::string& src, const std::string& dst) {
+        __forceinline int Replace(std::string& target, const std::string& src, const std::string& dst) {
             int count = 0;
             std::string::size_type pos = 0;
             std::string::size_type srcLen = src.size();
@@ -22,7 +22,7 @@ namespace XEngine {
             return count;
         }
 
-        inline int Split(const std::string& src, const std::string& commas, std::vector<std::string>& res) {
+        __forceinline int Split(const std::string& src, const std::string& commas, std::vector<std::string>& res) {
             std::string::size_type pos_1 = 0;
             std::string::size_type pos_2 = 0;
 
@@ -39,19 +39,33 @@ namespace XEngine {
             return res.size();
         }
 
-        inline int64 StringToInt64(const std::string& str) {
+        __forceinline bool StringStartWith(const std::string& src, const std::string& sub) {
+            if (src.length() < sub.length()) {
+                return false;
+            }
+
+            for (int i = 0; i < sub.length(); i++) {
+                if (src.c_str()[i] != sub.c_str()[i]) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        __forceinline int64 StringToInt64(const std::string& str) {
             return atoll(str.c_str());
         }
 
-        inline int StringToInt(const std::string& str) {
+        __forceinline int StringToInt(const std::string& str) {
             return atol(str.c_str());
         }
 
-        inline float StringToFloat(const std::string& str) {
+        __forceinline float StringToFloat(const std::string& str) {
             return atof(str.c_str());
         }
 
-        inline std::string Int64ToString(const int64 value) {
+        __forceinline std::string Int64ToString(const int64 value) {
             char str[128] = { 0 };
             sprintf_s(str, sizeof(str), "%llu", value);
             return str;

@@ -77,6 +77,10 @@ namespace XEngine {
     bool Engine::isShutdown() {
         return false;
     }
+
+    Api::iComponent* Engine::FindComponent(const std::string& name) {
+        return g_logic->FindComponent(name);
+    }
 }
 
 bool AnalysisLaunchParameters(const int argc, const char** args, const char** env) {

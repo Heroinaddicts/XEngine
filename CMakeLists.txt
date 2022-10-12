@@ -48,6 +48,7 @@ set(Api
 )
 
 set(Geometry
+    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Geometry.h"
     "${PROJECT_SOURCE_DIR}/Utils/Geometry/Vector.h"
     "${PROJECT_SOURCE_DIR}/Utils/Geometry/Vector.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/Geometry/Quaternion.h"
@@ -64,8 +65,6 @@ set(Utils
     "${PROJECT_SOURCE_DIR}/Utils/SafeString.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/SafeMemory.h"
     "${PROJECT_SOURCE_DIR}/Utils/SafeMemory.cpp"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeFile.h"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeFile.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/SafeThread.h"
     "${PROJECT_SOURCE_DIR}/Utils/SafeThread.cpp"
     "${PROJECT_SOURCE_DIR}/Utils/SafeSystem.h"
@@ -76,7 +75,10 @@ set(Utils
     "${PROJECT_SOURCE_DIR}/Utils/XBuffer.h"
     "${PROJECT_SOURCE_DIR}/Utils/XPool.h"
     "${PROJECT_SOURCE_DIR}/Utils/XLock.h"
-    "${PROJECT_SOURCE_DIR}/Utils/X3DObjFile.h"
+    "${PROJECT_SOURCE_DIR}/Utils/X3DObj.h"
+    "${PROJECT_SOURCE_DIR}/Utils/X3DObj.cpp"
+    "${PROJECT_SOURCE_DIR}/Utils/XFile.h"
+    "${PROJECT_SOURCE_DIR}/Utils/XFile.cpp"
 )
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/Engine)

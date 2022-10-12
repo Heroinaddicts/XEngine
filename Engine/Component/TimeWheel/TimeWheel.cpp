@@ -47,12 +47,12 @@ namespace XEngine {
 
     void TimeWheel::Release(Api::iEngine* const engine) {
         for (int i = 0; i < 5; ++i) {
-            x_del _time_gears[i];
+            xdel _time_gears[i];
             _time_gears[i] = nullptr;
         }
-        x_del _running;
-        x_del _suspended;
-        x_del this;
+        xdel _running;
+        xdel _suspended;
+        xdel this;
     }
 
     void TimeWheel::EarlyUpdate(Api::iEngine* const engine) {

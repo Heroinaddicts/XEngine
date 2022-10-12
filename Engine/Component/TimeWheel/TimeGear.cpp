@@ -14,7 +14,7 @@ namespace XEngine {
 
     TimeGear::~TimeGear() {
         if (_timer_vec) {
-            x_del[] _timer_vec;
+            xdel[] _timer_vec;
             _timer_vec = nullptr;
         }
     }

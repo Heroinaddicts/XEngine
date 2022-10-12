@@ -1,5 +1,5 @@
 #include "Logic.h"
-#include "SafeFile.h"
+#include "SafeSystem.h"
 #include "SafeString.h"
 #include "MultiSys.h"
 #include <vector>
@@ -19,14 +19,23 @@ namespace XEngine {
         return &static_logic;
     }
 
+    Api::iComponent* Logic::FindComponent(const std::string& name) {
+        auto itor = _ComponentMap.find(name);
+        if (_ComponentMap.end() != itor) {
+            return itor->second;
+        }
+
+        return nullptr;
+    }
+
     bool Logic::Initialize(Api::iEngine* const engine) {
         const char* component_path = engine->GetLaunchParameter("component_path");
-        component_path ? _ComponentPath = component_path : _ComponentPath = SafeFile::GetApplicationPath();
+        component_path ? _ComponentPath = component_path : _ComponentPath = SafeSystem::File::GetApplicationPath();
 
-        const char* components_arg = engine->GetLaunchParameter("components");
-        if (components_arg) {
+        const char* components = engine->GetLaunchParameter("components");
+        if (components) {
             std::vector<std::string> names;
-            int count = SafeString::Split(std::string(components_arg), ",", names);
+            int count = SafeString::Split(components, ";", names);
 
             for (int i = 0; i < count; i++) {
 #ifdef WIN32
@@ -43,25 +52,25 @@ namespace XEngine {
                 XASSERT(fun, "Can not export dll function GetComponents, dll %s", path.c_str());
                 Api::iComponent* component = fun();
                 if (false == component->Initialize(engine)) {
-                    XERROR(engine, "Component %s Initialize failed", component->_name.c_str());
+                    XERROR(engine, "Component %s Initialize failed", component->_name);
                     return false;
                 }
 
-                XLOG(engine, "Component %s Initialized", component->_name.c_str());
+                XLOG(engine, "Component %s Initialized", component->_name);
                 _ComponentMap.insert(std::make_pair(component->_name, component));
             }
         }
 
-        return false;
+        return true;
     }
 
     bool Logic::Launch(Api::iEngine* const engine) {
         for (auto itor = _ComponentMap.begin(); itor != _ComponentMap.end(); itor++) {
             if (false == itor->second->Launch(engine)) {
-                XERROR(engine, "Component %s Launch failed", itor->second->_name.c_str());
+                XERROR(engine, "Component %s Launch failed", itor->second->_name);
                 return false;
             }
-            XLOG(engine, "Component %s Launched", itor->second->_name.c_str());
+            XLOG(engine, "Component %s Launched", itor->second->_name);
         }
 
         return true;
@@ -70,7 +79,7 @@ namespace XEngine {
     void Logic::Release(Api::iEngine* const engine) {
         for (auto itor = _ComponentMap.begin(); itor != _ComponentMap.end(); itor++) {
             if (false == itor->second->Destroy(engine)) {
-                XERROR(engine, "component %s Destroy failed", itor->second->_name.c_str());
+                XERROR(engine, "component %s Destroy failed", itor->second->_name);
             }
         }
     }

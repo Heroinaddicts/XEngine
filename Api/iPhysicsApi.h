@@ -4,6 +4,7 @@
 #include "MultiSys.h"
 #include "Geometry/Vector.h"
 #include "Geometry/Quaternion.h"
+#include "X3DObj.h"
 
 namespace XEngine {
     namespace Api {
@@ -119,7 +120,14 @@ namespace XEngine {
             virtual iPhysxBox* CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context = nullptr) = 0;
             virtual iPhysxCapsule* CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context = nullptr) = 0;
             virtual iPhysxConvexMesh* CreateConvexMesh(const eRigType type, const Quaternion& qt, Api::iPhysxContext* const context = nullptr) = 0;
-            virtual iPhysxTriangleMesh* CreateTriangleMesh(const eRigType type, const Vector3& pos, const Quaternion& qt, const float scale, const eMeshFileType meshfiletype, const std::string& file, iPhysxContext* const data = nullptr) = 0;
+            virtual iPhysxTriangleMesh* CreateTriangleMesh(
+                const eRigType type,
+                const Vector3& pos,
+                const Quaternion& qt,
+                const float scale,
+                const X3DObj* obj,
+                iPhysxContext* const data = nullptr
+            ) = 0;
 
             virtual void Simulate(float dt) = 0;
             virtual bool FetchResults(bool block) = 0;

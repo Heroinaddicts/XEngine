@@ -6,7 +6,6 @@
 class TestPhysics : public iComponent, public iTimer {
 public:
     virtual ~TestPhysics() {}
-    DEFINE_COMPONENT_CONSTRUCTOR(TestPhysics);
     virtual bool Initialize(iEngine* const engine);
     virtual bool Launch(iEngine* const engine);
     virtual bool Destroy(iEngine* const engine);

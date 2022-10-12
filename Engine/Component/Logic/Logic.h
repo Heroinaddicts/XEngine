@@ -10,6 +10,7 @@ namespace XEngine {
 
         static iLogic* GetInstance();
 
+        virtual Api::iComponent* FindComponent(const std::string& name) override;
         // 通过 iLogic 继承
         virtual bool Initialize(Api::iEngine* const engine) override;
         virtual bool Launch(Api::iEngine* const engine) override;

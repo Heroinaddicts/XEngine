@@ -3,6 +3,8 @@
 
 #include "MultiSys.h"
 #include <chrono>
+#include <string>
+#include <vector>
 
 namespace XEngine {
     namespace SafeSystem {
@@ -23,6 +25,11 @@ namespace XEngine {
 
             unsigned_int64 GetCurrentProcessID();
             unsigned_int64 GetCurrentThreadID();
+        }
+
+        namespace File {
+            const std::string& GetApplicationPath();
+            int GetFileInDirectory(const std::string& dir, const std::string& extension, OUT std::vector<std::string>& paths, OUT std::vector<std::string>& names, bool recursive = true);
         }
     }
 }
