@@ -22,7 +22,7 @@ namespace XEngine {
             const Api::eRigType type,
             const Vector3& pos,
             const Quaternion& qt,
-            const float scale,
+            const Vector3& scale,
             const X3DObj* obj,
             Api::iPhysxContext* const data
         );

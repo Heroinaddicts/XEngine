@@ -48,7 +48,7 @@ namespace XEngine {
         const Api::eRigType type,
         const Vector3& pos,
         const Quaternion& qt,
-        const float scale,
+        const Vector3& scale,
         const X3DObj* obj,
         Api::iPhysxContext* context
     ) {
@@ -60,7 +60,7 @@ namespace XEngine {
 
         // 加载顶点
         for (int i = 0; i < numVertices; ++i) {
-            PxVec3 vectmp(obj->GetV()[i].x * scale, obj->GetV()[i].y * scale, obj->GetV()[i].z * scale);
+            PxVec3 vectmp(obj->GetV()[i].x * scale.x, obj->GetV()[i].y * scale.y, obj->GetV()[i].z * scale.z);
             vertices[i] = vectmp;
         }
         //memcpy(vertices + 1, &objtmp->v[0], sizeof(PxVec3)* (numVertices));
@@ -92,6 +92,7 @@ namespace XEngine {
         switch (type) {
         case Api::eRigType::Dynamic: {
             actor = g_pxphysics->createRigidDynamic(PxTransform(pos.x, pos.y, pos.z, PxQuat(qt.x, qt.y, qt.z, qt.w)));
+            (dynamic_cast<PxRigidDynamic*>(actor))->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
             break;
         }
         case Api::eRigType::Static: {
@@ -106,7 +107,7 @@ namespace XEngine {
             shape->setContactOffset(0.03f);
             // A negative rest offset helps to avoid jittering when the deformed mesh moves away from objects resting on it.
             // 允许穿透的厚度，当穿透指定的厚度后，就是发生弹开等动作 -0.02f 负数代表穿透后，正数代表穿透前
-            shape->setRestOffset(-0.02f);
+            shape->setRestOffset(0.02);
         }
 
         actor->attachShape(*shape);

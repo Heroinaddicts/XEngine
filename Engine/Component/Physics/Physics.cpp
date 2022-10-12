@@ -70,7 +70,7 @@ namespace XEngine {
         desc.cpuDispatcher = PxDefaultCpuDispatcherCreate(2);
         desc.filterShader = PxDefaultSimulationFilterShader;
         desc.cudaContextManager = g_cuda_context_manager;
-        desc.flags | PxSceneFlag::eENABLE_CCD;
+        //desc.flags | PxSceneFlag::eENABLE_CCD;
         desc.flags | PxSceneFlag::eENABLE_GPU_DYNAMICS;
         desc.broadPhaseType = PxBroadPhaseType::eGPU;
 
