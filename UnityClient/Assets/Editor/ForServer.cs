@@ -30,7 +30,12 @@ public class ForServer : EditorWindow
 
     static string GetServerPhysxDataPath()
     {
-        return Application.dataPath + "../../Physx/" + SceneManager.GetActiveScene().name + "/";
+        string path = Application.dataPath + "../../../XEngine/Bin/Windows/Debug/Env/Config/Objs/" + SceneManager.GetActiveScene().name + "/";
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        return path;
     }
     static string GetMeshPath(Mesh mesh)
     {
