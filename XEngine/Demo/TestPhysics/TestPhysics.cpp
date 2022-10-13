@@ -2,6 +2,7 @@
 #include "tinyxml2.h"
 #include "SafeSystem.h"
 #include "X3DObj.h"
+#include "SafeSystem.h"
 
 iEngine* g_engine = nullptr;
 iObjLoader* g_objloader = nullptr;
@@ -12,6 +13,8 @@ bool TestPhysics::Initialize(iEngine* const engine) {
 }
 
 bool TestPhysics::Launch(iEngine* const engine) {
+    TRACE(engine, "Main thread id %lld", SafeSystem::Process::GetCurrentThreadID());
+
     g_objloader = engine->GetComponent<iObjLoader>("ObjLoader");
     XASSERT(g_objloader, "GetComponent Error");
 
@@ -22,7 +25,7 @@ bool TestPhysics::Launch(iEngine* const engine) {
     START_TIMER(engine, this, 1, SafeTools::Rand(500), Api::Unlimited, 17, scene);
 
     tinyxml2::XMLDocument doc;
-    if (tinyxml2::XMLError::XML_SUCCESS != doc.LoadFile((SafeSystem::File::GetApplicationPath() + "/LostCity/SceneObjs.xml").c_str())) {
+    if (tinyxml2::XMLError::XML_SUCCESS != doc.LoadFile((SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/TestPhysx/SceneObjs.xml").c_str())) {
         XASSERT(false, "load xml error");
         return false;
     }
@@ -43,13 +46,13 @@ bool TestPhysics::Launch(iEngine* const engine) {
         float qz = SafeString::StringToFloat(sceneObj->Attribute("QuaternionZ"));
         float qw = SafeString::StringToFloat(sceneObj->Attribute("QuaternionW"));
 
-        std::string file = SafeSystem::File::GetApplicationPath() + "/LostCity/" + sceneObj->Attribute("SceneObj");
+        std::string file = SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/TestPhysx/" + sceneObj->Attribute("SceneObj");
         const X3DObj* obj = g_objloader->Get3DObj(file);
         scene->CreateTriangleMesh(XEngine::Api::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), Vector3(scalex, scaley, scalez), obj);
         sceneObj = sceneObj->NextSiblingElement("SceneObj");
     }
 
-    START_TIMER(engine, this, 0, 25000, 100, 50, scene);
+    START_TIMER(engine, this, 0, 5000, 100, 50, scene);
     scene->Simulate(1 / 60.0f);
 
     return true;
@@ -70,10 +73,10 @@ void TestPhysics::OnTimer(const int id, void* const context, const int64 timesta
         int index = SafeTools::Rand(100000000) % 2;
         Quaternion qt;
         if (index == 0) {
-            scene->CreateBox(eRigType::Dynamic, Vector3(140, 30, 433), qt, Vector3(2, 2, 1));
+            scene->CreateBox(eRigType::Dynamic, Vector3(0, 30, 0), qt, Vector3(2, 2, 1));
         }
         else {
-            scene->CreateCapsule(eRigType::Dynamic, Vector3(205, 30, 400), qt, 1, 2);
+            scene->CreateCapsule(eRigType::Dynamic, Vector3(0, 30, 0), qt, 1, 2);
         }
     }
     else if (1 == id) {

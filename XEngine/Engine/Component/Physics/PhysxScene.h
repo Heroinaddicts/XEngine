@@ -4,7 +4,7 @@
 #include "Header.h"
 
 namespace XEngine {
-    class PhysxScene : public Api::iPhysxScene, public SafeThread {
+    class PhysxScene : public Api::iPhysxScene, public PxSimulationEventCallback, public PxContactModifyCallback, public PxCCDContactModifyCallback, public SafeThread {
         struct LoadMesh {
             MeshData* data;
             const Vector3& pos;
@@ -30,11 +30,26 @@ namespace XEngine {
         virtual void Simulate(const float elapsed_time);
         virtual bool FetchResults(bool block);
 
+        // 通过 PxSimulationEventCallback 继承
+        virtual void onConstraintBreak(PxConstraintInfo* constraints, PxU32 count) override;
+        virtual void onWake(PxActor** actors, PxU32 count) override;
+        virtual void onSleep(PxActor** actors, PxU32 count) override;
+        virtual void onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs) override;
+        virtual void onTrigger(PxTriggerPair* pairs, PxU32 count) override;
+        virtual void onAdvance(const PxRigidBody* const* bodyBuffer, const PxTransform* poseBuffer, const PxU32 count) override;
+
+        // 通过 PxContactModifyCallback 继承
+        virtual void onContactModify(PxContactModifyPair* const pairs, PxU32 count) override;
+
+        // 通过 PxCCDContactModifyCallback 继承
+        virtual void onCCDContactModify(PxContactModifyPair* const pairs, PxU32 count) override;
+
     protected:
         virtual void Run(void* constext);
     private:
         PxScene* const _scene;
         PxMaterial* const _material;
+
     };
 }
 

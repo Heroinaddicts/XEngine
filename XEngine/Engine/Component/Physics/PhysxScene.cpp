@@ -1,4 +1,5 @@
 #include "PhysxScene.h"
+#include "SafeSystem.h"
 
 namespace XEngine {
     PhysxScene::PhysxScene(
@@ -7,7 +8,12 @@ namespace XEngine {
         const float dynamic_friction,
         const float restitution)
         : _scene(scene),
-        _material(g_pxphysics->createMaterial(static_friction, dynamic_friction, restitution)) { }
+        _material(g_pxphysics->createMaterial(static_friction, dynamic_friction, restitution)) {
+
+        _scene->setSimulationEventCallback(this);
+        _scene->setCCDContactModifyCallback(this);
+        _scene->setContactModifyCallback(this);
+    }
 
     Api::iPhysxPlane* PhysxScene::CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context) {
         PxRigidStatic* groundPlane = PxCreatePlane(*g_pxphysics, PxPlane(nx, ny, nz, distance), *_material);
@@ -25,7 +31,7 @@ namespace XEngine {
         body->attachShape(*shape);
         PxRigidBodyExt::updateMassAndInertia(*body, 10.0f);
         _scene->addActor(*body);
-        shape->release();
+        //shape->release();
         return nullptr;
     }
 
@@ -36,7 +42,7 @@ namespace XEngine {
         body->attachShape(*shape);
         PxRigidBodyExt::updateMassAndInertia(*body, 10.0f);
         _scene->addActor(*body);
-        shape->release();
+        //shape->release();
         return nullptr;
     }
 
@@ -110,7 +116,7 @@ namespace XEngine {
         }
 
         actor->attachShape(*shape);
-        shape->release();
+        //shape->release();
         actor->userData = context;
         _scene->addActor(*actor);
 
@@ -127,5 +133,37 @@ namespace XEngine {
 
     void PhysxScene::Run(void* constext) {
 
+    }
+
+    void PhysxScene::onCCDContactModify(PxContactModifyPair* const pairs, PxU32 count) {
+        printf("PhysxScene::onCCDContactModify, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+    }
+
+    void PhysxScene::onContactModify(PxContactModifyPair* const pairs, PxU32 count) {
+        printf("PhysxScene::onContactModify, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+    }
+
+    void PhysxScene::onConstraintBreak(PxConstraintInfo* constraints, PxU32 count) {
+        printf("PhysxScene::onConstraintBreak, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+    }
+
+    void PhysxScene::onWake(PxActor** actors, PxU32 count) {
+        printf("PhysxScene::onWake, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+    }
+
+    void PhysxScene::onSleep(PxActor** actors, PxU32 count) {
+        printf("PhysxScene::onSleep, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+    }
+
+    void PhysxScene::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs) {
+        printf("PhysxScene::onContact, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+    }
+
+    void PhysxScene::onTrigger(PxTriggerPair* pairs, PxU32 count) {
+        printf("PhysxScene::onTrigger, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+    }
+
+    void PhysxScene::onAdvance(const PxRigidBody* const* bodyBuffer, const PxTransform* poseBuffer, const PxU32 count) {
+        printf("PhysxScene::onAdvance, %lld\n", SafeSystem::Process::GetCurrentThreadID());
     }
 }

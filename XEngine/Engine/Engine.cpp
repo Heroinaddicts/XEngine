@@ -156,12 +156,6 @@ int main(int argc, const char** args, const char** env) {
         g_logic->Update(engine);
         g_physics->Update(engine);
 
-        g_navigation->LaterUpdate(engine);
-        g_timewheel->LaterUpdate(engine);
-        g_net->LaterUpdate(engine);
-        g_logic->LaterUpdate(engine);
-        g_physics->LaterUpdate(engine);
-
         unsigned_int64 tick2 = XEngine::SafeSystem::Time::GetMicroSecond();
         if (tick2 - tick >= static_fixed_time_step) {
             g_navigation->FixedUpdate(engine);
@@ -171,6 +165,13 @@ int main(int argc, const char** args, const char** env) {
             g_physics->FixedUpdate(engine);
             tick += static_fixed_time_step;
         }
+
+        g_navigation->LaterUpdate(engine);
+        g_timewheel->LaterUpdate(engine);
+        g_logic->LaterUpdate(engine);
+        g_physics->LaterUpdate(engine);
+        g_net->LaterUpdate(engine);
+
     }
 
     { // Release

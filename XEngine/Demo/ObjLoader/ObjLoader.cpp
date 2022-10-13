@@ -6,10 +6,10 @@ iEngine* g_engine = nullptr;
 bool ObjLoader::Initialize(iEngine* const engine) {
     g_engine = engine;
 
-    std::string path = "D:/Github/XEngine/Bin/Windows/Debug/LostCity";
+    std::string file = SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs";
     std::vector<std::string> paths, names;
 
-    int count = SafeSystem::File::GetFileInDirectory(path, ".obj", paths, names);
+    int count = SafeSystem::File::GetFileInDirectory(file, ".obj", paths, names);
     for (int i = 0; i < count; i++) {
         std::string path = paths[i];
         X3DObj* obj = xnew X3DObj();
