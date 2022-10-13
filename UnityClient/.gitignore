@@ -26,8 +26,10 @@
 *.out
 *.app
 
-# build dir
-build/*
 
-Engine/Library/Debug/FbxSDK/libfbxsdk-mt.lib
-Engine/Library/Debug/FbxSDK/libfbxsdk-md.lib
+# build dir
+Library/*
+Temp/*
+*.sln
+.vsconfig
+*.csproj
