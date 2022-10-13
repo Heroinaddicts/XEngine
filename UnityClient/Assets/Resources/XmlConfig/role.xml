@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<root>
+    <role id="101.000000" name="处男" desc="默认第一个角色" icon="role_101" resources="Prefabs/player/role_101" life="100.000000" weapon_near="2001.000000" weapon_gun="-1.000000" speed_move="5" speed_rotate="15.000000" />
+    <role id="102.000000" name="处女" desc="第二个角色" icon="role_102" resources="Prefabs/player/role_102" life="100.000000" weapon_near="2002.000000" weapon_gun="3002.000000" speed_move="5" speed_rotate="15.000000" />
+</root>

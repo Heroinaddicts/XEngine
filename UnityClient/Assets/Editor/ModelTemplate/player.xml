@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<root parent="charactor">
+    <attribute name="weapon_melee" type="int64" visual="true" share="false" save="false" important="false" />
+    <attribute name="weapon_gun" type="int64" visual="true" share="false" save="false" important="false" />
+</root>

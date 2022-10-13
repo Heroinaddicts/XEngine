@@ -1,0 +1,12 @@
+include_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/Interface"
+)
+
+set(Interface
+    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iObjLoader.h"
+)
+
+
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Test001)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/TestPhysics)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/ObjLoader)
