@@ -27,10 +27,6 @@ namespace XEngine {
             Static
         };
 
-        struct PhysxMesh {
-
-        };
-
         class iPhysxContext;
         class iPhysxBase {
         public:
