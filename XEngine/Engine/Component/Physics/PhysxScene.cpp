@@ -2,6 +2,10 @@
 #include "SafeSystem.h"
 
 namespace XEngine {
+    enum {
+        CCD_FLAG = 1 << 29,
+    };
+
     PhysxScene::PhysxScene(
         PxScene* scene,
         const float static_friction,
@@ -15,42 +19,51 @@ namespace XEngine {
         _scene->setContactModifyCallback(this);
     }
 
-    Api::iPhysxPlane* PhysxScene::CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context) {
+    void PhysxScene::CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context) {
         PxRigidStatic* groundPlane = PxCreatePlane(*g_pxphysics, PxPlane(nx, ny, nz, distance), *_material);
         if (groundPlane) {
             _scene->addActor(*groundPlane);
         }
-        return nullptr;
     }
 
-    Api::iPhysxBox* PhysxScene::CreateBox(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context) {
+    void PhysxScene::CreateBox(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context) {
         PxShape* shape = g_pxphysics->createShape(PxBoxGeometry(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f), *_material);
+        PxFilterData fd = shape->getSimulationFilterData();
+
+        shape->setSimulationFilterData(fd);
+
         PxRigidDynamic* body = g_pxphysics->createRigidDynamic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
         body->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
         body->userData = context;
         body->attachShape(*shape);
+        body->setActorFlag(PxActorFlag::eVISUALIZATION, true);
+
+        body->setAngularDamping(0.5f);
         PxRigidBodyExt::updateMassAndInertia(*body, 10.0f);
         _scene->addActor(*body);
-        //shape->release();
-        return nullptr;
+        shape->release();
     }
 
-    Api::iPhysxCapsule* PhysxScene::CreateCapsule(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context) {
+    void PhysxScene::CreateCapsule(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context) {
         PxShape* shape = g_pxphysics->createShape(PxCapsuleGeometry(radius, height / 2.0f), *_material);
+        PxFilterData fd = shape->getSimulationFilterData();
+        fd.word3 |= CCD_FLAG;
+        shape->setSimulationFilterData(fd);
+
         PxRigidDynamic* body = g_pxphysics->createRigidDynamic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
         body->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
         body->attachShape(*shape);
+        body->setActorFlag(PxActorFlag::eVISUALIZATION, true);
+        body->setAngularDamping(0.5f);
         PxRigidBodyExt::updateMassAndInertia(*body, 10.0f);
         _scene->addActor(*body);
-        //shape->release();
-        return nullptr;
+        shape->release();
     }
 
-    Api::iPhysxConvexMesh* PhysxScene::CreateConvexMesh(const Api::eRigType type, const Quaternion& qt, Api::iPhysxContext* const context) {
-        return nullptr;
+    void PhysxScene::CreateConvexMesh(const Api::eRigType type, const Quaternion& qt, Api::iPhysxContext* const context) {
     }
 
-    Api::iPhysxTriangleMesh* PhysxScene::CreateTriangleMesh(
+    void PhysxScene::CreateTriangleMesh(
         const Api::eRigType type,
         const Vector3& pos,
         const Quaternion& qt,
@@ -89,7 +102,7 @@ namespace XEngine {
         meshDesc.triangles.stride = sizeof(PxU32) * 3;
         PxTriangleMesh* triMesh = g_cooking->createTriangleMesh(meshDesc, g_pxphysics->getPhysicsInsertionCallback());
         if (nullptr == triMesh) {
-            return nullptr;
+            return;
         }
 
         PxTriangleMeshGeometry geom(triMesh);
@@ -107,6 +120,10 @@ namespace XEngine {
         }
 
         PxShape* shape = g_pxphysics->createShape(geom, *_material);
+        PxFilterData fd = shape->getSimulationFilterData();
+        fd.word3 |= CCD_FLAG;
+        shape->setSimulationFilterData(fd);
+
         {
             // 设置厚度， 相当于多了一层 0.03厚的皮肤，也就是为了提前预判
             shape->setContactOffset(0.03f);
@@ -119,8 +136,6 @@ namespace XEngine {
         //shape->release();
         actor->userData = context;
         _scene->addActor(*actor);
-
-        return nullptr;
     }
 
     void PhysxScene::Simulate(const float elapsed_time) {

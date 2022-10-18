@@ -18,7 +18,7 @@ bool TestPhysics::Launch(iEngine* const engine) {
     g_objloader = engine->GetComponent<iObjLoader>("ObjLoader");
     XASSERT(g_objloader, "GetComponent Error");
 
-    iPhysxScene* scene = engine->GetPhysicsApi()->CreateScene(5, 5, 0.6);
+    iPhysxScene* scene = engine->GetPhysicsApi()->CreateScene(0.5f, 0.5f, 0.3f);
     scene->CreatePlane(0, 1, 0, 0, nullptr);
     int64 tick = SafeSystem::Time::GetMilliSecond();
 

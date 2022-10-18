@@ -95,6 +95,14 @@ namespace XEngine {
     }
 
     void Physics::ReleaseScene(Api::iPhysxScene* scene) {
-
+        PhysxScene* p = dynamic_cast<PhysxScene*>(scene);
+        XASSERT(p, "wtf");
+        if (p) {
+            p->_scene->release();
+            xdel scene;
+        }
+        else {
+            XERROR(Engine::GetInstance(), "error iPhysxScene address %lld", scene);
+        }
     }
 }

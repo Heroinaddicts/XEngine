@@ -2,19 +2,11 @@
 
 namespace XEngine {
 
-    Vector3 TriangleMeshActor::WorldPosition() {
+    Vector3 TriangleMeshActor::Position() {
         return Vector3();
     }
 
-    Vector3 TriangleMeshActor::WorldRotation() {
-        return Vector3();
-    }
-
-    Vector3 TriangleMeshActor::LocalPosition() {
-        return Vector3();
-    }
-
-    Vector3 TriangleMeshActor::LocalRotation() {
+    Vector3 TriangleMeshActor::Rotation() {
         return Vector3();
     }
 

@@ -12,22 +12,6 @@ using namespace physx;
 #include "SafeThread.h"
 
 namespace XEngine {
-    class Face {
-    public:
-        Face() : u(0), v(0), w(0) {}
-
-        unsigned int u;
-        unsigned int v;
-        unsigned int w;
-    };
-
-    class MeshData {
-    public:
-        std::vector<Vector3> v;
-        std::list<std::list<Face>> f;
-        std::string name;
-    };
-
     class PhysicsAllocator : public PxAllocatorCallback {
     public:
         void* allocate(size_t size, const char*, const char*, int) {

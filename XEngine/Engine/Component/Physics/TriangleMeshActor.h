@@ -7,11 +7,8 @@ namespace XEngine {
     class TriangleMeshActor : public Api::iPhysxTriangleMesh {
     public:
         virtual ~TriangleMeshActor() {}
-        virtual Vector3 WorldPosition() override;
-        virtual Vector3 WorldRotation() override;
-
-        virtual Vector3 LocalPosition() override;
-        virtual Vector3 LocalRotation() override;
+        virtual Vector3 Position() override;
+        virtual Vector3 Rotation() override;
 
         TriangleMeshActor(Api::iPhysxContext* context, PxActor* actor);
 

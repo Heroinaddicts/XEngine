@@ -16,20 +16,12 @@ namespace XEngine {
             TriangleMesh
         };
 
-        enum class eMeshFileType {
-            Obj,
-            Fbx
-        };
-
         enum class eRigType {
             Dynamic,
             Kinematic,
             Static
         };
 
-        struct PhysxMesh {
-
-        };
 
         class iPhysxContext;
         class iPhysxBase {
@@ -37,11 +29,8 @@ namespace XEngine {
             virtual ~iPhysxBase() {}
             iPhysxBase(const eUnitType type, iPhysxContext* const context) : _type(type), _context(context) {}
 
-            virtual Vector3 WorldPosition() = 0;
-            virtual Vector3 WorldRotation() = 0;
-
-            virtual Vector3 LocalPosition() = 0;
-            virtual Vector3 LocalRotation() = 0;
+            virtual Vector3 Position() = 0;
+            virtual Vector3 Rotation() = 0;
 
             const eUnitType _type;
             iPhysxContext* const _context;
@@ -51,37 +40,35 @@ namespace XEngine {
         public:
             virtual ~iPhysxContext() {}
 
-            virtual void OnPhysxCreated(bool successed) = 0;
-            virtual void OnPhysxReleased() = 0;
+            virtual void OnCreated(bool success) = 0;
+            virtual void OnAwake() = 0;
+            virtual void OnRelease() = 0;
 
-            virtual void OnCollisionEnter() = 0;
-            virtual void OnCollisionExit() = 0;
+            virtual void OnTriggerEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
+            virtual void OnTriggerExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
 
-            virtual Vector3 PhysxWorldPosition() {
+            virtual void OnCollisionEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
+            virtual void OnCollisionExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
+
+            virtual Vector3 Position() {
                 if (_physx_base) {
-                    return _physx_base->WorldPosition();
+                    return _physx_base->Position();
                 }
+                return Vector3();
             }
 
-            virtual Vector3 PhysxWorldRotation() {
+            virtual Vector3 Rotation() {
                 if (_physx_base) {
-                    return _physx_base->WorldRotation();
+                    return _physx_base->Rotation();
                 }
-            }
-
-            virtual Vector3 PhysxLocalPosition() {
-                if (_physx_base) {
-                    return _physx_base->LocalPosition();
-                }
-            }
-
-            virtual Vector3 PhysxLocalRotation() {
-                if (_physx_base) {
-                    return _physx_base->LocalRotation();
-                }
+                return Vector3();
             }
 
             iPhysxContext(void* const data) : _data(data), _physx_base(nullptr) {}
+
+            template<typename T>
+            T* GetData() { return dynamic_cast<T*>(_data); }
+
             void* const _data;
             iPhysxBase* const _physx_base;
         };
@@ -116,11 +103,11 @@ namespace XEngine {
         public:
             virtual ~iPhysxScene() {}
 
-            virtual iPhysxPlane* CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context = nullptr) = 0;
-            virtual iPhysxBox* CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context = nullptr) = 0;
-            virtual iPhysxCapsule* CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context = nullptr) = 0;
-            virtual iPhysxConvexMesh* CreateConvexMesh(const eRigType type, const Quaternion& qt, Api::iPhysxContext* const context = nullptr) = 0;
-            virtual iPhysxTriangleMesh* CreateTriangleMesh(
+            virtual void CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context = nullptr) = 0;
+            virtual void CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context = nullptr) = 0;
+            virtual void CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context = nullptr) = 0;
+            virtual void CreateConvexMesh(const eRigType type, const Quaternion& qt, Api::iPhysxContext* const context = nullptr) = 0;
+            virtual void CreateTriangleMesh(
                 const eRigType type,
                 const Vector3& pos,
                 const Quaternion& qt,
