@@ -10,17 +10,19 @@ namespace XEngine {
         PhysxScene(PxScene* scene, const float static_friction, const float dynamic_friction, const float restitution);
 
         virtual void CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context);
-        virtual void CreateBox(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context);
-        virtual void CreateCapsule(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context);
-        virtual void CreateConvexMesh(const Api::eRigType type, const Quaternion& qt, Api::iPhysxContext* const context);
+        virtual void CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context);
+        virtual void CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context);
+        virtual void CreateConvexMesh(const eRigType type, const Quaternion& qt, Api::iPhysxContext* const context);
         virtual void CreateTriangleMesh(
-            const Api::eRigType type,
+            const eRigType type,
             const Vector3& pos,
             const Quaternion& qt,
             const Vector3& scale,
             const X3DObj* obj,
             Api::iPhysxContext* const data
         );
+
+        virtual bool Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit);
 
         virtual void Simulate(const float elapsed_time);
         virtual bool FetchResults(bool block);

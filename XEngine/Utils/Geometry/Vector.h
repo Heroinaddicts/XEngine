@@ -1,7 +1,15 @@
 #ifndef __Vector_h__
 #define __Vector_h__
 
+#include "Geometry.h"
+
 namespace XEngine {
+    struct Face {
+        unsigned int u; //顶点标号
+        unsigned int v; // 贴图顶点标号
+        unsigned int w;	// 法向量标号
+    };
+
     struct Vector2 {
         Vector2(const float x_, const float y_) : x(x_), y(y_) {}
         Vector2(const Vector2& v) : x(v.x), y(v.y) {}
@@ -26,24 +34,58 @@ namespace XEngine {
     };
 
     struct Vector3 {
-        Vector3(const float x_, const float y_, const float z_) : x(x_), y(y_), z(z_) {}
-        Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
-        Vector3() : x(0), y(0), z(0) {}
+        static const Vector3 zero;
 
+        __forceinline Vector3(const float x_, const float y_, const float z_) : x(x_), y(y_), z(z_) {}
+        __forceinline Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
+        __forceinline Vector3() : x(0), y(0), z(0) {}
 
-        Vector3& operator=(const float* v) {
+        __forceinline float Length() const {
+            return (float)sqrt(x * x + y * y + z * z);
+        }
+
+        __forceinline Vector3 Normalized(float epilon = Epsilon) const
+        {
+            float len = Length();
+            if (len > epilon) {
+                return (*this) / len;
+            }
+            return Vector3::zero;
+        }
+
+        __forceinline Vector3& operator=(const float* v) {
             x = v[0];
             y = v[1];
             z = v[2];
             return *this;
         }
 
-        Vector3 operator-(const Vector3& v) const {
+        __forceinline Vector3& operator-(const Vector3& v) const {
             return Vector3(x - v.x, y - v.y, z - v.z);
         }
 
-        Vector3 operator+(const Vector3& v) const {
+        __forceinline Vector3& operator+(const Vector3& v) const {
             return Vector3(x + v.x, y + v.y, z + v.z);
+        }
+
+        __forceinline Vector3& operator *= (const float s) {
+            x *= s; y *= s; z *= s;
+            return *this;
+        }
+
+        __forceinline Vector3 operator * (const float s) const {
+            return Vector3(x * s, y * s, z * s);
+        }
+
+        __forceinline Vector3 operator / (const float s) const {
+            float invS = 1.0f / s;
+            return Vector3(x * invS, y * invS, z * invS);
+        }
+
+        __forceinline Vector3& operator /= (const float s) {
+            float invS = 1.0f / s;
+            x *= invS; y *= invS; z *= invS;
+            return *this;
         }
 
         float x;

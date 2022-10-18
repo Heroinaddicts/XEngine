@@ -26,7 +26,7 @@ namespace XEngine {
         }
     }
 
-    void PhysxScene::CreateBox(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context) {
+    void PhysxScene::CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context) {
         PxShape* shape = g_pxphysics->createShape(PxBoxGeometry(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f), *_material);
         PxFilterData fd = shape->getSimulationFilterData();
 
@@ -44,7 +44,7 @@ namespace XEngine {
         shape->release();
     }
 
-    void PhysxScene::CreateCapsule(const Api::eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context) {
+    void PhysxScene::CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context) {
         PxShape* shape = g_pxphysics->createShape(PxCapsuleGeometry(radius, height / 2.0f), *_material);
         PxFilterData fd = shape->getSimulationFilterData();
         fd.word3 |= CCD_FLAG;
@@ -60,11 +60,11 @@ namespace XEngine {
         shape->release();
     }
 
-    void PhysxScene::CreateConvexMesh(const Api::eRigType type, const Quaternion& qt, Api::iPhysxContext* const context) {
+    void PhysxScene::CreateConvexMesh(const eRigType type, const Quaternion& qt, Api::iPhysxContext* const context) {
     }
 
     void PhysxScene::CreateTriangleMesh(
-        const Api::eRigType type,
+        const eRigType type,
         const Vector3& pos,
         const Quaternion& qt,
         const Vector3& scale,
@@ -108,12 +108,12 @@ namespace XEngine {
         PxTriangleMeshGeometry geom(triMesh);
         PxRigidActor* actor = nullptr;
         switch (type) {
-        case Api::eRigType::Dynamic: {
+        case eRigType::Dynamic: {
             actor = g_pxphysics->createRigidDynamic(PxTransform(pos.x, pos.y, pos.z, PxQuat(qt.x, qt.y, qt.z, qt.w)));
             (dynamic_cast<PxRigidDynamic*>(actor))->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, true);
             break;
         }
-        case Api::eRigType::Static: {
+        case eRigType::Static: {
             actor = g_pxphysics->createRigidStatic(PxTransform(pos.x, pos.y, pos.z, PxQuat(qt.x, qt.y, qt.z, qt.w)));
             break;
         }
@@ -136,6 +136,10 @@ namespace XEngine {
         //shape->release();
         actor->userData = context;
         _scene->addActor(*actor);
+    }
+
+    bool PhysxScene::Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit) {
+        return false;
     }
 
     void PhysxScene::Simulate(const float elapsed_time) {

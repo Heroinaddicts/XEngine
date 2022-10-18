@@ -17,13 +17,13 @@ namespace XEngine {
         __forceinline const std::vector<Vector3>& GetV() const { return _vs; }
         __forceinline const std::vector<Vector3>& GetVN() const { return _vns; }
         __forceinline const std::vector<Vector2>& GetVT() const { return _vts; }
-        __forceinline const std::vector<std::vector<Facet>>& GetF() const { return _fs; }
+        __forceinline const std::vector<std::vector<Face>>& GetF() const { return _fs; }
 
     private:
         std::vector<Vector3> _vs;
         std::vector<Vector3> _vns;
         std::vector<Vector2> _vts;
-        std::vector<std::vector<Facet>> _fs;
+        std::vector<std::vector<Face>> _fs;
     };
 }
 

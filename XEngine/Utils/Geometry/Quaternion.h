@@ -4,7 +4,6 @@
 #include "Vector.h"
 
 namespace XEngine {
-#define kEpsilon (1E-06F)
     class Quaternion {
     public:
         virtual ~Quaternion() {}

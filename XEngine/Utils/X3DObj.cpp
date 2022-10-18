@@ -63,9 +63,9 @@ namespace XEngine {
                 if (count < 3) {
                     return false;
                 }
-                std::vector<Facet> f;
+                std::vector<Face> f;
                 for (int i = 0; i < count; i++) {
-                    Facet temp;
+                    Face temp;
                     temp.u = SafeString::StringToInt(res[i]) - 1;
                     f.push_back(temp);
                 }

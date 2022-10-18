@@ -77,7 +77,6 @@ namespace XEngine {
         desc.filterShader = _PxSimulationFilterShader;
         desc.gravity = PxVec3(0.0f, -98.1f, 0.0f);
         desc.cpuDispatcher = PxDefaultCpuDispatcherCreate(2);
-        desc.filterShader = PxDefaultSimulationFilterShader;
         desc.cudaContextManager = g_cuda_context_manager;
         //desc.flags | PxSceneFlag::eENABLE_CCD;
         desc.flags | PxSceneFlag::eENABLE_GPU_DYNAMICS | PxSceneFlag::eENABLE_ACTIVE_ACTORS | PxSceneFlag::eENABLE_CCD;

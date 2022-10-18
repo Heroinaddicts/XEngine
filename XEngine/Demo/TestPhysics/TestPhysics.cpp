@@ -48,7 +48,7 @@ bool TestPhysics::Launch(iEngine* const engine) {
 
         std::string file = SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/TestPhysx/" + sceneObj->Attribute("SceneObj");
         const X3DObj* obj = g_objloader->Get3DObj(file);
-        scene->CreateTriangleMesh(XEngine::Api::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), Vector3(scalex, scaley, scalez), obj);
+        scene->CreateTriangleMesh(XEngine::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), Vector3(scalex, scaley, scalez), obj);
         sceneObj = sceneObj->NextSiblingElement("SceneObj");
     }
 

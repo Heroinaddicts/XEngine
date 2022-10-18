@@ -7,29 +7,85 @@
 #include "X3DObj.h"
 
 namespace XEngine {
+    enum class eUnitType {
+        Plane,
+        Box,
+        Capsule,
+        ConvexMesh,
+        TriangleMesh
+    };
+
+    enum class eRigType {
+        Dynamic,
+        Kinematic,
+        Static
+    };
+
+    enum eQueryTriggerInteraction {
+        Global,
+        Ignore,
+        Hit
+    };
+
     namespace Api {
-        enum class eUnitType {
-            Plane,
-            Box,
-            Capsule,
-            ConvexMesh,
-            TriangleMesh
-        };
-
-        enum class eRigType {
-            Dynamic,
-            Kinematic,
-            Static
-        };
-
         class iPhysxContext;
+    }
+
+    class Ray {
+    public:
+        Vector3 origin;
+        Vector3 direction;
+
+        Ray() {}
+        Ray(const Vector3& org, const Vector3& dir) : origin(org), direction(dir) {}
+        Vector3 GetPoint(const float t) const { return origin + direction * t; }
+    };
+
+    struct RaycastHit {
+        Vector3 point;
+        Vector3 normal;
+        unsigned_int32 face;
+        Vector2 uv;
+        Api::iPhysxContext* context;
+    };
+
+    enum class eInterpolate {
+        None,
+        Interpolate,
+        Extrapolate
+    };
+
+    enum class eCollisionDetection {
+        Discrete,
+        Continuous,
+        ContinuousDynamic,
+        ContinuousSpeculative
+    };
+
+    namespace Api {
         class iPhysxBase {
         public:
             virtual ~iPhysxBase() {}
             iPhysxBase(const eUnitType type, iPhysxContext* const context) : _type(type), _context(context) {}
 
-            virtual Vector3 Position() = 0;
-            virtual Vector3 Rotation() = 0;
+            virtual void SetLayer(const int index) = 0; //index range in [0-31]
+
+            virtual void SetOnlyTrigger(const bool value) = 0;
+
+            virtual void SetMass(const float mass) = 0;
+            virtual void SetDrag(const float drag) = 0;
+            virtual void SetAngularDrag(const float angularDrag) = 0;
+
+            virtual void UseGravity(const bool use) = 0;
+            virtual void SetKinematic(const bool value) = 0;
+
+            virtual void SetInterpolate(const eInterpolate type) = 0; //物理运动插值模式 建议服务器使用None
+            virtual void SetCollisionDetection(const eCollisionDetection type) = 0;
+
+            //virtual void UpdateMaterial()  更新物理材质
+
+            virtual Vector3 Position() const = 0;
+            virtual Vector3 Rotation() const = 0;
 
             const eUnitType _type;
             iPhysxContext* const _context;
@@ -48,6 +104,69 @@ namespace XEngine {
 
             virtual void OnCollisionEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
             virtual void OnCollisionExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
+
+            virtual void SetLayer(const int index) { //index range in [0-31]
+                XASSERT(_physx_base, "wtf");
+                if (_physx_base) {
+                    _physx_base->SetLayer(index);
+                }
+            }
+
+            virtual void SetOnlyTrigger(const bool value) {
+                XASSERT(_physx_base, "wtf");
+                if (_physx_base) {
+                    _physx_base->SetOnlyTrigger(value);
+                }
+            }
+
+            virtual void SetMass(const float mass) {
+                XASSERT(_physx_base, "wtf");
+                if (_physx_base) {
+                    _physx_base->SetMass(mass);
+                }
+            }
+
+            virtual void SetDrag(const float drag) {
+                XASSERT(_physx_base, "wtf");
+                if (_physx_base) {
+                    _physx_base->SetDrag(drag);
+                }
+            }
+
+            virtual void SetAngularDrag(const float angularDrag) {
+                XASSERT(_physx_base, "wtf");
+                if (_physx_base) {
+                    _physx_base->SetAngularDrag(angularDrag);
+                }
+            }
+
+            virtual void UseGravity(const bool use) {
+                XASSERT(_physx_base, "wtf");
+                if (_physx_base) {
+                    _physx_base->UseGravity(use);
+                }
+            }
+
+            virtual void SetKinematic(const bool value) {
+                XASSERT(_physx_base, "wtf");
+                if (_physx_base) {
+                    _physx_base->SetKinematic(value);
+                }
+            }
+
+            virtual void SetInterpolate(const eInterpolate type) { //物理运动插值模式 建议服务器使用None
+                XASSERT(_physx_base, "wtf");
+                if (_physx_base) {
+                    _physx_base->SetInterpolate(type);
+                }
+            }
+
+            virtual void SetCollisionDetection(const eCollisionDetection type) {
+                XASSERT(_physx_base, "wtf");
+                if (_physx_base) {
+                    _physx_base->SetCollisionDetection(type);
+                }
+            }
 
             virtual Vector3 Position() {
                 if (_physx_base) {
@@ -72,32 +191,6 @@ namespace XEngine {
             iPhysxBase* const _physx_base;
         };
 
-        class iPhysxPlane : public iPhysxBase {
-        public:
-            virtual ~iPhysxPlane() {}
-        };
-
-        class iPhysxBox : public iPhysxBase {
-        public:
-            virtual ~iPhysxBox() {}
-        };
-
-        class iPhysxCapsule : public iPhysxBase {
-        public:
-            virtual ~iPhysxCapsule() {}
-        };
-
-        class iPhysxConvexMesh : public iPhysxBase {
-        public:
-            virtual ~iPhysxConvexMesh() {}
-        };
-
-        class iPhysxTriangleMesh : public iPhysxBase {
-        public:
-            virtual ~iPhysxTriangleMesh() {}
-            iPhysxTriangleMesh(const eUnitType type, iPhysxContext* const context) :iPhysxBase(type, context) {}
-        };
-
         class iPhysxScene {
         public:
             virtual ~iPhysxScene() {}
@@ -114,6 +207,8 @@ namespace XEngine {
                 const X3DObj* obj,
                 iPhysxContext* const data = nullptr
             ) = 0;
+
+            virtual bool Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit) = 0;
 
             virtual void Simulate(float dt) = 0;
             virtual bool FetchResults(bool block) = 0;

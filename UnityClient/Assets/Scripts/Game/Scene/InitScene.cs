@@ -10,12 +10,12 @@ public class InitScene : IScene
     static void Initialize()
     {
 #if UNITY_EDITOR
-        Scene scene = SceneManager.GetActiveScene();
-        if (scene != null && (scene.name.Equals("InitScene")))
-        {
-            return;
-        }
-        SceneManager.LoadScene("InitScene");
+//         Scene scene = SceneManager.GetActiveScene();
+//         if (scene != null && (scene.name.Equals("InitScene")))
+//         {
+//             return;
+//         }
+//         SceneManager.LoadScene("InitScene");
 #endif //UNITY_EDITOR
     }
 
