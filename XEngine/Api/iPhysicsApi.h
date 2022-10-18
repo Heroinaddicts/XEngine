@@ -22,7 +22,6 @@ namespace XEngine {
             Static
         };
 
-
         class iPhysxContext;
         class iPhysxBase {
         public:
