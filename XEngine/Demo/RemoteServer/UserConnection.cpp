@@ -4,6 +4,7 @@
 #include "XBuffer.h"
 
 int UserConnection::OnReceive(const char* content, const int size) {
+	TRACE(g_engine, "UserConnection::OnReceive %d", size);
 	if (!g_agentConnection) {
 		Close();
 		return 0;
@@ -18,9 +19,11 @@ int UserConnection::OnReceive(const char* content, const int size) {
 }
 
 void UserConnection::OnConnected() {
+	TRACE(g_engine, " UserConnection::OnConnected");
 	if (g_userConnection) {
 		g_userConnection->Close();
 	}
+	g_userConnection = this;
 
 	if (nullptr == g_agentConnection) {
 		Close();
@@ -32,10 +35,13 @@ void UserConnection::OnConnected() {
 	header.id = ServerToAgentProto::RequestNewConnectioon;
 	g_agentConnection->Send(&header, sizeof(header));
 
-	g_userConnection = this;
 }
 
 void UserConnection::OnDisconnect() {
+	TRACE(g_engine, " UserConnection::OnDisconnect");
+	if (g_userConnection == this) {
+		g_userConnection = nullptr;
+	}
 	xdel this;
 }
 

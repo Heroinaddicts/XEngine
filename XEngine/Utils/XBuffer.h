@@ -81,8 +81,8 @@ namespace XEngine {
         }
 
         inline void Clear() {
-            _in == 0;
-            _out == 0;
+            _in = 0;
+            _out = 0;
         }
 
     private:

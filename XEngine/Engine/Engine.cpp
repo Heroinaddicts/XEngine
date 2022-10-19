@@ -156,22 +156,24 @@ int main(int argc, const char** args, const char** env) {
         g_logic->Update(engine);
         g_physics->Update(engine);
 
-        unsigned_int64 tick2 = XEngine::SafeSystem::Time::GetMicroSecond();
-        if (tick2 - tick >= static_fixed_time_step) {
-            g_navigation->FixedUpdate(engine);
-            g_timewheel->FixedUpdate(engine);
-            g_net->FixedUpdate(engine);
-            g_logic->FixedUpdate(engine);
-            g_physics->FixedUpdate(engine);
-            tick += static_fixed_time_step;
-        }
-
         g_navigation->LaterUpdate(engine);
         g_timewheel->LaterUpdate(engine);
         g_logic->LaterUpdate(engine);
         g_physics->LaterUpdate(engine);
         g_net->LaterUpdate(engine);
 
+		unsigned_int64 tick2 = XEngine::SafeSystem::Time::GetMicroSecond();
+		if (tick2 - tick >= static_fixed_time_step) {
+			g_navigation->FixedUpdate(engine);
+			g_timewheel->FixedUpdate(engine);
+			g_net->FixedUpdate(engine);
+			g_logic->FixedUpdate(engine);
+			g_physics->FixedUpdate(engine);
+			tick += static_fixed_time_step;
+        }
+        else {
+            XEngine::SafeSystem::Time::MillisecondSleep(0);
+        }
     }
 
     { // Release

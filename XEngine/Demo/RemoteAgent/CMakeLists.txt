@@ -9,6 +9,10 @@ include_directories(
 
 set(RemoteAgent
     "${CMAKE_CURRENT_SOURCE_DIR}/Header.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/MstscConnection.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/MstscConnection.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ServerConnection.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/ServerConnection.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/RemoteAgent.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/RemoteAgent.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/DllExport.cpp"
