@@ -87,6 +87,9 @@ namespace XEngine {
             virtual Vector3 Position() const = 0;
             virtual Vector3 Rotation() const = 0;
 
+            virtual void SetPosition(const Vector3& position) = 0;
+            virtual void SetRotation(const Vector3& rotation) = 0;
+
             const eUnitType _type;
             iPhysxContext* const _context;
         };
@@ -105,82 +108,23 @@ namespace XEngine {
             virtual void OnCollisionEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
             virtual void OnCollisionExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
 
-            virtual void SetLayer(const int index) { //index range in [0-31]
-                XASSERT(_physx_base, "wtf");
-                if (_physx_base) {
-                    _physx_base->SetLayer(index);
-                }
-            }
+            virtual void SetLayer(const int index) { _physx_base ? _physx_base->SetLayer(index) : void(0); }
 
-            virtual void SetOnlyTrigger(const bool value) {
-                XASSERT(_physx_base, "wtf");
-                if (_physx_base) {
-                    _physx_base->SetOnlyTrigger(value);
-                }
-            }
+            virtual void SetOnlyTrigger(const bool value) { _physx_base ? _physx_base->SetOnlyTrigger(value) : void(0); }
 
-            virtual void SetMass(const float mass) {
-                XASSERT(_physx_base, "wtf");
-                if (_physx_base) {
-                    _physx_base->SetMass(mass);
-                }
-            }
+            virtual void SetMass(const float mass) { _physx_base ? _physx_base->SetMass(mass) : void(0); }
 
-            virtual void SetDrag(const float drag) {
-                XASSERT(_physx_base, "wtf");
-                if (_physx_base) {
-                    _physx_base->SetDrag(drag);
-                }
-            }
+            virtual void SetDrag(const float drag) { _physx_base ? _physx_base->SetDrag(drag) : void(0); }
 
-            virtual void SetAngularDrag(const float angularDrag) {
-                XASSERT(_physx_base, "wtf");
-                if (_physx_base) {
-                    _physx_base->SetAngularDrag(angularDrag);
-                }
-            }
+            virtual void SetAngularDrag(const float angularDrag) { _physx_base ? _physx_base->SetAngularDrag(angularDrag) : void(0); }
 
-            virtual void UseGravity(const bool use) {
-                XASSERT(_physx_base, "wtf");
-                if (_physx_base) {
-                    _physx_base->UseGravity(use);
-                }
-            }
+            virtual void UseGravity(const bool use) { _physx_base ? _physx_base->UseGravity(use) : void(0); }
 
-            virtual void SetKinematic(const bool value) {
-                XASSERT(_physx_base, "wtf");
-                if (_physx_base) {
-                    _physx_base->SetKinematic(value);
-                }
-            }
+            virtual void SetKinematic(const bool value) { _physx_base ? _physx_base->SetKinematic(value) : void(0); }
 
-            virtual void SetInterpolate(const eInterpolate type) { //物理运动插值模式 建议服务器使用None
-                XASSERT(_physx_base, "wtf");
-                if (_physx_base) {
-                    _physx_base->SetInterpolate(type);
-                }
-            }
+            virtual void SetInterpolate(const eInterpolate type) { _physx_base ? _physx_base->SetInterpolate(type) : void(0); }
+            virtual void SetCollisionDetection(const eCollisionDetection type) { _physx_base ? _physx_base->SetCollisionDetection(type) : void(0); }
 
-            virtual void SetCollisionDetection(const eCollisionDetection type) {
-                XASSERT(_physx_base, "wtf");
-                if (_physx_base) {
-                    _physx_base->SetCollisionDetection(type);
-                }
-            }
-
-            virtual Vector3 Position() {
-                if (_physx_base) {
-                    return _physx_base->Position();
-                }
-                return Vector3();
-            }
-
-            virtual Vector3 Rotation() {
-                if (_physx_base) {
-                    return _physx_base->Rotation();
-                }
-                return Vector3();
-            }
 
             iPhysxContext(void* const data) : _data(data), _physx_base(nullptr) {}
 
@@ -189,6 +133,29 @@ namespace XEngine {
 
             void* const _data;
             iPhysxBase* const _physx_base;
+
+
+            virtual Vector3 Position() {
+                return position;
+            }
+
+            virtual Vector3 Rotation() {
+                return rotation;
+            }
+
+            virtual void SetPosition(const Vector3& pos) {
+                position = pos;
+                _physx_base ? _physx_base->SetPosition(pos) : void(0);
+            }
+
+            virtual void SetRotation(const Vector3& r) {
+                rotation = r;
+                _physx_base ? _physx_base->SetRotation(r) : void(0);
+            }
+
+        private:
+            Vector3 position;
+            Vector3 rotation;
         };
 
         class iPhysxScene {

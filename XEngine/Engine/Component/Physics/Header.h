@@ -77,7 +77,7 @@ namespace XEngine {
         }
 
         int GetLayerIndex() {
-
+            return layer;
         }
 
     };

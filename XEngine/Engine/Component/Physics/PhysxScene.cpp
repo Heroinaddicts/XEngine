@@ -22,6 +22,10 @@ namespace XEngine {
     void PhysxScene::CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context) {
         PxRigidStatic* groundPlane = PxCreatePlane(*g_pxphysics, PxPlane(nx, ny, nz, distance), *_material);
         if (groundPlane) {
+            PxShape* shape = nullptr;
+            groundPlane->getShapes(&shape, sizeof(shape));
+            PxFilterData data = shape->getQueryFilterData();
+
             _scene->addActor(*groundPlane);
         }
     }
