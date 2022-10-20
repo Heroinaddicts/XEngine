@@ -80,6 +80,11 @@ namespace XEngine {
             return _in - _out;
         }
 
+        inline void Clear() {
+            _in = 0;
+            _out = 0;
+        }
+
     private:
         unsigned int _size;
         unsigned int _in;

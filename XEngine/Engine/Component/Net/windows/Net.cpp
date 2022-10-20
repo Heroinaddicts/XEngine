@@ -85,7 +85,7 @@ namespace XEngine {
         bool initiative = true;
         SafeMemory::Memcpy((void*)&session->_initiative, sizeof(bool), &initiative, sizeof(initiative));
 
-        if (!GetIpByHost(host, (std::string)session->_ip)) {
+        if (!GetIpByHost(host, (std::string&)session->_ip)) {
             session->OnConnectFailed();
             return false;
         }
