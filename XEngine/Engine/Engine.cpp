@@ -13,6 +13,10 @@
 #include "Net/windows/Net.h"
 #endif //WIN32
 
+#ifdef Linux
+#include "Net/Linux/Net.h"
+#endif //Linux
+
 
 static std::map<std::string, std::string> static_parameter_map;
 

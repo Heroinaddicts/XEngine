@@ -54,7 +54,15 @@ set(Net
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Net/Windows/Accepter.cpp"
 )
 elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
-
+set(Net
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Net/Linux/Header.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Net/Linux/Net.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Net/Linux/Net.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Net/Linux/Tcper.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Net/Linux/Tcper.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Net/Linux/Accepter.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Net/Linux/Accepter.cpp"
+)
 endif()
 
 set(TimeWheel
@@ -157,6 +165,57 @@ source_group(Component\\Navigation FILES ${Navigation})
 source_group(Component\\Physics FILES ${Physics})
 source_group(\\ FILES ${Engine})
 
+if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
+set(LibFbxSDK
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/FbxSDK/libfbxsdk.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/FbxSDK/libfbxsdk-md.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/FbxSDK/libxml2-md.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/FbxSDK/zlib-md.lib"
+)
+
+set(LibPhysx4
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysXCooking_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysXExtensions_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysXFoundation_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysXPvdSDK_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysXTask_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysXVehicle_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/LowLevel_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/LowLevelAABB_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/LowLevelDynamics_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysX_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysXCharacterKinematic_static_64.lib"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysXCommon_64.lib"
+)
+endif()
+
+if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Linux")
+set(LibFbxSDK
+)
+
+set(LibPhysx4
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXFoundation_static_64.a"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXCharacterKinematic_static_64.a"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXCommon_static_64.a"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXCooking_static_64.a"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXExtensions_static_64.a"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXVehicle_static_64.a"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXPvdSDK_static_64.a"
+    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysX_static_64.a"
+    #debug "${PROJECT_SOURCE_DIR}/Bin/Linux/libPhysXGpu_64.so"
+    
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXFoundation_static_64.a"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXCharacterKinematic_static_64.a"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXCommon_static_64.a"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXCooking_static_64.a"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXExtensions_static_64.a"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXVehicle_static_64.a"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXPvdSDK_static_64.a"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysX_static_64.a"
+    #optimized "${PROJECT_SOURCE_DIR}/Bin/Linux/libPhysXGpu_64.so"
+)
+endif()
+
 add_executable(XEngine
     ${Api}
     ${iEngineComponent}
@@ -172,29 +231,6 @@ add_executable(XEngine
     ${Engine}
 )
 
-set(LibFbxSDK
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libfbxsdk.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libfbxsdk-md.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/libxml2-md.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/FbxSDK/zlib-md.lib"
-)
-
-set(LibPhysx4
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXCooking_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXExtensions_static_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXFoundation_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXPvdSDK_static_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXTask_static_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXVehicle_static_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/LowLevel_static_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/LowLevelAABB_static_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/LowLevelDynamics_static_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysX_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXCharacterKinematic_static_64.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Physx4/PhysXCommon_64.lib"
-)
-
-target_link_libraries(XEngine
-    ${LibFbxSDK}
-    ${LibPhysx4}
-)
+target_link_libraries(XEngine "-Xlinker \"-(\"")
+target_link_libraries(XEngine ${LibPhysx4})
+target_link_libraries(XEngine "-Xlinker \"-)\"")

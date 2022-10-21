@@ -71,7 +71,11 @@ namespace XEngine {
     }
 
     TimeBase::TimeBase(Api::iTimer* timer, const int id, void* const context, int count, int interval, const char* file, const int line)
-        : _timer(timer), _id(id), _interval(interval), _context(context), _file(file), _line(line) {
+        : _timer(timer), _id(id), _interval(interval), _context(context)
+#ifdef _DEBUG
+        , _file(file), _line(line)
+#endif //_DEBUG
+        {
         _list = nullptr;
         _next = nullptr;
         _prev = nullptr;

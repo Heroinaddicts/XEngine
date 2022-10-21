@@ -4,8 +4,6 @@
 #include <string>
 #include "MultiSys.h"
 
-#include <windows.h>
-
 namespace XEngine {
     class XFile {
     public:
@@ -19,7 +17,7 @@ namespace XEngine {
         __forceinline bool Open(const std::string& path, const std::string& model = "r+") {
             _file = fopen(path.c_str(), model.c_str());
             if (nullptr == _file) {
-                XASSERT(false, "XFILE open %s error %d", path.c_str(), ::GetLastError());
+                XASSERT(false, "XFILE open %s", path.c_str());
                 return false;
             }
 

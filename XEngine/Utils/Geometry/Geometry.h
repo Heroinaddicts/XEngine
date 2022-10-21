@@ -2,6 +2,7 @@
 #define __Geometry_h__
 
 #include <math.h>
+#include "MultiSys.h"
 
 namespace XEngine {
 #define Epsilon 1e-6f

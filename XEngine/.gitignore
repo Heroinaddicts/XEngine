@@ -29,5 +29,5 @@
 # build dir
 build/*
 
-Engine/Library/Debug/FbxSDK/libfbxsdk-mt.lib
-Engine/Library/Debug/FbxSDK/libfbxsdk-md.lib
+Engine/Library/Windows/Debug/FbxSDK/libfbxsdk-mt.lib
+Engine/Library/Windows/Debug/FbxSDK/libfbxsdk-md.lib

@@ -2,17 +2,16 @@
 #author : max
 #created : 2022-09-28 12:45
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.2)
 project(XEngine)
 set_property(GLOBAL PROPERTY USE_FOLDERS On)
 
+message(STATUS "os : ${CMAKE_HOST_SYSTEM_NAME}")
 if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
-    message(STATUS "os : windows")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
     set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/Bin/Windows/")
     set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/Bin/Windows/")
 elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
-    message(STATUS "os : linux")
     option(USE_32BITS "Compile for 32bits processors(linux only)" OFF)
     set(CMAKE_CXX_FLAGS "-g -fuse-ld=gold -std=c++11 -Wall -lpthread -rdynamic -ldl -DLinux")
     set(CMAKE_CXX_FLAGS_DEBUG "-g -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -DLinux")
@@ -20,12 +19,18 @@ elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
     set(CMAKE_CXX_FLAGS_RELEASE "-g -o3 -fuse-ld=gold -std=c++11 -lpthread -rdynamic -ldl -DLinux")
     set(EXECUTABLE_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/Bin/Linux/")
     set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/Bin/Linux/")
+endif()
 
-    if (CMAKE_BUILD_TYPE STREQUAL Debug)
-        add_definitions(
-            -D_DEBUG
-        )
-    endif ()
+if (CMAKE_BUILD_TYPE STREQUAL Debug)
+    message(STATUS "Debug")
+    add_definitions(
+        -D_Debug -D_DEBUG
+    )
+else()
+    message(STATUS "Not Debug")
+    add_definitions(
+        -DNDEBUG
+    )
 endif()
 
 include_directories(

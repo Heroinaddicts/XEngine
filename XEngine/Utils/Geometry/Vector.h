@@ -5,9 +5,9 @@
 
 namespace XEngine {
     struct Face {
-        unsigned int u; //¶¥µã±êºÅ
-        unsigned int v; // ÌùÍ¼¶¥µã±êºÅ
-        unsigned int w;	// ·¨ÏòÁ¿±êºÅ
+        unsigned int u; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        unsigned int v; // ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        unsigned int w;	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     };
 
     struct Vector2 {
@@ -44,8 +44,7 @@ namespace XEngine {
             return (float)sqrt(x * x + y * y + z * z);
         }
 
-        __forceinline Vector3 Normalized(float epilon = Epsilon) const
-        {
+        __forceinline Vector3 Normalized(float epilon = Epsilon) const {
             float len = Length();
             if (len > epilon) {
                 return (*this) / len;
@@ -60,11 +59,11 @@ namespace XEngine {
             return *this;
         }
 
-        __forceinline Vector3& operator-(const Vector3& v) const {
+        __forceinline Vector3 operator-(const Vector3& v) const {
             return Vector3(x - v.x, y - v.y, z - v.z);
         }
 
-        __forceinline Vector3& operator+(const Vector3& v) const {
+        __forceinline Vector3 operator+(const Vector3& v) const {
             return Vector3(x + v.x, y + v.y, z + v.z);
         }
 

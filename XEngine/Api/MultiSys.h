@@ -1,6 +1,11 @@
 #ifndef __MultiSys_h__
 #define __MultiSys_h__
 
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdarg.h>
+
 #pragma execution_character_set("utf-8")
 
 #ifdef WIN32
@@ -23,6 +28,9 @@ typedef unsigned char unsigned_int8;
 typedef unsigned short unsigned_int16;
 typedef uint32_t unsigned_int32;
 typedef uint64_t unsigned_int64;
+
+#define __forceinline inline
+#define sprintf_s snprintf
 #endif //WIN32
 
 #define OUT
@@ -44,4 +52,8 @@ void __assert__(const char* file, int line, const char* funname, const char* for
 #define XASSERT(p, format, ...) {\
     (p) ? (void)0 : __assert__(__FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__);\
 }
+
+void * aligned_malloc(size_t size, size_t alignment);
+void aligned_free(void * p);
+
 #endif //__MultiSys_h__

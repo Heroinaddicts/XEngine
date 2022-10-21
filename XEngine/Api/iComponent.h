@@ -42,8 +42,9 @@ class Factory##Component {\
 public:\
     Factory##Component(XEngine::Api::iComponent * & pComponent) {\
         XEngine::Api::iComponent * p = xnew Component();\
-        ((const char *)p->_name) = #Component;\
-        ((iComponent*)p->_next) = pComponent;\
+        const char * temp = #Component; \
+        memcpy((void *)&(p->_name), &temp, sizeof(const char *));\
+        memcpy((void *)&(p->_next), &pComponent, sizeof(pComponent));\
         pComponent = p;\
     }\
 };\

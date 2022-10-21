@@ -10,6 +10,10 @@
 #pragma comment(lib, "shlwapi.lib")
 #endif //WIN32
 
+#ifdef Linux
+#include <unistd.h>
+#endif //Linux
+
 namespace XEngine {
     namespace SafeSystem {
         namespace Time {
@@ -19,7 +23,7 @@ namespace XEngine {
 #endif //WIN32
 
 #ifdef Linux
-                sleep(millisecond);
+                usleep(millisecond * 1000);
 #endif //Linux
             }
         }

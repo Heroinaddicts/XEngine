@@ -48,6 +48,14 @@ namespace XEngine {
 
                 __GetComponents fun = (__GetComponents)::GetProcAddress(hinst, "GetComponents");
 #else
+                std::string path = _ComponentPath + "/" + names[i] + ".so";
+                void * handle = dlopen(path.c_str(), RTLD_LAZY);
+                if (!handle) {
+                    XERROR(engine, "load %s error %s\n", path.c_str(), errno);
+                    return false;
+                }
+
+                __GetComponents fun = (__GetComponents)dlsym(handle, "GetComponents");
 #endif //WIN32
                 XASSERT(fun, "Can not export dll function GetComponents, dll %s", path.c_str());
                 Api::iComponent* component = fun();

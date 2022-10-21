@@ -40,9 +40,9 @@ namespace XEngine {
             };
 
             struct {
-                PxU32 word0; //word0 ÓÃÀ´´æ¸÷ÖÖ±êÖ¾Î»
-                PxU32 word1; //word1 ÓÃÀ´´ælayermask ¶ÔÓ¦Âß¼­²ã32×éÎïÀí·Ö×é
-                PxU32 word2; //word2ºÍword3ºÏ²¢ÆðÀ´´æÉÏÏÂÎÄÊý¾ÝÖ¸Õë
+                PxU32 word0; //word0 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ö¾Î»
+                PxU32 word1; //word1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½layermask ï¿½ï¿½Ó¦ï¿½ß¼ï¿½ï¿½ï¿½32ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                PxU32 word2; //word2ï¿½ï¿½word3ï¿½Ï²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½
                 PxU32 word3;
             };
         };
@@ -86,13 +86,13 @@ namespace XEngine {
     class PhysicsAllocator : public PxAllocatorCallback {
     public:
         void* allocate(size_t size, const char*, const char*, int) {
-            void* p = _aligned_malloc(size, 16);
-            XASSERT((reinterpret_cast<size_t>(p) & 15) == 0, "PhysicsAllocator error");
+            void* p = aligned_malloc(size, 16);
+            //XASSERT((reinterpret_cast<size_t>(p) & 15) == 0, "PhysicsAllocator error");
             return p;
         }
 
         void deallocate(void* p) {
-            _aligned_free(p);
+            aligned_free(p);
         }
     };
 

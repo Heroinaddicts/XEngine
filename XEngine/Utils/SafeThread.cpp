@@ -45,7 +45,7 @@ namespace XEngine {
             }
 #else
             pthread_t ptid = 0;
-            int ret = pthread_create(&ptid, nullptr, threadProc, (void*)&args);
+            int ret = pthread_create(&ptid, nullptr, ThreadProc, (void*)&p);
             if (ret != 0) {
                 return false;
             }
