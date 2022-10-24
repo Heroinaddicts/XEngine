@@ -13,8 +13,10 @@ namespace XEngine {
         static PhysxBase* Create(PhysxScene* _scene, PxShape* shape, PxActor* actor, Api::iPhysxContext* contexnt);
 
         // Í¨¹ý iPhysxBase ¼Ì³Ð
-        virtual void SetFlags(ePhysxFlags flags, bool b) override;
-        virtual void SetLayer(const int index) override;
+        virtual void SetSimulationFlag(const int flags, bool b) override;
+        virtual void SetQueryFlag(const int flags, bool b) override;
+        virtual void SetLayer(const ePhysxLayer index) override;
+
         virtual void SetMass(const float mass) override;
         virtual void SetDrag(const float drag) override;
         virtual void SetAngularDrag(const float angularDrag) override;

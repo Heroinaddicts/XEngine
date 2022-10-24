@@ -58,4 +58,19 @@ namespace XEngine {
     extern PxDefaultCpuDispatcher* g_pxdispatcher;
     extern PxPvd* g_pxpvd;
     extern PxCudaContextManager* g_cuda_context_manager;
+
+#pragma pack(push, 1)
+    struct PhysxIdentity {
+        union {
+            struct {
+                const int word2;
+                const int word3;
+            };
+            void* const userdata;
+        };
+
+        PhysxIdentity(void* p) : userdata(p) {}
+    };
+#pragma pack(pop)
+
 }
