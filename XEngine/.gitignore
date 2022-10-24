@@ -22,7 +22,6 @@
 *.la
 
 # Executables
-*.exe
 *.out
 *.app
 
