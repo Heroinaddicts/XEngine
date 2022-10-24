@@ -53,7 +53,7 @@ void __assert__(const char* file, int line, const char* funname, const char* for
     (p) ? (void)0 : __assert__(__FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__);\
 }
 
-void * aligned_malloc(size_t size, size_t alignment);
-void aligned_free(void * p);
+void* aligned_malloc(size_t size, size_t alignment);
+void aligned_free(void* p);
 
 #endif //__MultiSys_h__

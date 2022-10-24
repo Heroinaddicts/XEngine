@@ -1,0 +1,107 @@
+#ifndef __Template_h__
+#define __Template_h__
+
+const char* header_h = "#ifndef __Header_h__\n\
+#define __Header_h__\n\
+\n\
+#include \"i{name}.h\"\n\
+\n\
+using namespace XEngine;\n\
+using namespace XEngine::Api;\n\
+\n\
+#include \"i{name}.h\"\n\
+\n\
+extern iEngine* g_engine;\n\
+extern i{name}* g_{name};\n\
+\n\
+#endif //__Header_h__\n\
+";
+
+const char* interface_h = "#ifndef __i{name}_h__\n\
+#define __i{name}_h__\n\
+\n\
+#include \"iComponent.h\"\n\
+\n\
+namespace XEngine {\n\
+    class i{name} : public Api::iComponent {\n\
+    public:\n\
+        virtual ~i{name}() {}\n\
+    };\n\
+}\n\
+\n\
+#endif //__i{name}_h__\n\
+";
+
+const char* template_h = "#ifndef __{name}_h__\n\
+#define __{name}_h__ \n\
+\n\
+#include \"Header.h\"\n\
+\n\
+class {name} : public iComponent {\n\
+public:\n\
+    virtual ~{name}() {}\n\
+    virtual bool Initialize(iEngine* const engine);\n\
+    virtual bool Launch(iEngine* const engine);\n\
+    virtual bool Destroy(iEngine* const engine);\n\
+};\n\
+\n\
+#endif //__{name}_h__\n\
+";
+
+const char* template_cpp = "#include \"{name}.h\"\n\
+\n\
+iEngine * g_engine = nullptr;\n\
+\n\
+bool {name}::Initialize(iEngine* const engine) {\n\
+    g_engine = engine;\n\
+    return true;\n\
+}\n\
+\n\
+bool {name}::Launch(iEngine* const engine) {\n\
+    return true;\n\
+}\n\
+\n\
+bool {name}::Destroy(iEngine* const engine) {\n\
+    return true;\n\
+}\n\
+";
+
+const char* dllexport_cpp = "#include \"{name}.h\"\n\
+\n\
+DLL_INSTANCE;\n\
+CREATE_COMPONENT({name});\n";
+
+const char* cmakelists = "#cmake file for project core\n\
+#author : {auther}\n\
+#created : {date}\n\
+\n\
+include_directories(\n\
+    \"${PROJECT_SOURCE_DIR}/Api\"\n\
+    \"${CMAKE_CURRENT_SOURCE_DIR}\"\n\
+)\n\
+\n\
+set({name}\n\
+    \"${CMAKE_CURRENT_SOURCE_DIR}/Header.h\"\n\
+    \"${CMAKE_CURRENT_SOURCE_DIR}/{name}.h\"\n\
+    \"${CMAKE_CURRENT_SOURCE_DIR}/{name}.cpp\"\n\
+    \"${CMAKE_CURRENT_SOURCE_DIR}/DllExport.cpp\"\n\
+)\n\
+\n\
+source_group(Api FILES ${Api})\n\
+source_group(Utils\\\\TinyXML FILES ${TinyXML})\n\
+source_group(Utils\\\\Geometry FILES ${Geometry})\n\
+source_group(Utils FILES ${Utils})\n\
+source_group(\\\\ FILES ${{name}})\n\
+\n\
+add_library({name} SHARED\n\
+    ${Api}\n\
+    ${TinyXML}\n\
+    ${Geometry}\n\
+    ${Utils}\n\
+    ${{name}}\n\
+)\n\
+\n\
+set_property(TARGET {name} PROPERTY FOLDER \"{group}\")\n\
+";
+
+#endif //__Template_h__

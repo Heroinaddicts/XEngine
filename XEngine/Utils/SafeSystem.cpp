@@ -1,6 +1,8 @@
 #include "SafeSystem.h"
 #include "SafeString.h"
 
+#include <stdio.h>
+
 #ifdef WIN32
 #include <Shlwapi.h>
 #include <direct.h>  
@@ -43,8 +45,7 @@ namespace XEngine {
         }
 
         namespace File {
-            const std::string& GetApplicationPath()
-            {
+            const std::string& GetApplicationPath() {
 #define PATH_STRING_MAX_LEN 1024
                 static std::string* static_path = nullptr;
 #ifdef WIN32
@@ -60,6 +61,35 @@ namespace XEngine {
                 }
 #endif //WIN32
                 return *static_path;
+            }
+
+            bool FileExists(const std::string& path) {
+#ifdef WIN32
+                return _access(path.c_str(), 0) == 0;
+#endif //WIN32
+            }
+
+            bool FolderExists(const std::string& path) {
+#ifdef WIN32
+                return::PathIsDirectory(path.c_str());
+#endif //WIN32
+            }
+
+            bool CreateFolder(const std::string& path) {
+#ifdef WIN32
+                if (::PathIsDirectory(path.c_str())) {
+                    return true;
+                }
+                return ::CreateDirectory(path.c_str(), 0);
+#endif //WIN32
+            }
+
+            bool DelFolder(const std::string& path) {
+                return remove(path.c_str()) == 0;
+            }
+
+            bool DelFile(const std::string& path) {
+                return remove(path.c_str()) == 0;
             }
 
             int GetFileInDirectory(const std::string& dir, const std::string& extension, OUT std::vector<std::string>& paths, OUT std::vector<std::string>& names, bool recursive) {

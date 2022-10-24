@@ -17,7 +17,6 @@
 #include "Net/Linux/Net.h"
 #endif //Linux
 
-
 static std::map<std::string, std::string> static_parameter_map;
 
 XEngine::iLogic* g_logic = nullptr;
@@ -166,14 +165,14 @@ int main(int argc, const char** args, const char** env) {
         g_physics->LaterUpdate(engine);
         g_net->LaterUpdate(engine);
 
-		unsigned_int64 tick2 = XEngine::SafeSystem::Time::GetMicroSecond();
-		if (tick2 - tick >= static_fixed_time_step) {
-			g_navigation->FixedUpdate(engine);
-			g_timewheel->FixedUpdate(engine);
-			g_net->FixedUpdate(engine);
-			g_logic->FixedUpdate(engine);
-			g_physics->FixedUpdate(engine);
-			tick += static_fixed_time_step;
+        unsigned_int64 tick2 = XEngine::SafeSystem::Time::GetMicroSecond();
+        if (tick2 - tick >= static_fixed_time_step) {
+            g_navigation->FixedUpdate(engine);
+            g_timewheel->FixedUpdate(engine);
+            g_net->FixedUpdate(engine);
+            g_logic->FixedUpdate(engine);
+            g_physics->FixedUpdate(engine);
+            tick += static_fixed_time_step;
         }
         else {
             XEngine::SafeSystem::Time::MillisecondSleep(0);

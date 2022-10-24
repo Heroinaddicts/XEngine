@@ -14,7 +14,7 @@ namespace XEngine {
         }
         XFile() : _file(nullptr) {}
 
-        __forceinline bool Open(const std::string& path, const std::string& model = "r+") {
+        __forceinline bool Open(const std::string& path, const std::string& model = "a+") {
             _file = fopen(path.c_str(), model.c_str());
             if (nullptr == _file) {
                 XASSERT(false, "XFILE open %s", path.c_str());
@@ -24,15 +24,26 @@ namespace XEngine {
             return true;
         }
 
+        __forceinline bool GetLine(char* buff, const int len) {
+            return fgets(buff, len, _file) != nullptr;
+        }
+
+        XFile& operator << (const std::string& content) {
+            fwrite(content.c_str(), content.size(), 1, _file);
+            return *this;
+        }
+
+        __forceinline void Save() {
+            if (_file) {
+                fflush(_file);
+            }
+        }
+
         __forceinline void Close() {
             if (_file) {
                 fclose(_file);
                 _file = nullptr;
             }
-        }
-
-        __forceinline bool GetLine(char* buff, const int len) {
-            return fgets(buff, len, _file) != nullptr;
         }
 
     private:
