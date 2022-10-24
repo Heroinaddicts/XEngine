@@ -167,10 +167,7 @@ source_group(\\ FILES ${Engine})
 
 if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
 set(LibFbxSDK
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/FbxSDK/libfbxsdk.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/FbxSDK/libfbxsdk-md.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/FbxSDK/libxml2-md.lib"
-    debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/FbxSDK/zlib-md.lib"
+
 )
 
 set(LibPhysx4
@@ -204,6 +201,7 @@ endif()
 
 if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Linux")
 set(LibFbxSDK
+
 )
 
 set(LibPhysx4
@@ -215,7 +213,6 @@ set(LibPhysx4
     debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXVehicle_static_64.a"
     debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXPvdSDK_static_64.a"
     debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysX_static_64.a"
-    #debug "${PROJECT_SOURCE_DIR}/Bin/Linux/libPhysXGpu_64.so"
     
     optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXFoundation_static_64.a"
     optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXCharacterKinematic_static_64.a"
@@ -225,7 +222,6 @@ set(LibPhysx4
     optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXVehicle_static_64.a"
     optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysXPvdSDK_static_64.a"
     optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Linux/Physx4/libPhysX_static_64.a"
-    #optimized "${PROJECT_SOURCE_DIR}/Bin/Linux/libPhysXGpu_64.so"
 )
 endif()
 
