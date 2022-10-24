@@ -7,14 +7,6 @@
 #include "X3DObj.h"
 
 namespace XEngine {
-    enum class eUnitType {
-        Plane,
-        Box,
-        Capsule,
-        ConvexMesh,
-        TriangleMesh
-    };
-
     enum class eRigType {
         Dynamic,
         Kinematic,
@@ -62,22 +54,27 @@ namespace XEngine {
         ContinuousSpeculative
     };
 
+    enum class ePhysxFlags {
+        IsActive = 1,
+        IsStatic = 1 << 1,
+        IsKinematic = 1 << 2,
+        IsActiveCCD = 1 << 3,
+        OnlyTirgger = 1 << 4,
+        UseGravity = 1 << 5
+    };
+
     namespace Api {
         class iPhysxBase {
         public:
             virtual ~iPhysxBase() {}
-            iPhysxBase(const eUnitType type, iPhysxContext* const context) : _type(type), _context(context) {}
+            iPhysxBase(iPhysxContext* const context) : _context(context) {}
 
+            virtual void SetFlags(ePhysxFlags flags, bool b) = 0;
             virtual void SetLayer(const int index) = 0; //index range in [0-31]
-
-            virtual void SetOnlyTrigger(const bool value) = 0;
 
             virtual void SetMass(const float mass) = 0;
             virtual void SetDrag(const float drag) = 0;
             virtual void SetAngularDrag(const float angularDrag) = 0;
-
-            virtual void UseGravity(const bool use) = 0;
-            virtual void SetKinematic(const bool value) = 0;
 
             virtual void SetInterpolate(const eInterpolate type) = 0; //物理运动插值模式 建议服务器使用None
             virtual void SetCollisionDetection(const eCollisionDetection type) = 0;
@@ -90,7 +87,6 @@ namespace XEngine {
             virtual void SetPosition(const Vector3& position) = 0;
             virtual void SetRotation(const Vector3& rotation) = 0;
 
-            const eUnitType _type;
             iPhysxContext* const _context;
         };
 
@@ -108,23 +104,15 @@ namespace XEngine {
             virtual void OnCollisionEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
             virtual void OnCollisionExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
 
+            virtual void SetFlags(ePhysxFlags flags, bool b) { _physx_base ? _physx_base->SetFlags(flags, b) : void(0); }
             virtual void SetLayer(const int index) { _physx_base ? _physx_base->SetLayer(index) : void(0); }
 
-            virtual void SetOnlyTrigger(const bool value) { _physx_base ? _physx_base->SetOnlyTrigger(value) : void(0); }
-
             virtual void SetMass(const float mass) { _physx_base ? _physx_base->SetMass(mass) : void(0); }
-
             virtual void SetDrag(const float drag) { _physx_base ? _physx_base->SetDrag(drag) : void(0); }
-
             virtual void SetAngularDrag(const float angularDrag) { _physx_base ? _physx_base->SetAngularDrag(angularDrag) : void(0); }
-
-            virtual void UseGravity(const bool use) { _physx_base ? _physx_base->UseGravity(use) : void(0); }
-
-            virtual void SetKinematic(const bool value) { _physx_base ? _physx_base->SetKinematic(value) : void(0); }
 
             virtual void SetInterpolate(const eInterpolate type) { _physx_base ? _physx_base->SetInterpolate(type) : void(0); }
             virtual void SetCollisionDetection(const eCollisionDetection type) { _physx_base ? _physx_base->SetCollisionDetection(type) : void(0); }
-
 
             iPhysxContext(void* const data) : _data(data), _physx_base(nullptr) {}
 

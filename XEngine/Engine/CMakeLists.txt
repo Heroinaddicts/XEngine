@@ -139,8 +139,8 @@ set(Navigation
 
 set(Physics
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Header.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/TriangleMeshActor.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/TriangleMeshActor.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxBase.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxBase.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxScene.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxScene.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physics.h"
@@ -186,6 +186,19 @@ set(LibPhysx4
     debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysX_64.lib"
     debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysXCharacterKinematic_static_64.lib"
     debug "${PROJECT_SOURCE_DIR}/Engine/Library/Debug/Windows/Physx4/PhysXCommon_64.lib"
+    
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/PhysXCooking_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/PhysXExtensions_static_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/PhysXFoundation_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/PhysXPvdSDK_static_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/PhysXTask_static_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/PhysXVehicle_static_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/LowLevel_static_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/LowLevelAABB_static_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/LowLevelDynamics_static_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/PhysX_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/PhysXCharacterKinematic_static_64.lib"
+    optimized "${PROJECT_SOURCE_DIR}/Engine/Library/Release/Windows/Physx4/PhysXCommon_64.lib"
 )
 endif()
 
