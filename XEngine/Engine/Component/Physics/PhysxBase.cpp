@@ -2,8 +2,8 @@
 #include "PhysxScene.h"
 
 namespace XEngine {
-    PhysxBase* PhysxBase::Create(PhysxScene* _scene, PxShape* shape, PxActor* actor, Api::iPhysxContext* context) {
-        return nullptr;
+    PhysxBase* PhysxBase::Create(PhysxScene* scene, PxShape* shape, PxActor* actor, Api::iPhysxContext* context) {
+        return xnew PhysxBase(scene, shape, actor, context);
     }
 
     PhysxBase::PhysxBase(PhysxScene* scene, PxShape* shape, PxActor* actor, Api::iPhysxContext* context)
@@ -21,6 +21,8 @@ namespace XEngine {
             fd.word3 = id.word3;
             _shape->setQueryFilterData(fd);
         }
+
+        context ? context->OnCreated(true) : void(0);
     }
 
     void PhysxBase::SetSimulationFlag(const int flags, bool b) {

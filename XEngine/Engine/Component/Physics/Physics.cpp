@@ -94,11 +94,10 @@ namespace XEngine {
                 pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_CONTACTS, true);
                 pvdClient->setScenePvdFlag(PxPvdSceneFlag::eTRANSMIT_SCENEQUERIES, true);
             }
-
             return scene;
         }
 
-        XERROR(Engine::GetInstance(), "create physx scene error, name %s");
+        XERROR(Engine::GetInstance(), "create physx scene error");
         return nullptr;
     }
 

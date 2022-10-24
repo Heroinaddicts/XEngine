@@ -10,7 +10,7 @@ namespace XEngine {
     public:
         virtual ~PhysxBase() {}
 
-        static PhysxBase* Create(PhysxScene* _scene, PxShape* shape, PxActor* actor, Api::iPhysxContext* contexnt);
+        static PhysxBase* Create(PhysxScene* scene, PxShape* shape, PxActor* actor, Api::iPhysxContext* contexnt);
 
         // Í¨¹ý iPhysxBase ¼Ì³Ð
         virtual void SetSimulationFlag(const int flags, bool b) override;
