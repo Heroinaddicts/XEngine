@@ -64,17 +64,9 @@ namespace XEngine {
 
     }
 
-    PxFilterFlags _PxSimulationFilterShader(
-        PxFilterObjectAttributes attributes0, PxFilterData filterData0,
-        PxFilterObjectAttributes attributes1, PxFilterData filterData1,
-        PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize) {
-
-        return PxFilterFlag::eNOTIFY;
-    }
-
     Api::iPhysxScene* Physics::CreateScene(const float static_friction, const float dynamic_friction, const float restitution) {
         PxSceneDesc desc(g_pxphysics->getTolerancesScale());
-        desc.filterShader = _PxSimulationFilterShader;
+        desc.filterShader = PhysxScene::PhysxSimulationFilterShader;
         desc.gravity = PxVec3(0.0f, -98.1f, 0.0f);
         desc.cpuDispatcher = PxDefaultCpuDispatcherCreate(2);
         desc.cudaContextManager = g_cuda_context_manager;

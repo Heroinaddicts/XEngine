@@ -9,6 +9,8 @@ namespace XEngine {
         virtual ~PhysxScene() {}
         PhysxScene(PxScene* scene, const float static_friction, const float dynamic_friction, const float restitution);
 
+        virtual void RelationPhysicsLayer(const int layerA, const int layerB);
+
         virtual void CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context);
         virtual void CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context);
         virtual void CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context);
@@ -41,6 +43,12 @@ namespace XEngine {
         // Í¨¹ý PxCCDContactModifyCallback ¼Ì³Ð
         virtual void onCCDContactModify(PxContactModifyPair* const pairs, PxU32 count) override;
 
+    public:
+        static PxFilterFlags PhysxSimulationFilterShader(
+            PxFilterObjectAttributes attributes0, PxFilterData filterData0,
+            PxFilterObjectAttributes attributes1, PxFilterData filterData1,
+            PxPairFlags& pairFlags, const void* constantBlock, PxU32 constantBlockSize);
+
     protected:
         virtual void Run(void* constext);
 
@@ -48,6 +56,8 @@ namespace XEngine {
         PxScene* const _scene;
         PxMaterial* const _material;
 
+    private:
+        std::set<PhysicsLayerRelation> _physics_layer_relations;
     };
 }
 

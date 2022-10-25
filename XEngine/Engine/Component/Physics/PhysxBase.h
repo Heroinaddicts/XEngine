@@ -10,12 +10,26 @@ namespace XEngine {
     public:
         virtual ~PhysxBase() {}
 
-        static PhysxBase* Create(PhysxScene* scene, PxShape* shape, PxActor* actor, Api::iPhysxContext* contexnt);
+        static PhysxBase* Create(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* contexnt);
 
         // Í¨¹ý iPhysxBase ¼Ì³Ð
-        virtual void SetSimulationFlag(const int flags, bool b) override;
-        virtual void SetQueryFlag(const int flags, bool b) override;
-        virtual void SetLayer(const ePhysxLayer index) override;
+        virtual void SetActive(const bool b) override;
+        virtual bool IsActive() const override;
+
+        virtual void SetKinematic(const bool b) override;
+        virtual bool GetKinematic() const override;
+
+        virtual void ActiveCCD(const bool b) override;
+        virtual bool IsCCD() const override;
+
+        virtual void SetTrigger(const bool b) override;
+        virtual bool IsTrigger() const override;
+
+        virtual void SetUseGravity(const bool b) override;
+        virtual bool IsUseGravity() const override;
+
+        virtual void SetLayer(const int layer) override;
+        virtual int GetLayer() const override;
 
         virtual void SetMass(const float mass) override;
         virtual void SetDrag(const float drag) override;
@@ -27,13 +41,21 @@ namespace XEngine {
         virtual void SetPosition(const Vector3& position) override;
         virtual void SetRotation(const Vector3& rotation) override;
 
+        PhysxScene* GetScene() const { return _Scene; }
     private:
-        PhysxBase(PhysxScene* scene, PxShape* shape, PxActor* actor, Api::iPhysxContext* context);
+        PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context);
 
     private:
-        PhysxScene* const _scene;
-        PxActor* const _actor;
-        PxShape* const _shape;
+        PhysxScene* const _Scene;
+        PxRigidActor* const _Actor;
+        PxShape* const _Shape;
+
+        int _Layer;
+        bool _Active;
+        bool _Kinematic;
+        bool _CCD;
+        bool _Trigger;
+        bool _UseGravity;
     };
 }
 

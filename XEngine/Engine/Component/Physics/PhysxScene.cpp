@@ -3,6 +3,8 @@
 #include "PhysxBase.h"
 
 namespace XEngine {
+
+
     PhysxScene::PhysxScene(
         PxScene* scene,
         const float static_friction,
@@ -12,9 +14,58 @@ namespace XEngine {
         _material(g_pxphysics->createMaterial(static_friction, dynamic_friction, restitution)) {
 
         _scene->userData = this;
+        PxFilterData* pfd = xnew PxFilterData;
+        GetWords(this, pfd->word0, pfd->word1);
+        _scene->setFilterShaderData(pfd, sizeof(PxFilterData));
+
         _scene->setSimulationEventCallback(this);
         _scene->setCCDContactModifyCallback(this);
         _scene->setContactModifyCallback(this);
+    }
+
+    void PhysxScene::RelationPhysicsLayer(const int layerA, const int layerB) {
+        _physics_layer_relations.insert(PhysicsLayerRelation(layerA, layerB));
+    }
+
+    PxFilterFlags PhysxScene::PhysxSimulationFilterShader(
+        PxFilterObjectAttributes attributes0,
+        PxFilterData filterData0,
+        PxFilterObjectAttributes attributes1,
+        PxFilterData filterData1,
+        PxPairFlags& pairFlags,
+        const void* constantBlock,
+        PxU32 constantBlockSize) {
+
+        PhysxBase* pb0 = static_cast<PhysxBase*>(GetUserData(filterData0.word0, filterData0.word1));
+        PhysxBase* pb1 = static_cast<PhysxBase*>(GetUserData(filterData1.word0, filterData1.word1));
+
+        if (nullptr == pb0 || nullptr == pb1) {
+            return PxFilterFlag::eDEFAULT;
+        }
+
+        XASSERT(pb0->GetScene() && pb1->GetScene() && pb0->GetScene() == pb1->GetScene(), "wtf");
+        if (pb0->GetScene() == nullptr || pb1->GetScene() == nullptr || pb0->GetScene() != pb1->GetScene()) {
+            XERROR(Engine::GetInstance(), "fatal error");
+            return PxFilterFlag::eSUPPRESS;
+        }
+
+        if (!pb0->IsActive() || !pb1->IsActive()) {
+            return PxFilterFlag::eSUPPRESS;
+        }
+
+        PhysxScene* scene = pb0->GetScene();
+        if (scene->_physics_layer_relations.find(PhysicsLayerRelation(pb0->GetLayer(), pb1->GetLayer())) == scene->_physics_layer_relations.end()) {
+            return PxFilterFlag::eSUPPRESS;
+        }
+
+        if (pb0->IsTrigger() || pb1->IsTrigger()) {
+            pairFlags |= PxPairFlag::eTRIGGER_DEFAULT;
+        }
+        else {
+            pairFlags |= PxPairFlag::eCONTACT_DEFAULT;
+        }
+
+        return PxFilterFlag::eDEFAULT;
     }
 
     void PhysxScene::CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context) {
@@ -25,8 +76,8 @@ namespace XEngine {
         }
 
         PxShape* shape = nullptr;
+        groundPlane->userData = context;
         groundPlane->getShapes(&shape, sizeof(shape));
-        PxFilterData data = shape->getQueryFilterData();
         _scene->addActor(*groundPlane);
         PhysxBase::Create(this, shape, groundPlane, context);
     }
@@ -41,22 +92,31 @@ namespace XEngine {
         PxFilterData fd = shape->getSimulationFilterData();
         shape->setSimulationFilterData(fd);
 
-        PxRigidDynamic* body = g_pxphysics->createRigidDynamic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
-        if (nullptr == body) {
+        PxRigidActor* actor = nullptr;
+        switch (type) {
+        case eRigType::Dynamic:
+            actor = g_pxphysics->createRigidDynamic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
+            break;
+        case eRigType::Static:
+            actor = g_pxphysics->createRigidStatic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
+            break;
+        }
+
+        if (nullptr == actor) {
             context ? context->OnCreated(false) : void(0);
             shape->release();
             return;
         }
 
-        body->userData = context;
-        body->attachShape(*shape);
-        body->setActorFlag(PxActorFlag::eVISUALIZATION, true);
-        _scene->addActor(*body);
-        shape->release();
+        if (context) {
+            context->SetPosition(pos);
+            context->SetRotation(qt.EulerAngles());
+        }
 
-        context->SetPosition(pos);
-        context->SetRotation(qt.EulerAngles());
-        PhysxBase::Create(this, shape, body, context);
+        PhysxBase::Create(this, shape, actor, context);
+        actor->attachShape(*shape);
+        _scene->addActor(*actor);
+        shape->release();
     }
 
     void PhysxScene::CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context) {
@@ -66,19 +126,31 @@ namespace XEngine {
             return;
         }
 
-        PxRigidDynamic* body = g_pxphysics->createRigidDynamic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
-        if (nullptr == body) {
+        PxRigidActor* actor = nullptr;
+        switch (type) {
+        case eRigType::Dynamic:
+            actor = g_pxphysics->createRigidDynamic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
+            break;
+        case eRigType::Static:
+            actor = g_pxphysics->createRigidStatic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
+            break;
+        }
+
+        if (nullptr == actor) {
             context ? context->OnCreated(false) : void(0);
+            shape->release();
             return;
         }
 
-        body->attachShape(*shape);
-        _scene->addActor(*body);
-        shape->release();
+        if (context) {
+            context->SetPosition(pos);
+            context->SetRotation(qt.EulerAngles());
+        }
 
-        context->SetPosition(pos);
-        context->SetRotation(qt.EulerAngles());
-        PhysxBase::Create(this, shape, body, context);
+        PhysxBase::Create(this, shape, actor, context);
+        actor->attachShape(*shape);
+        _scene->addActor(*actor);
+        shape->release();
     }
 
     void PhysxScene::CreateConvexMesh(const eRigType type, const Quaternion& qt, Api::iPhysxContext* const context) {
@@ -158,11 +230,15 @@ namespace XEngine {
         // 允许穿透的厚度，当穿透指定的厚度后，就是发生弹开等动作 -0.02f 负数代表穿透后，正数代表穿透前
         shape->setRestOffset(-0.02);
 
-        actor->attachShape(*shape);
-        shape->release();
-        actor->userData = context;
-        _scene->addActor(*actor);
+        if (context) {
+            context->SetPosition(pos);
+            context->SetRotation(qt.EulerAngles());
+        }
+
         PhysxBase::Create(this, shape, actor, context);
+        actor->attachShape(*shape);
+        _scene->addActor(*actor);
+        shape->release();
     }
 
     bool PhysxScene::Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit) {

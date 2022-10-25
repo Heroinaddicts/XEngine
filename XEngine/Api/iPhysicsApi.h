@@ -54,64 +54,29 @@ namespace XEngine {
         ContinuousSpeculative
     };
 
-    enum class ePhysxLayer {
-        Layer0 = 1 << 0,
-        Layer1 = 1 << 1,
-        Layer2 = 1 << 2,
-        Layer3 = 1 << 3,
-        Layer4 = 1 << 4,
-        Layer5 = 1 << 5,
-        Layer6 = 1 << 6,
-        Layer7 = 1 << 7,
-        Layer8 = 1 << 8,
-        Layer9 = 1 << 9,
-        Layer10 = 1 << 10,
-        Layer11 = 1 << 11,
-        Layer12 = 1 << 12,
-        Layer13 = 1 << 13,
-        Layer14 = 1 << 14,
-        Layer15 = 1 << 15,
-        Layer16 = 1 << 16,
-        Layer17 = 1 << 17,
-        Layer18 = 1 << 18,
-        Layer19 = 1 << 19,
-        Layer20 = 1 << 20,
-        Layer21 = 1 << 21,
-        Layer22 = 1 << 22,
-        Layer23 = 1 << 23,
-        Layer24 = 1 << 24,
-        Layer25 = 1 << 25,
-        Layer26 = 1 << 26,
-        Layer27 = 1 << 27,
-        Layer28 = 1 << 28,
-        Layer29 = 1 << 29,
-        Layer30 = 1 << 30,
-        Lyaer31 = 1 << 31
-    };
-
-    enum class ePhysxSimulationFlags {
-        IsActive = 1,
-        IsStatic = 1 << 1,
-        IsKinematic = 1 << 2,
-        IsActiveCCD = 1 << 3,
-        OnlyTirgger = 1 << 4,
-        UseGravity = 1 << 5
-    };
-
-    enum class eQueryFlags {
-
-    };
-
     namespace Api {
         class iPhysxBase {
         public:
             virtual ~iPhysxBase() {}
             iPhysxBase(iPhysxContext* const context) : _context(context) {}
 
-            virtual void SetSimulationFlag(const int flags, bool b = true) = 0;
-            virtual void SetQueryFlag(const int flags, bool b = true) = 0;
+            virtual void SetActive(const bool b) = 0;
+            virtual bool IsActive() const = 0;
 
-            virtual void SetLayer(const ePhysxLayer index) = 0; //index range in [0-31]
+            virtual void SetKinematic(const bool b) = 0;
+            virtual bool GetKinematic() const = 0;
+
+            virtual void ActiveCCD(const bool b) = 0;
+            virtual bool IsCCD() const = 0;
+
+            virtual void SetTrigger(const bool b) = 0;
+            virtual bool IsTrigger() const = 0;
+
+            virtual void SetUseGravity(const bool b) = 0;
+            virtual bool IsUseGravity() const = 0;
+
+            virtual void SetLayer(const int layer) = 0;
+            virtual int GetLayer() const = 0;
 
             virtual void SetMass(const float mass) = 0;
             virtual void SetDrag(const float drag) = 0;
@@ -145,9 +110,8 @@ namespace XEngine {
             virtual void OnCollisionEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
             virtual void OnCollisionExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
 
-            virtual void SetSimulationFlag(const int flags, bool b = true) { _physx_base ? _physx_base->SetSimulationFlag(flags, b) : void(0); }
-            virtual void SetQueryFlag(const int flags, bool b = true) { _physx_base ? _physx_base->SetQueryFlag(flags, b) : void(0); }
-            virtual void SetLayer(const ePhysxLayer index) { _physx_base ? _physx_base->SetLayer(index) : void(0); }
+            virtual void SetLayer(const int layer) { _physx_base ? _physx_base->SetLayer(layer) : void(0); }
+            virtual int GetLayer() const { return _physx_base ? _physx_base->GetLayer() : 0; }
 
             virtual void SetMass(const float mass) { _physx_base ? _physx_base->SetMass(mass) : void(0); }
             virtual void SetDrag(const float drag) { _physx_base ? _physx_base->SetDrag(drag) : void(0); }
@@ -191,6 +155,8 @@ namespace XEngine {
         class iPhysxScene {
         public:
             virtual ~iPhysxScene() {}
+
+            virtual void RelationPhysicsLayer(const int layerA, const int layerB) = 0;
 
             virtual void CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context = nullptr) = 0;
             virtual void CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context = nullptr) = 0;

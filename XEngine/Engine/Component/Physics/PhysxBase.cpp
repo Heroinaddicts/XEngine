@@ -2,62 +2,79 @@
 #include "PhysxScene.h"
 
 namespace XEngine {
-    PhysxBase* PhysxBase::Create(PhysxScene* scene, PxShape* shape, PxActor* actor, Api::iPhysxContext* context) {
+    PhysxBase* PhysxBase::Create(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context) {
         return xnew PhysxBase(scene, shape, actor, context);
     }
 
-    PhysxBase::PhysxBase(PhysxScene* scene, PxShape* shape, PxActor* actor, Api::iPhysxContext* context)
-        : iPhysxBase(context), _scene(scene), _shape(shape), _actor(actor) {
-        PhysxIdentity id(this);
+    PhysxBase::PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context)
+        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _Layer(0), _Active(true), _Kinematic(false), _CCD(false), _Trigger(false), _UseGravity(false) {
+
+        _Actor->userData = context;
         {
-            PxFilterData fd = _shape->getSimulationFilterData();
-            fd.word2 = id.word2;
-            fd.word3 = id.word3;
-            _shape->setSimulationFilterData(fd);
+            PxFilterData fd = _Shape->getSimulationFilterData();
+            GetWords(this, fd.word0, fd.word1);
+            _Shape->setSimulationFilterData(fd);
         }
         {
-            PxFilterData fd = _shape->getQueryFilterData();
-            fd.word2 = id.word2;
-            fd.word3 = id.word3;
-            _shape->setQueryFilterData(fd);
+            PxFilterData fd = _Shape->getQueryFilterData();
+            GetWords(this, fd.word0, fd.word1);
+            _Shape->setQueryFilterData(fd);
         }
 
-        context ? context->OnCreated(true) : void(0);
+        Api::iPhysxBase* pb = dynamic_cast<Api::iPhysxBase*>(this);
+
+        if (context) {
+            SafeMemory::Memcpy((void*)&(context->_physx_base), sizeof(Api::iPhysxBase*), &pb, sizeof(Api::iPhysxBase*));
+            context->OnCreated(true);
+        }
     }
 
-    void PhysxBase::SetSimulationFlag(const int flags, bool b) {
-        PxFilterData fd = _shape->getSimulationFilterData();
-        if (b) {
-            fd.word0 |= flags;
-        }
-        else {
-            fd.word0 &= ~flags;
-        }
-        _shape->setSimulationFilterData(fd);
+    void PhysxBase::SetActive(const bool b) {
+        _Active = b;
     }
 
-    void PhysxBase::SetQueryFlag(const int flags, bool b) {
-        PxFilterData fd = _shape->getQueryFilterData();
-        if (b) {
-            fd.word0 |= flags;
-        }
-        else {
-            fd.word0 &= ~flags;
-        }
-        _shape->setQueryFilterData(fd);
+    bool PhysxBase::IsActive() const {
+        return _Active;
     }
 
-    void PhysxBase::SetLayer(const ePhysxLayer index) {
-        {
-            PxFilterData fd = _shape->getSimulationFilterData();
-            fd.word1 = (int)index;
-            _shape->setSimulationFilterData(fd);
-        }
-        {
-            PxFilterData fd = _shape->getQueryFilterData();
-            fd.word1 = (int)index;
-            _shape->setQueryFilterData(fd);
-        }
+    void PhysxBase::SetKinematic(const bool b) {
+        _Kinematic = b;
+    }
+
+    bool PhysxBase::GetKinematic() const {
+        return _Kinematic;
+    }
+
+    void PhysxBase::ActiveCCD(const bool b) {
+        _CCD = b;
+    }
+
+    bool PhysxBase::IsCCD() const {
+        return _CCD;
+    }
+
+    void PhysxBase::SetTrigger(const bool b) {
+        _Trigger = b;
+    }
+
+    bool PhysxBase::IsTrigger() const {
+        return _Trigger;
+    }
+
+    void PhysxBase::SetUseGravity(const bool b) {
+        _UseGravity = b;
+    }
+
+    bool PhysxBase::IsUseGravity() const {
+        return _UseGravity;
+    }
+
+    void PhysxBase::SetLayer(const int layer) {
+        _Layer = layer;
+    }
+
+    int PhysxBase::GetLayer() const {
+        return _Layer;
     }
 
     void PhysxBase::SetMass(const float mass) {
@@ -81,7 +98,7 @@ namespace XEngine {
     }
 
     Vector3 PhysxBase::Position() const {
-        PxTransform tf = _shape->getLocalPose();
+        PxTransform tf = _Shape->getLocalPose();
         return Vector3(tf.p.x, tf.p.y, tf.p.z);
     }
 
@@ -90,20 +107,20 @@ namespace XEngine {
     }
 
     void PhysxBase::SetPosition(const Vector3& position) {
-        PxTransform tf = _shape->getLocalPose();
+        PxTransform tf = _Shape->getLocalPose();
         tf.p.x = position.x;
         tf.p.y = position.y;
         tf.p.z = position.z;
-        _shape->setLocalPose(tf);
+        _Shape->setLocalPose(tf);
     }
 
     void PhysxBase::SetRotation(const Vector3& rotation) {
-        PxTransform tf = _shape->getLocalPose();
+        PxTransform tf = _Shape->getLocalPose();
         Quaternion q = Quaternion::Euler(rotation);
         tf.q.x = q.x;
         tf.q.y = q.y;
         tf.q.z = q.z;
         tf.q.w = q.w;
-        _shape->setLocalPose(tf);
+        _Shape->setLocalPose(tf);
     }
 }

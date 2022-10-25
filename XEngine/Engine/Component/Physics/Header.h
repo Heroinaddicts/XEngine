@@ -5,6 +5,7 @@
 #include "iPhysics.h"
 #include "Engine.h"
 #include "PxPhysicsAPI.h"
+#include <set>
 using namespace physx;
 
 #include "SafeString.h"
@@ -59,18 +60,45 @@ namespace XEngine {
     extern PxPvd* g_pxpvd;
     extern PxCudaContextManager* g_cuda_context_manager;
 
+
 #pragma pack(push, 1)
-    struct PhysxIdentity {
+    struct UserDataIdentity {
         union {
             struct {
-                const int word2;
-                const int word3;
+                const PxU32 worda;
+                const PxU32 wordb;
             };
-            void* const userdata;
+            void* const data;
         };
 
-        PhysxIdentity(void* p) : userdata(p) {}
+        UserDataIdentity(PxU32 w0, PxU32 w1) : worda(w0), wordb(w1) {}
+        UserDataIdentity(void* p) : data(p) {}
     };
 #pragma pack(pop)
 
+    __forceinline void* GetUserData(PxU32 a, PxU32 b) {
+        return UserDataIdentity(a, b).data;
+    }
+
+    __forceinline void GetWords(void* p, PxU32& a, PxU32& b) {
+        UserDataIdentity udi(p);
+        a = udi.worda;
+        b = udi.wordb;
+    }
+
+    struct PhysicsLayerRelation {
+        const int layerA;
+        const int layerB;
+
+        PhysicsLayerRelation(int a, int b) : layerA(a), layerB(b) {}
+        PhysicsLayerRelation(const PhysicsLayerRelation& target) : layerA(target.layerA), layerB(target.layerB) {}
+
+        bool operator==(const PhysicsLayerRelation& target) const {
+            return (layerA == target.layerA && layerB == target.layerB) || (layerA == target.layerB && layerB == target.layerA);
+        }
+
+        bool operator <(const PhysicsLayerRelation& target) const {
+            return (layerA + layerB) < (target.layerA + target.layerB);
+        }
+    };
 }

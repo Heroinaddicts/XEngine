@@ -7,6 +7,45 @@
 iEngine* g_engine = nullptr;
 iObjLoader* g_objloader = nullptr;
 
+class PhysicsTest : public Api::iPhysxContext {
+public:
+    PhysicsTest() : Api::iPhysxContext(nullptr) {}
+
+    // Í¨¹ý iPhysxContext ¼Ì³Ð
+    virtual void OnCreated(bool success) override {
+        if (success) {
+            SetLayer(0);
+        }
+        else {
+            xdel this;
+        }
+    }
+
+    virtual void OnAwake() override {
+    }
+
+    virtual void OnRelease() override {
+        xdel this;
+    }
+
+    virtual void OnTriggerEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) override {
+
+    }
+
+    virtual void OnTriggerExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) override {
+
+    }
+
+    virtual void OnCollisionEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) override {
+
+    }
+
+    virtual void OnCollisionExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) override {
+
+    }
+
+};
+
 bool TestPhysics::Initialize(iEngine* const engine) {
     g_engine = engine;
     return true;
@@ -48,13 +87,13 @@ bool TestPhysics::Launch(iEngine* const engine) {
 
         std::string file = SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/TestPhysx/" + sceneObj->Attribute("SceneObj");
         const X3DObj* obj = g_objloader->Get3DObj(file);
-        scene->CreateTriangleMesh(XEngine::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), Vector3(scalex, scaley, scalez), obj);
+        scene->CreateTriangleMesh(XEngine::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), Vector3(scalex, scaley, scalez), obj, xnew PhysicsTest());
         sceneObj = sceneObj->NextSiblingElement("SceneObj");
     }
 
     START_TIMER(engine, this, 0, 5000, 100, 50, scene);
     scene->Simulate(1 / 60.0f);
-
+    scene->RelationPhysicsLayer(0, 0);
     return true;
 }
 
@@ -73,10 +112,10 @@ void TestPhysics::OnTimer(const int id, void* const context, const int64 timesta
         int index = SafeTools::Rand(100000000) % 2;
         Quaternion qt;
         if (index == 0) {
-            scene->CreateBox(eRigType::Dynamic, Vector3(0, 30, 0), qt, Vector3(2, 2, 1));
+            scene->CreateBox(eRigType::Dynamic, Vector3(0, 30, 0), qt, Vector3(2, 2, 1), xnew PhysicsTest());
         }
         else {
-            scene->CreateCapsule(eRigType::Dynamic, Vector3(0, 30, 0), qt, 1, 2);
+            scene->CreateCapsule(eRigType::Dynamic, Vector3(0, 30, 0), qt, 1, 2, xnew PhysicsTest());
         }
     }
     else if (1 == id) {
