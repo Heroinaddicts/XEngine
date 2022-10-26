@@ -40,34 +40,40 @@ namespace XEngine {
     }
 
     void PhysxBase::SetKinematic(const bool b) {
-        PxRigidBody* body = dynamic_cast<PxRigidBody*>(_Actor);
+        if (_Actor->getType() != PxActorType::eRIGID_DYNAMIC) {
+            return;
+        }
+        PxRigidDynamic* body = static_cast<PxRigidDynamic*>(_Actor);
         body ? body->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, b) : void(0);
     }
 
     bool PhysxBase::IsKinematic() const {
-        PxRigidBody* body = dynamic_cast<PxRigidBody*>(_Actor);
+        if (_Actor->getType() != PxActorType::eRIGID_DYNAMIC) {
+            return false;
+        }
+        PxRigidDynamic* body = static_cast<PxRigidDynamic*>(_Actor);
         return body ? body->getRigidBodyFlags().isSet(PxRigidBodyFlag::eKINEMATIC) : false;
     }
 
-    void PhysxBase::ActiveCCD(const bool b) {
-        PxRigidBody* body = dynamic_cast<PxRigidBody*>(_Actor);
+    void PhysxBase::SetCCD(const bool b) {
+        if (_Actor->getType() != PxActorType::eRIGID_DYNAMIC) {
+            return;
+        }
+        PxRigidDynamic* body = static_cast<PxRigidDynamic*>(_Actor);
         body ? body->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, b) : void(0);
     }
 
     bool PhysxBase::IsCCD() const {
-        PxRigidBody* body = dynamic_cast<PxRigidBody*>(_Actor);
+        if (_Actor->getType() != PxActorType::eRIGID_DYNAMIC) {
+            return false;
+        }
+        PxRigidDynamic* body = static_cast<PxRigidDynamic*>(_Actor);
         return body ? body->getRigidBodyFlags().isSet(PxRigidBodyFlag::eENABLE_CCD) : false;
     }
 
     void PhysxBase::SetTrigger(const bool b) {
-        if (b) {
-            _Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-            _Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
-        }
-        else {
-            _Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);
-            _Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, true);
-        }
+        _Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, b);
+        _Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !b);
     }
 
     bool PhysxBase::IsTrigger() const {
@@ -140,5 +146,7 @@ namespace XEngine {
     void PhysxBase::Release() {
         SafeMemory::Memset((void*)&(_context->_physx_base), sizeof(_context->_physx_base), 0, sizeof(_context->_physx_base));
         _context->OnPhysxRelease();
+        //_Actor->release();
+        //_Actor->setBaseFlag(PxBaseFlag::eIS_RELEASABLE)
     }
 }

@@ -66,7 +66,7 @@ namespace XEngine {
             virtual void SetKinematic(const bool b) = 0;
             virtual bool IsKinematic() const = 0;
 
-            virtual void ActiveCCD(const bool b) = 0;
+            virtual void SetCCD(const bool b) = 0;
             virtual bool IsCCD() const = 0;
 
             virtual void SetTrigger(const bool b) = 0;
@@ -123,8 +123,21 @@ namespace XEngine {
             virtual void OnPhysxAwake() = 0;
             virtual void OnPhysxRelease() = 0;
 
+
+            virtual void SetPhysxActive(const bool b) { _physx_base ? _physx_base->SetActive(b) : void(0); }
+            virtual bool IsPhysxActive() const { return _physx_base ? _physx_base->IsActive() : false; }
+
+            virtual void SetKinematic(const bool b) { _physx_base ? _physx_base->SetKinematic(b) : void(0); }
+            virtual bool IsKinematic() const { return _physx_base ? _physx_base->IsKinematic() : false; }
+
+            virtual void SetCCD(const bool b) { _physx_base ? _physx_base->SetCCD(b) : void(0); };
+            virtual bool IsCCD() const { return _physx_base ? _physx_base->IsCCD() : false; }
+
             virtual void SetTrigger(const bool b) { _physx_base ? _physx_base->SetTrigger(b) : void(0); }
             virtual bool IsTrigger() const { return _physx_base ? _physx_base->IsTrigger() : false; }
+
+            virtual void SetUseGravity(const bool b) { _physx_base ? _physx_base->SetUseGravity(b) : void(0); }
+            virtual bool IsUseGravity() const { return _physx_base ? _physx_base->IsUseGravity() : false; }
 
             virtual void SetLayer(const int layer) { _physx_base ? _physx_base->SetLayer(layer) : void(0); }
             virtual int GetLayer() const { return _physx_base ? _physx_base->GetLayer() : 0; }

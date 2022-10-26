@@ -19,7 +19,7 @@ namespace XEngine {
         virtual void SetKinematic(const bool b) override;
         virtual bool IsKinematic() const override;
 
-        virtual void ActiveCCD(const bool b) override;
+        virtual void SetCCD(const bool b) override;
         virtual bool IsCCD() const override;
 
         virtual void SetTrigger(const bool b) override;

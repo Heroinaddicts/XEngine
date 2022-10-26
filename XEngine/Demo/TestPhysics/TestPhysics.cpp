@@ -15,7 +15,8 @@ public:
     virtual void OnPhysxCreated(bool success) override {
         if (success) {
             SetLayer(0);
-            SetTrigger(false);
+            SetTrigger(true);
+            SetCCD(true);
         }
         else {
             xdel this;
@@ -55,6 +56,7 @@ public:
         if (success) {
             SetLayer(1);
             SetTrigger(false);
+            SetCCD(true);
         }
         else {
             xdel this;
