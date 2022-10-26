@@ -6,11 +6,13 @@
 namespace XEngine {
     class PhysxScene;
 
+#define CREATE_PHYSX_BASE(scene, shape, actor, context) PhysxBase::Create(scene, shape, actor, context, __FILE__, __LINE__)
+
     class PhysxBase : public Api::iPhysxBase {
     public:
         virtual ~PhysxBase() {}
 
-        static PhysxBase* Create(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* contexnt);
+        static PhysxBase* Create(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* contexnt, const char * file, const int line);
 
         // Í¨¹ý iPhysxBase ¼Ì³Ð
         virtual void SetActive(const bool b) override;
@@ -45,12 +47,15 @@ namespace XEngine {
 
         PhysxScene* GetScene() const { return _Scene; }
     private:
-        PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context);
+        PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context, const char* file, const int line);
 
     public:
         PhysxScene* const _Scene;
         PxRigidActor* const _Actor;
         PxShape* const _Shape;
+
+        const std::string _File;
+        const int _Line;
 
     private:
         int _Layer;

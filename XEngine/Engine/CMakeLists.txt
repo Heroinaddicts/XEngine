@@ -145,6 +145,8 @@ set(Physics
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxBase.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxScene.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxScene.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxSimulationFilterCallback.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxSimulationFilterCallback.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physics.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Physics.cpp"
 )

@@ -2,12 +2,12 @@
 #include "PhysxScene.h"
 
 namespace XEngine {
-    PhysxBase* PhysxBase::Create(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context) {
-        return xnew PhysxBase(scene, shape, actor, context);
+    PhysxBase* PhysxBase::Create(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context, const char* file, const int line) {
+        return xnew PhysxBase(scene, shape, actor, context, file, line);
     }
 
-    PhysxBase::PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context)
-        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _Layer(0) {
+    PhysxBase::PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context, const char* file, const int line)
+        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _Layer(0), _File(file), _Line(line) {
 
         _Actor->userData = context;
         {
@@ -27,8 +27,8 @@ namespace XEngine {
             SafeMemory::Memcpy((void*)&(context->_physx_base), sizeof(Api::iPhysxBase*), &pb, sizeof(Api::iPhysxBase*));
             context->OnPhysxCreated(true);
         }
-        shape->userData = _Actor;
-        shape->setFlags(PxShapeFlag::eSIMULATION_SHAPE | PxShapeFlag::eSCENE_QUERY_SHAPE | PxShapeFlag::eVISUALIZATION);
+		shape->userData = this;
+		//shape->setFlags((shape->getFlags() | PxShapeFlag::eSIMULATION_SHAPE | PxShapeFlag::eSCENE_QUERY_SHAPE | PxShapeFlag::eVISUALIZATION) & ~PxShapeFlag::eTRIGGER_SHAPE);
     }
 
     void PhysxBase::SetActive(const bool b) {
@@ -36,7 +36,7 @@ namespace XEngine {
     }
 
     bool PhysxBase::IsActive() const {
-        return !_Actor->getActorFlags().isSet(PxActorFlag::eSEND_SLEEP_NOTIFIES);
+        return true; // !_Actor->getActorFlags().isSet(PxActorFlag::eSEND_SLEEP_NOTIFIES);
     }
 
     void PhysxBase::SetKinematic(const bool b) {
@@ -71,9 +71,15 @@ namespace XEngine {
         return body ? body->getRigidBodyFlags().isSet(PxRigidBodyFlag::eENABLE_CCD) : false;
     }
 
-    void PhysxBase::SetTrigger(const bool b) {
-        _Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, b);
-        _Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, !b);
+	void PhysxBase::SetTrigger(const bool b) {
+        if (b) {
+			_Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+			_Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+		}
+		else {
+			_Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);
+			_Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, true);
+        }
     }
 
     bool PhysxBase::IsTrigger() const {

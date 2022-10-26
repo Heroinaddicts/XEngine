@@ -19,6 +19,7 @@ namespace XEngine {
         GetWords(this, pfd->word0, pfd->word1);
         _scene->setFilterShaderData(pfd, sizeof(PxFilterData));
 
+        _scene->getFilterCallback()
         _scene->setSimulationEventCallback(this);
         _scene->setCCDContactModifyCallback(this);
         _scene->setContactModifyCallback(this);
@@ -87,7 +88,7 @@ namespace XEngine {
         groundPlane->userData = context;
         groundPlane->getShapes(&shape, sizeof(shape));
         _scene->addActor(*groundPlane);
-        PhysxBase::Create(this, shape, groundPlane, context);
+        CREATE_PHYSX_BASE(this, shape, groundPlane, context);
     }
 
     void PhysxScene::CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context) {
@@ -121,7 +122,7 @@ namespace XEngine {
             context->SetRotation(qt.EulerAngles());
         }
 
-        PhysxBase::Create(this, shape, actor, context);
+        CREATE_PHYSX_BASE(this, shape, actor, context);
         actor->attachShape(*shape);
         _scene->addActor(*actor);
         shape->release();
@@ -155,7 +156,7 @@ namespace XEngine {
             context->SetRotation(qt.EulerAngles());
         }
 
-        PhysxBase::Create(this, shape, actor, context);
+        CREATE_PHYSX_BASE(this, shape, actor, context);
         actor->attachShape(*shape);
         _scene->addActor(*actor);
         shape->release();
@@ -243,7 +244,7 @@ namespace XEngine {
             context->SetRotation(qt.EulerAngles());
         }
 
-        PhysxBase::Create(this, shape, actor, context);
+        CREATE_PHYSX_BASE(this, shape, actor, context);
         actor->attachShape(*shape);
         _scene->addActor(*actor);
         shape->release();
@@ -292,8 +293,8 @@ namespace XEngine {
     void PhysxScene::onTrigger(PxTriggerPair* pairs, PxU32 count) {
         printf("PhysxScene::onTrigger, %lld\n", SafeSystem::Process::GetCurrentThreadID());
         for (int i = 0; i < count; i++) {
-            PhysxBase* base0 = static_cast<PhysxBase*>(pairs[i].triggerActor->userData);
-            PhysxBase* base1 = static_cast<PhysxBase*>(pairs[i].otherActor->userData);
+            PhysxBase* base0 = static_cast<PhysxBase*>(pairs[i].triggerShape->userData);
+            PhysxBase* base1 = static_cast<PhysxBase*>(pairs[i].otherShape->userData);
             if (base0->_context && base1->_context) {
                 Collider collider1(base1->_context);
                 Collider collider0(base0->_context);
@@ -312,5 +313,16 @@ namespace XEngine {
 
     void PhysxScene::onAdvance(const PxRigidBody* const* bodyBuffer, const PxTransform* poseBuffer, const PxU32 count) {
         printf("PhysxScene::onAdvance, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+    }
+    PxFilterFlags PhysxSceneSimulationFilterCallback::pairFound(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, const PxActor* a0, const PxShape* s0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, const PxActor* a1, const PxShape* s1, PxPairFlags& pairFlags)
+    {
+        return PxFilterFlags();
+    }
+    void PhysxSceneSimulationFilterCallback::pairLost(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, bool objectRemoved)
+    {
+    }
+    bool PhysxSceneSimulationFilterCallback::statusChange(PxU32& pairID, PxPairFlags& pairFlags, PxFilterFlags& filterFlags)
+    {
+        return false;
     }
 }
