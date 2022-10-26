@@ -17,7 +17,7 @@ namespace XEngine {
         virtual bool IsActive() const override;
 
         virtual void SetKinematic(const bool b) override;
-        virtual bool GetKinematic() const override;
+        virtual bool IsKinematic() const override;
 
         virtual void ActiveCCD(const bool b) override;
         virtual bool IsCCD() const override;
@@ -41,21 +41,20 @@ namespace XEngine {
         virtual void SetPosition(const Vector3& position) override;
         virtual void SetRotation(const Vector3& rotation) override;
 
+        virtual void Release() override;
+
         PhysxScene* GetScene() const { return _Scene; }
     private:
         PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context);
 
-    private:
+    public:
         PhysxScene* const _Scene;
         PxRigidActor* const _Actor;
         PxShape* const _Shape;
 
+    private:
         int _Layer;
-        bool _Active;
-        bool _Kinematic;
         bool _CCD;
-        bool _Trigger;
-        bool _UseGravity;
     };
 }
 

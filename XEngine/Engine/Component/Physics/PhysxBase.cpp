@@ -7,7 +7,7 @@ namespace XEngine {
     }
 
     PhysxBase::PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context)
-        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _Layer(0), _Active(true), _Kinematic(false), _CCD(false), _Trigger(false), _UseGravity(false) {
+        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _Layer(0) {
 
         _Actor->userData = context;
         {
@@ -25,48 +25,61 @@ namespace XEngine {
 
         if (context) {
             SafeMemory::Memcpy((void*)&(context->_physx_base), sizeof(Api::iPhysxBase*), &pb, sizeof(Api::iPhysxBase*));
-            context->OnCreated(true);
+            context->OnPhysxCreated(true);
         }
+        shape->userData = _Actor;
+        shape->setFlags(PxShapeFlag::eSIMULATION_SHAPE | PxShapeFlag::eSCENE_QUERY_SHAPE | PxShapeFlag::eVISUALIZATION);
     }
 
     void PhysxBase::SetActive(const bool b) {
-        _Active = b;
+        _Actor->setActorFlag(PxActorFlag::eSEND_SLEEP_NOTIFIES, b);
     }
 
     bool PhysxBase::IsActive() const {
-        return _Active;
+        return !_Actor->getActorFlags().isSet(PxActorFlag::eSEND_SLEEP_NOTIFIES);
     }
 
     void PhysxBase::SetKinematic(const bool b) {
-        _Kinematic = b;
+        PxRigidBody* body = dynamic_cast<PxRigidBody*>(_Actor);
+        body ? body->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, b) : void(0);
     }
 
-    bool PhysxBase::GetKinematic() const {
-        return _Kinematic;
+    bool PhysxBase::IsKinematic() const {
+        PxRigidBody* body = dynamic_cast<PxRigidBody*>(_Actor);
+        return body ? body->getRigidBodyFlags().isSet(PxRigidBodyFlag::eKINEMATIC) : false;
     }
 
     void PhysxBase::ActiveCCD(const bool b) {
-        _CCD = b;
+        PxRigidBody* body = dynamic_cast<PxRigidBody*>(_Actor);
+        body ? body->setRigidBodyFlag(PxRigidBodyFlag::eENABLE_CCD, b) : void(0);
     }
 
     bool PhysxBase::IsCCD() const {
-        return _CCD;
+        PxRigidBody* body = dynamic_cast<PxRigidBody*>(_Actor);
+        return body ? body->getRigidBodyFlags().isSet(PxRigidBodyFlag::eENABLE_CCD) : false;
     }
 
     void PhysxBase::SetTrigger(const bool b) {
-        _Trigger = b;
+        if (b) {
+            _Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+            _Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+        }
+        else {
+            _Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);
+            _Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, true);
+        }
     }
 
     bool PhysxBase::IsTrigger() const {
-        return _Trigger;
+        return _Shape->getFlags().isSet(PxShapeFlag::eTRIGGER_SHAPE);
     }
 
     void PhysxBase::SetUseGravity(const bool b) {
-        _UseGravity = b;
+        _Actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, b);
     }
 
     bool PhysxBase::IsUseGravity() const {
-        return _UseGravity;
+        return !_Actor->getActorFlags().isSet(PxActorFlag::eDISABLE_GRAVITY);
     }
 
     void PhysxBase::SetLayer(const int layer) {
@@ -122,5 +135,10 @@ namespace XEngine {
         tf.q.z = q.z;
         tf.q.w = q.w;
         _Shape->setLocalPose(tf);
+    }
+
+    void PhysxBase::Release() {
+        SafeMemory::Memset((void*)&(_context->_physx_base), sizeof(_context->_physx_base), 0, sizeof(_context->_physx_base));
+        _context->OnPhysxRelease();
     }
 }

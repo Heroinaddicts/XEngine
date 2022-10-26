@@ -1,6 +1,7 @@
 #include "PhysxScene.h"
 #include "SafeSystem.h"
 #include "PhysxBase.h"
+#include "Collider.hpp"
 
 namespace XEngine {
 
@@ -36,6 +37,8 @@ namespace XEngine {
         const void* constantBlock,
         PxU32 constantBlockSize) {
 
+        //printf("PhysxScene::PhysxSimulationFilterShader, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+
         PhysxBase* pb0 = static_cast<PhysxBase*>(GetUserData(filterData0.word0, filterData0.word1));
         PhysxBase* pb1 = static_cast<PhysxBase*>(GetUserData(filterData1.word0, filterData1.word1));
 
@@ -53,16 +56,21 @@ namespace XEngine {
             return PxFilterFlag::eSUPPRESS;
         }
 
+        if (PxFilterObjectIsKinematic(attributes0) && PxFilterObjectIsKinematic(attributes1)) {
+            pairFlags = PxPairFlags();
+            return PxFilterFlag::eSUPPRESS;
+        }
+
         PhysxScene* scene = pb0->GetScene();
         if (scene->_physics_layer_relations.find(PhysicsLayerRelation(pb0->GetLayer(), pb1->GetLayer())) == scene->_physics_layer_relations.end()) {
             return PxFilterFlag::eSUPPRESS;
         }
 
-        if (pb0->IsTrigger() || pb1->IsTrigger()) {
-            pairFlags |= PxPairFlag::eTRIGGER_DEFAULT;
+        if (PxFilterObjectIsTrigger(attributes0) || PxFilterObjectIsTrigger(attributes1)) {
+            pairFlags = PxPairFlag::eTRIGGER_DEFAULT;
         }
         else {
-            pairFlags |= PxPairFlag::eCONTACT_DEFAULT;
+            pairFlags = PxPairFlag::eCONTACT_DEFAULT | PxPairFlag::eNOTIFY_TOUCH_FOUND;
         }
 
         return PxFilterFlag::eDEFAULT;
@@ -71,7 +79,7 @@ namespace XEngine {
     void PhysxScene::CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context) {
         PxRigidStatic* groundPlane = PxCreatePlane(*g_pxphysics, PxPlane(nx, ny, nz, distance), *_material);
         if (nullptr == groundPlane) {
-            context ? context->OnCreated(false) : void(0);
+            context ? context->OnPhysxCreated(false) : void(0);
             return;
         }
 
@@ -85,7 +93,7 @@ namespace XEngine {
     void PhysxScene::CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context) {
         PxShape* shape = g_pxphysics->createShape(PxBoxGeometry(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f), *_material);
         if (nullptr == shape) {
-            context ? context->OnCreated(false) : void(0);
+            context ? context->OnPhysxCreated(false) : void(0);
             return;
         }
 
@@ -103,7 +111,7 @@ namespace XEngine {
         }
 
         if (nullptr == actor) {
-            context ? context->OnCreated(false) : void(0);
+            context ? context->OnPhysxCreated(false) : void(0);
             shape->release();
             return;
         }
@@ -122,7 +130,7 @@ namespace XEngine {
     void PhysxScene::CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context) {
         PxShape* shape = g_pxphysics->createShape(PxCapsuleGeometry(radius, height / 2.0f), *_material);
         if (nullptr == shape) {
-            context ? context->OnCreated(false) : void(0);
+            context ? context->OnPhysxCreated(false) : void(0);
             return;
         }
 
@@ -137,7 +145,7 @@ namespace XEngine {
         }
 
         if (nullptr == actor) {
-            context ? context->OnCreated(false) : void(0);
+            context ? context->OnPhysxCreated(false) : void(0);
             shape->release();
             return;
         }
@@ -177,7 +185,7 @@ namespace XEngine {
         }
 
         if (nullptr == actor) {
-            context ? context->OnCreated(false) : void(0);
+            context ? context->OnPhysxCreated(false) : void(0);
             return;
         }
 
@@ -212,7 +220,7 @@ namespace XEngine {
         meshDesc.triangles.stride = sizeof(PxU32) * 3;
         PxTriangleMesh* mesh = g_cooking->createTriangleMesh(meshDesc, g_pxphysics->getPhysicsInsertionCallback());
         if (nullptr == mesh) {
-            context ? context->OnCreated(false) : void(0);
+            context ? context->OnPhysxCreated(false) : void(0);
             return;
         }
 
@@ -220,7 +228,7 @@ namespace XEngine {
         PxShape* shape = g_pxphysics->createShape(geom, *_material);
         if (nullptr == shape) {
             mesh->release();
-            context ? context->OnCreated(false) : void(0);
+            context ? context->OnPhysxCreated(false) : void(0);
             return;
         }
 
@@ -283,6 +291,23 @@ namespace XEngine {
 
     void PhysxScene::onTrigger(PxTriggerPair* pairs, PxU32 count) {
         printf("PhysxScene::onTrigger, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+        for (int i = 0; i < count; i++) {
+            PhysxBase* base0 = static_cast<PhysxBase*>(pairs[i].triggerActor->userData);
+            PhysxBase* base1 = static_cast<PhysxBase*>(pairs[i].otherActor->userData);
+            if (base0->_context && base1->_context) {
+                Collider collider1(base1->_context);
+                Collider collider0(base0->_context);
+                if (pairs[i].status | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND) {
+                    base0->_context->OnTriggerEnter(&collider1);
+                    base1->_context->OnTriggerEnter(&collider0);
+                }
+
+                if (pairs[i].status | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_LOST) {
+                    base0->_context->OnTriggerExit(&collider1);
+                    base1->_context->OnTriggerExit(&collider0);
+                }
+            }
+        }
     }
 
     void PhysxScene::onAdvance(const PxRigidBody* const* bodyBuffer, const PxTransform* poseBuffer, const PxU32 count) {

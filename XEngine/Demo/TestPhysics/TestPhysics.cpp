@@ -12,38 +12,77 @@ public:
     PhysicsTest() : Api::iPhysxContext(nullptr) {}
 
     // 通过 iPhysxContext 继承
-    virtual void OnCreated(bool success) override {
+    virtual void OnPhysxCreated(bool success) override {
         if (success) {
             SetLayer(0);
+            SetTrigger(false);
         }
         else {
             xdel this;
         }
     }
 
-    virtual void OnAwake() override {
+    virtual void OnPhysxAwake() override {
     }
 
-    virtual void OnRelease() override {
+    virtual void OnPhysxRelease() override {
         xdel this;
     }
 
-    virtual void OnTriggerEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) override {
-
+    virtual void OnTriggerEnter(iCollider* const other) override {
+        TRACE(g_engine, "PhysicsTest::OnTriggerEnter %lld", this);
     }
 
-    virtual void OnTriggerExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) override {
-
+    virtual void OnTriggerExit(iCollider* const other) override {
+        TRACE(g_engine, "PhysicsTest::OnTriggerExit %lld", this);
     }
 
-    virtual void OnCollisionEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) override {
-
+    virtual void OnCollisionEnter(iCollision* const other) override {
+        TRACE(g_engine, "PhysicsTest::OnCollisionEnter %lld", this);
     }
 
-    virtual void OnCollisionExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) override {
+    virtual void OnCollisionExit(iCollision* const other) override {
+        TRACE(g_engine, "PhysicsTest::OnCollisionExit %lld", this);
+    }
+};
 
+class PhysicsMeshStatic : public Api::iPhysxContext {
+public:
+    PhysicsMeshStatic() : Api::iPhysxContext(nullptr) {}
+
+    // 通过 iPhysxContext 继承
+    virtual void OnPhysxCreated(bool success) override {
+        if (success) {
+            SetLayer(1);
+            SetTrigger(false);
+        }
+        else {
+            xdel this;
+        }
     }
 
+    virtual void OnPhysxAwake() override {
+    }
+
+    virtual void OnPhysxRelease() override {
+        xdel this;
+    }
+
+    virtual void OnTriggerEnter(iCollider* const other) override {
+        TRACE(g_engine, "PhysicsMeshStatic::OnTriggerEnter %lld", this);
+    }
+
+    virtual void OnTriggerExit(iCollider* const other) override {
+        TRACE(g_engine, "PhysicsMeshStatic::OnTriggerExit %lld", this);
+    }
+
+    virtual void OnCollisionEnter(iCollision* const other) override {
+        TRACE(g_engine, "PhysicsMeshStatic::OnCollisionEnter %lld", this);
+    }
+
+    virtual void OnCollisionExit(iCollision* const other) override {
+        TRACE(g_engine, "PhysicsMeshStatic::OnCollisionExit %lld", this);
+    }
 };
 
 bool TestPhysics::Initialize(iEngine* const engine) {
@@ -87,13 +126,13 @@ bool TestPhysics::Launch(iEngine* const engine) {
 
         std::string file = SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/TestPhysx/" + sceneObj->Attribute("SceneObj");
         const X3DObj* obj = g_objloader->Get3DObj(file);
-        scene->CreateTriangleMesh(XEngine::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), Vector3(scalex, scaley, scalez), obj, xnew PhysicsTest());
+        scene->CreateTriangleMesh(XEngine::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), Vector3(scalex, scaley, scalez), obj, xnew PhysicsMeshStatic());
         sceneObj = sceneObj->NextSiblingElement("SceneObj");
     }
 
     START_TIMER(engine, this, 0, 5000, 100, 50, scene);
     scene->Simulate(1 / 60.0f);
-    scene->RelationPhysicsLayer(0, 0);
+    scene->RelationPhysicsLayer(0, 1);
     return true;
 }
 

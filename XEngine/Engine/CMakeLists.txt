@@ -139,6 +139,8 @@ set(Navigation
 
 set(Physics
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Header.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Collider.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/Collision.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxBase.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxBase.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Physics/PhysxScene.h"

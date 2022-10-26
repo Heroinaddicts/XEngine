@@ -64,7 +64,7 @@ namespace XEngine {
             virtual bool IsActive() const = 0;
 
             virtual void SetKinematic(const bool b) = 0;
-            virtual bool GetKinematic() const = 0;
+            virtual bool IsKinematic() const = 0;
 
             virtual void ActiveCCD(const bool b) = 0;
             virtual bool IsCCD() const = 0;
@@ -93,22 +93,38 @@ namespace XEngine {
             virtual void SetPosition(const Vector3& position) = 0;
             virtual void SetRotation(const Vector3& rotation) = 0;
 
+            virtual void Release() = 0;
+
             iPhysxContext* const _context;
+        };
+
+
+        class iCollider {
+        public:
+            virtual ~iCollider() {}
+
+            virtual iPhysxContext* const GetPhysxContext() const = 0;
+        };
+
+        class iCollision {
+        public:
+            virtual ~iCollision() {}
+
+            virtual iPhysxContext* const GetPhysxContext() const = 0;
+            virtual const Vector3& ClosestPoint() const = 0;
+            virtual const Vector3& ClosestPointOnBounds() = 0;
         };
 
         class iPhysxContext {
         public:
             virtual ~iPhysxContext() {}
 
-            virtual void OnCreated(bool success) = 0;
-            virtual void OnAwake() = 0;
-            virtual void OnRelease() = 0;
+            virtual void OnPhysxCreated(bool success) = 0;
+            virtual void OnPhysxAwake() = 0;
+            virtual void OnPhysxRelease() = 0;
 
-            virtual void OnTriggerEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
-            virtual void OnTriggerExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
-
-            virtual void OnCollisionEnter(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
-            virtual void OnCollisionExit(iPhysxBase* const other, const Vector3& pos, const Vector3& normal) = 0;
+            virtual void SetTrigger(const bool b) { _physx_base ? _physx_base->SetTrigger(b) : void(0); }
+            virtual bool IsTrigger() const { return _physx_base ? _physx_base->IsTrigger() : false; }
 
             virtual void SetLayer(const int layer) { _physx_base ? _physx_base->SetLayer(layer) : void(0); }
             virtual int GetLayer() const { return _physx_base ? _physx_base->GetLayer() : 0; }
@@ -120,6 +136,12 @@ namespace XEngine {
             virtual void SetInterpolate(const eInterpolate type) { _physx_base ? _physx_base->SetInterpolate(type) : void(0); }
             virtual void SetCollisionDetection(const eCollisionDetection type) { _physx_base ? _physx_base->SetCollisionDetection(type) : void(0); }
 
+            virtual void OnTriggerEnter(iCollider* const other) {}
+            virtual void OnTriggerExit(iCollider* const other) {}
+
+            virtual void OnCollisionEnter(iCollision* const other) = 0;
+            virtual void OnCollisionExit(iCollision* const other) = 0;
+
             iPhysxContext(void* const data) : _data(data), _physx_base(nullptr) {}
 
             template<typename T>
@@ -127,7 +149,6 @@ namespace XEngine {
 
             void* const _data;
             iPhysxBase* const _physx_base;
-
 
             virtual Vector3 Position() {
                 return position;
@@ -147,10 +168,15 @@ namespace XEngine {
                 _physx_base ? _physx_base->SetRotation(r) : void(0);
             }
 
+            virtual void ReleasePhysics() {
+                _physx_base ? _physx_base->Release() : void(0);
+            }
+
         private:
             Vector3 position;
             Vector3 rotation;
         };
+
 
         class iPhysxScene {
         public:
