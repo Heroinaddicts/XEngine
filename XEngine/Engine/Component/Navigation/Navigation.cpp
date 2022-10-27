@@ -5,8 +5,8 @@
 namespace XEngine {
     Api::iEngine* g_Engine = nullptr;
     iNavigation* Navigation::GetInstance() {
-        static Navigation static_navigtaion;
-        return &static_navigtaion;
+        static Navigation s_Navigation;
+        return &s_Navigation;
     }
     bool Navigation::Initialize(Api::iEngine* const engine) {
         g_Engine = engine;
@@ -44,7 +44,7 @@ namespace XEngine {
         AsyncMeshLoader loader;
         while (_LoadedQueue.Pull(loader)) {
             if (loader._Mesh) {
-                _mesh_map.insert(std::make_pair(loader._Mesh->_File, loader._Mesh));
+                _MeshMap.insert(std::make_pair(loader._Mesh->_File, loader._Mesh));
             }
 
             loader._Call(loader._Mesh);
@@ -58,13 +58,13 @@ namespace XEngine {
             return nullptr;
         }
 
-        _mesh_map.insert(std::make_pair(file, mesh));
+        _MeshMap.insert(std::make_pair(file, mesh));
         return mesh;
     }
 
     void Navigation::LoadNavmeshAsync(const std::string& file, void(* const func)(Api::iNavmesh* mesh)) {
-        auto itor = _mesh_map.find(file);
-        if (itor != _mesh_map.end()) {
+        auto itor = _MeshMap.find(file);
+        if (itor != _MeshMap.end()) {
             func(itor->second);
             return;
         }

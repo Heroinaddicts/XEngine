@@ -7,26 +7,26 @@
 namespace XEngine {
 
     struct TimerContext {
-        const int _id;
-        void* const _context;
-        TimerContext(const int id, void* const context) : _id(id), _context(context) {}
+        const int _Id;
+        void* const _Context;
+        TimerContext(const int id, void* const context) : _Id(id), _Context(context) {}
 
         operator size_t() const {
-            return _id + (unsigned_int64)_context;
+            return _Id + (unsigned_int64)_Context;
         }
 
         bool operator ==(const TimerContext& target) const {
-            return _id == target._id && _context == target._context;
+            return _Id == target._Id && _Context == target._Context;
         }
     };
 
     typedef std::unordered_map<TimerContext, TimeBase*, SafeTools::T_Hash<TimerContext>> TIMEBASE_MAP;
     typedef std::unordered_map<Api::iTimer*, TIMEBASE_MAP> TIME_MAP;
-    static TIME_MAP static_timer_map;
+    static TIME_MAP s_TimerMap;
 
     iTimeWheel* TimeWheel::GetInstance() {
-        static TimeWheel static_wheel;
-        return &static_wheel;
+        static TimeWheel s_Wheel;
+        return &s_Wheel;
     }
 
     bool TimeWheel::Initialize(Api::iEngine* const engine) {
@@ -167,10 +167,10 @@ namespace XEngine {
     }
 
     TimeBase* TimeWheel::CreateTimerBase(Api::iTimer* timer, const int id, void* const context, int count, int interval, const char* file, const int line) {
-        TIME_MAP::iterator itor = static_timer_map.find(timer);
-        if (itor == static_timer_map.end()) {
-            static_timer_map.insert(std::make_pair(timer, TIMEBASE_MAP()));
-            itor = static_timer_map.find(timer);
+        TIME_MAP::iterator itor = s_TimerMap.find(timer);
+        if (itor == s_TimerMap.end()) {
+            s_TimerMap.insert(std::make_pair(timer, TIMEBASE_MAP()));
+            itor = s_TimerMap.find(timer);
         }
 
         TimeBase* base = TimeBase::Create(timer, id, context, count, interval / JIFF, file, line);
@@ -179,8 +179,8 @@ namespace XEngine {
     }
 
     void TimeWheel::RemoveTimerBase(TimeBase* base, Api::iTimer* timer, const int id, void* const context) {
-        TIME_MAP::iterator itor = static_timer_map.find(timer);
-        if (itor != static_timer_map.end()) {
+        TIME_MAP::iterator itor = s_TimerMap.find(timer);
+        if (itor != s_TimerMap.end()) {
             TIMEBASE_MAP::iterator ifind = itor->second.find(TimerContext(id, context));
             if (ifind != itor->second.end() && ifind->second == base) {
                 itor->second.erase(ifind);
@@ -190,8 +190,8 @@ namespace XEngine {
     }
 
     TimeBase* TimeWheel::FindTimerBase(Api::iTimer* timer, const int id, void* const context) {
-        TIME_MAP::iterator itor = static_timer_map.find(timer);
-        if (itor != static_timer_map.end()) {
+        TIME_MAP::iterator itor = s_TimerMap.find(timer);
+        if (itor != s_TimerMap.end()) {
             TIMEBASE_MAP::iterator ifind = itor->second.find(TimerContext(id, context));
             if (ifind != itor->second.end()) {
                 return ifind->second;
@@ -238,8 +238,8 @@ namespace XEngine {
     }
 
     void TimeWheel::Remove(TimeBase* base) {
-        TIME_MAP::iterator itor = static_timer_map.find(base->GetTimer());
-        if (itor != static_timer_map.end()) {
+        TIME_MAP::iterator itor = s_TimerMap.find(base->GetTimer());
+        if (itor != s_TimerMap.end()) {
             TIMEBASE_MAP::iterator ifind = itor->second.find(TimerContext(base->_Id, base->_Context));
             if (ifind != itor->second.end() && ifind->second == base) {
                 itor->second.erase(ifind);

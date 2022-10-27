@@ -1,10 +1,10 @@
 #include "TimeBase.h"
 
 namespace XEngine {
-    static XPool<TimeBase> static_base_pool;
+    static XPool<TimeBase> s_TimeBasePool;
 
     TimeBase* TimeBase::Create(Api::iTimer* timer, const int id, void* const context, const int count, const int interval, const char* file, const int line) {
-        return XPOOL_CREATE(static_base_pool, timer, id, context, count, interval, file, line);
+        return XPOOL_CREATE(s_TimeBasePool, timer, id, context, count, interval, file, line);
     }
 
     void TimeBase::OnTimer() {
@@ -67,7 +67,7 @@ namespace XEngine {
     }
 
     void TimeBase::Release() {
-        XPOOL_RELEASE(static_base_pool, this);
+        XPOOL_RELEASE(s_TimeBasePool, this);
     }
 
     TimeBase::TimeBase(Api::iTimer* timer, const int id, void* const context, int count, int interval, const char* file, const int line)

@@ -199,62 +199,62 @@ namespace XEngine {
     }
 
     struct TileCacheSetHeader {
-        int magic;
-        int version;
-        int numTiles;
-        dtNavMeshParams meshParams;
-        dtTileCacheParams cacheParams;
+        int _Magic;
+        int _Version;
+        int _NumTiles;
+        dtNavMeshParams _MeshParams;
+        dtTileCacheParams _CacheParams;
     };
 
     struct TileCacheTileHeader {
-        dtCompressedTileRef tileRef;
-        int dataSize;
+        dtCompressedTileRef _TileRef;
+        int _DataSize;
     };
 
     struct NavMeshSetHeader {
-        int magic;
-        int version;
-        int numTiles;
-        dtNavMeshParams params;
+        int _Magic;
+        int _Version;
+        int _NumTiles;
+        dtNavMeshParams _Params;
     };
 
     struct NavMeshTileHeader {
-        dtTileRef tileRef;
-        int dataSize;
+        dtTileRef _TileRef;
+        int _DataSize;
     };
 
     struct LinearAllocator : public dtTileCacheAlloc {
-        unsigned char* buffer;
-        size_t capacity;
-        size_t top;
-        size_t high;
+        unsigned char* _Buffer;
+        size_t _Capacity;
+        size_t _Top;
+        size_t _High;
 
-        LinearAllocator(const size_t cap) : buffer(0), capacity(0), top(0), high(0) {
+        LinearAllocator(const size_t cap) : _Buffer(0), _Capacity(0), _Top(0), _High(0) {
             resize(cap);
         }
 
         ~LinearAllocator() {
-            dtFree(buffer);
+            dtFree(_Buffer);
         }
 
         void resize(const size_t cap) {
-            if (buffer) dtFree(buffer);
-            buffer = (unsigned char*)dtAlloc(cap, DT_ALLOC_PERM);
-            capacity = cap;
+            if (_Buffer) dtFree(_Buffer);
+            _Buffer = (unsigned char*)dtAlloc(cap, DT_ALLOC_PERM);
+            _Capacity = cap;
         }
 
         virtual void reset() {
-            high = dtMax(high, top);
-            top = 0;
+            _High = dtMax(_High, _Top);
+            _Top = 0;
         }
 
         virtual void* alloc(const size_t size) {
-            if (!buffer)
+            if (!_Buffer)
                 return 0;
-            if (top + size > capacity)
+            if (_Top + size > _Capacity)
                 return 0;
-            unsigned char* mem = &buffer[top];
-            top += size;
+            unsigned char* mem = &_Buffer[_Top];
+            _Top += size;
             return mem;
         }
 

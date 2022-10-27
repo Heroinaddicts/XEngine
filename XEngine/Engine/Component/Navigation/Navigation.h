@@ -44,7 +44,7 @@ namespace XEngine {
     private:
         Navigation() : _LoadQueue(MESHLOAD_QUEUE_SIZE), _LoadedQueue(MESHLOAD_QUEUE_SIZE) {}
 
-        std::map<std::string, Navmesh*> _mesh_map;
+        std::map<std::string, Navmesh*> _MeshMap;
 
         struct AsyncMeshLoader {
             Navmesh* _Mesh;

@@ -3,7 +3,7 @@
 
 namespace XEngine {
 
-    XPool<Tcper> static_tcper_pool;
+    XPool<Tcper> s_TcperPool;
 
     Tcper::Tcper(Api::iTcpSession* session, const int sendsize, const int recvsize, int socket)
         : _Session(session), _SendBuff(sendsize), _RecvBuff(recvsize), _Socket(socket),
@@ -19,7 +19,7 @@ namespace XEngine {
     }
 
     Tcper* Tcper::Create(Api::iTcpSession* session, const std::string& ip, const int port, const int sendsize, const int recvsize, int sock, bool initiative) {
-        Tcper* pipe = XPOOL_CREATE(static_tcper_pool, session, sendsize, recvsize, sock);
+        Tcper* pipe = XPOOL_CREATE(s_TcperPool, session, sendsize, recvsize, sock);
 
         if (initiative) {
             static LPFN_CONNECTEX connectex = GetConnectExFun();
@@ -35,14 +35,14 @@ namespace XEngine {
             int err = GetLastError();
             if (SOCKET_ERROR == res && err != WSA_IO_PENDING) {
                 XPOOL_RELEASE(g_OverlappedexPool, ex);
-                XPOOL_RELEASE(static_tcper_pool, pipe);
+                XPOOL_RELEASE(s_TcperPool, pipe);
                 return nullptr;
             }
         }
         else {
             if (false == pipe->AsyncRecv()) {
                 SAFE_CLOSE_SOCKET(pipe->_Socket);
-                XPOOL_RELEASE(static_tcper_pool, pipe);
+                XPOOL_RELEASE(s_TcperPool, pipe);
                 return nullptr;
             }
         }
@@ -69,7 +69,7 @@ namespace XEngine {
 
             SAFE_CLOSE_SOCKET(_Socket);
             _Session->OnConnectFailed();
-            XPOOL_RELEASE(static_tcper_pool, this);
+            XPOOL_RELEASE(s_TcperPool, this);
             break;
         }
         case eCompletion::Recved: {
@@ -137,7 +137,7 @@ namespace XEngine {
             if (_Session) {
                 _Session->OnDisconnect();
             }
-            XPOOL_RELEASE(static_tcper_pool, this);
+            XPOOL_RELEASE(s_TcperPool, this);
         }
     }
 

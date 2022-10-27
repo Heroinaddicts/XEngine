@@ -29,8 +29,8 @@ static int s_FixedTimeStep = 33333;
 
 namespace XEngine {
     Engine* Engine::GetInstance() {
-        static Engine engine;
-        return &engine;
+        static Engine s_Engine;
+        return &s_Engine;
     }
     const char* Engine::GetLaunchParameter(const std::string& name) {
         auto itor = s_ParameterMap.find(name);

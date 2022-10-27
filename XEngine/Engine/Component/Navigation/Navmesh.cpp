@@ -32,8 +32,8 @@ namespace XEngine {
         TileCacheSetHeader header;
         size_t headerReadReturnCode = fread(&header, sizeof(TileCacheSetHeader), 1, fp);
         if (headerReadReturnCode != 1
-            || header.magic != TILECACHESET_MAGIC
-            || header.version != TILECACHESET_VERSION) {
+            || header._Magic != TILECACHESET_MAGIC
+            || header._Version != TILECACHESET_VERSION) {
             // Error or early EOF
             fclose(fp);
             return false;
@@ -45,7 +45,7 @@ namespace XEngine {
             return false;
         }
 
-        dtStatus status = _Mesh->init(&header.meshParams);
+        dtStatus status = _Mesh->init(&header._MeshParams);
         if (dtStatusFailed(status)) {
             fclose(fp);
             return false;
@@ -57,14 +57,14 @@ namespace XEngine {
             return false;
         }
 
-        status = _DtTileCache->init(&header.cacheParams, _Talloc, _Tcomp, _Tmproc);
+        status = _DtTileCache->init(&header._CacheParams, _Talloc, _Tcomp, _Tmproc);
         if (dtStatusFailed(status)) {
             fclose(fp);
             return false;
         }
 
         // Read tiles.
-        for (int i = 0; i < header.numTiles; ++i) {
+        for (int i = 0; i < header._NumTiles; ++i) {
             TileCacheTileHeader tileHeader;
             size_t tileHeaderReadReturnCode = fread(&tileHeader, sizeof(tileHeader), 1, fp);
             if (tileHeaderReadReturnCode != 1) {
@@ -73,13 +73,13 @@ namespace XEngine {
                 return false;
             }
 
-            if (!tileHeader.tileRef || !tileHeader.dataSize)
+            if (!tileHeader._TileRef || !tileHeader._DataSize)
                 break;
 
-            unsigned char* data = (unsigned char*)dtAlloc(tileHeader.dataSize, DT_ALLOC_PERM);
+            unsigned char* data = (unsigned char*)dtAlloc(tileHeader._DataSize, DT_ALLOC_PERM);
             if (!data) break;
-            memset(data, 0, tileHeader.dataSize);
-            size_t tileDataReadReturnCode = fread(data, tileHeader.dataSize, 1, fp);
+            memset(data, 0, tileHeader._DataSize);
+            size_t tileDataReadReturnCode = fread(data, tileHeader._DataSize, 1, fp);
             if (tileDataReadReturnCode != 1) {
                 // Error or early EOF
                 dtFree(data);
@@ -88,7 +88,7 @@ namespace XEngine {
             }
 
             dtCompressedTileRef tile = 0;
-            dtStatus addTileStatus = _DtTileCache->addTile(data, tileHeader.dataSize, DT_COMPRESSEDTILE_FREE_DATA, &tile);
+            dtStatus addTileStatus = _DtTileCache->addTile(data, tileHeader._DataSize, DT_COMPRESSEDTILE_FREE_DATA, &tile);
             if (dtStatusFailed(addTileStatus)) {
                 dtFree(data);
             }

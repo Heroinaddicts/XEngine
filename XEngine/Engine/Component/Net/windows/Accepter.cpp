@@ -1,10 +1,10 @@
 #include "Accepter.h"
 #include "Tcper.h"
 namespace XEngine {
-    static XPool<Accepter> static_accepter_pool;
+    static XPool<Accepter> s_AccepterPool;
 
     Accepter* Accepter::Create(Api::iTcpServer* server, const std::string& ip, const int port, const int ssize, const int rsize) {
-        Accepter* ac = XPOOL_CREATE(static_accepter_pool, server, ip, port, ssize, rsize);
+        Accepter* ac = XPOOL_CREATE(s_AccepterPool, server, ip, port, ssize, rsize);
 
         SafeMemory::Memset(&ac->_Addr, sizeof(ac->_Addr), 0, sizeof(ac->_Addr));
         inet_pton(AF_INET, ip.c_str(), (void*)&ac->_Addr.sin_addr.s_addr);
@@ -20,7 +20,7 @@ namespace XEngine {
             || listen(ac->_Socket, 2048) == SOCKET_ERROR) {
             XASSERT(false, "socket error %d", ::GetLastError());
             SAFE_CLOSE_SOCKET(ac->_Socket);
-            XPOOL_RELEASE(static_accepter_pool, ac);
+            XPOOL_RELEASE(s_AccepterPool, ac);
             server->OnError(nullptr);
             return nullptr;
         }
@@ -28,12 +28,12 @@ namespace XEngine {
         XASSERT(ac, "wtf");
         if (g_CompletePort != CreateIoCompletionPort((HANDLE)ac->_Socket, g_CompletePort, (u_long)ac->_Socket, 0)) {
             server->OnError(nullptr);
-            XPOOL_RELEASE(static_accepter_pool, ac);
+            XPOOL_RELEASE(s_AccepterPool, ac);
             return nullptr;
         }
 
         if (false == ac->AsyncAccept()) {
-            XPOOL_RELEASE(static_accepter_pool, ac);
+            XPOOL_RELEASE(s_AccepterPool, ac);
             server->OnRelease();
             return nullptr;
         }
@@ -88,7 +88,7 @@ namespace XEngine {
 
         if (false == AsyncAccept()) {
             _Server->OnRelease();
-            XPOOL_RELEASE(static_accepter_pool, this);
+            XPOOL_RELEASE(s_AccepterPool, this);
         }
     }
 
