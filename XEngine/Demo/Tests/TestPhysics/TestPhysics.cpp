@@ -159,6 +159,10 @@ void TestPhysics::OnStart(const int id, void* const context, const int64 timesta
 
 void TestPhysics::OnTimer(const int id, void* const context, const int64 timestamp) {
     if (id >= 4 && id < 7) {
+        if (s_PhysxObjectCount >= 100) {
+            return;
+        }
+
         iPhysxScene* scene = static_cast<iPhysxScene*>(context);
 
         int index = SafeTools::Rand(300);
