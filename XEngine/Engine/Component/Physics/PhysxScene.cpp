@@ -119,7 +119,9 @@ namespace XEngine {
             context->SetRotation(qt.EulerAngles());
         }
 
-        CREATE_PHYSX_BASE(this, shape, actor, context);
+        PhysxBase* pb = CREATE_PHYSX_BASE(this, shape, actor, context);
+        type == eRigType::Dynamic ? _PhysxBasePool.insert(pb) : void(0);
+
         actor->attachShape(*shape);
         _Scene->addActor(*actor);
         shape->release();
@@ -153,7 +155,9 @@ namespace XEngine {
             context->SetRotation(qt.EulerAngles());
         }
 
-        CREATE_PHYSX_BASE(this, shape, actor, context);
+        PhysxBase* pb = CREATE_PHYSX_BASE(this, shape, actor, context);
+        type == eRigType::Dynamic ? _PhysxBasePool.insert(pb) : void(0);
+
         actor->attachShape(*shape);
         _Scene->addActor(*actor);
         shape->release();
@@ -245,7 +249,9 @@ namespace XEngine {
             context->SetRotation(qt.EulerAngles());
         }
 
-        CREATE_PHYSX_BASE(this, shape, actor, context);
+        PhysxBase* pb = CREATE_PHYSX_BASE(this, shape, actor, context);
+        type == eRigType::Dynamic ? _PhysxBasePool.insert(pb) : void(0);
+
         actor->attachShape(*shape);
         _Scene->addActor(*actor);
         shape->release();
@@ -262,9 +268,15 @@ namespace XEngine {
     bool PhysxScene::FetchResults(bool block) {
         bool ret = _Scene->fetchResults(block);
         for (auto i = _ReleasePool.begin(); i != _ReleasePool.end(); i++) {
+            _PhysxBasePool.erase(*i);
             (*i)->_Actor->release();
             xdel(*i);
         }
+
+        for (auto i = _PhysxBasePool.begin(); i != _PhysxBasePool.end(); i++) {
+            (*i)->UpdatePositionAndRotation();
+        }
+
         _ReleasePool.clear();
         return ret;
     }
@@ -301,17 +313,18 @@ namespace XEngine {
         for (int i = 0; i < count; i++) {
             PhysxBase* base0 = static_cast<PhysxBase*>(pairs[i].triggerShape->userData);
             PhysxBase* base1 = static_cast<PhysxBase*>(pairs[i].otherShape->userData);
-            if (base0->_context && !base0->_IsRelease && base1->_context && !base1->_IsRelease) {
-                Collider collider1(base1->_context);
-                Collider collider0(base0->_context);
+            if (base0->_Context && !base0->_IsRelease
+                && base1->_Context && !base1->_IsRelease) {
+                Collider collider1(base1->_Context);
+                Collider collider0(base0->_Context);
                 if (pairs[i].status & PxPairFlag::eNOTIFY_TOUCH_FOUND) {
-                    base0->_context ? base0->_context->OnTriggerEnter(&collider1) : void(0);
-                    base1->_context ? base1->_context->OnTriggerEnter(&collider0) : void(0);;
+                    base0->_Context ? base0->_Context->OnTriggerEnter(&collider1) : void(0);
+                    base1->_Context ? base1->_Context->OnTriggerEnter(&collider0) : void(0);;
                 }
 
                 if (pairs[i].status & PxPairFlag::eNOTIFY_TOUCH_LOST) {
-                    base0->_context ? base0->_context->OnTriggerExit(&collider1) : void(0);
-                    base1->_context ? base1->_context->OnTriggerExit(&collider0) : void(0);
+                    base0->_Context ? base0->_Context->OnTriggerExit(&collider1) : void(0);
+                    base1->_Context ? base1->_Context->OnTriggerExit(&collider0) : void(0);
                 }
             }
         }

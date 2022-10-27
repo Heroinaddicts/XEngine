@@ -25,20 +25,20 @@ namespace XEngine {
 
     class Ray {
     public:
-        Vector3 origin;
-        Vector3 direction;
+        Vector3 _Origin;
+        Vector3 _Direction;
 
         Ray() {}
-        Ray(const Vector3& org, const Vector3& dir) : origin(org), direction(dir) {}
-        Vector3 GetPoint(const float t) const { return origin + direction * t; }
+        Ray(const Vector3& org, const Vector3& dir) : _Origin(org), _Direction(dir) {}
+        Vector3 GetPoint(const float t) const { return _Origin + _Direction * t; }
     };
 
     struct RaycastHit {
-        Vector3 point;
-        Vector3 normal;
-        unsigned_int32 face;
-        Vector2 uv;
-        Api::iPhysxContext* context;
+        Vector3 _Point;
+        Vector3 _Normal;
+        unsigned_int32 _Face;
+        Vector2 _UV;
+        Api::iPhysxContext* _Context;
     };
 
     enum class eInterpolate {
@@ -58,7 +58,7 @@ namespace XEngine {
         class iPhysxBase {
         public:
             virtual ~iPhysxBase() {}
-            iPhysxBase(iPhysxContext* const context) : _context(context) {}
+            iPhysxBase(iPhysxContext* const context) : _Context(context) {}
 
             virtual void SetActive(const bool b) = 0;
             virtual bool IsActive() const = 0;
@@ -87,15 +87,12 @@ namespace XEngine {
 
             //virtual void UpdateMaterial()  更新物理材质
 
-            virtual Vector3 Position() const = 0;
-            virtual Vector3 Rotation() const = 0;
-
             virtual void SetPosition(const Vector3& position) = 0;
             virtual void SetRotation(const Vector3& rotation) = 0;
 
             virtual void Release() = 0;
 
-            iPhysxContext* const _context;
+            iPhysxContext* const _Context;
         };
 
 
@@ -124,30 +121,30 @@ namespace XEngine {
             virtual void OnPhysxRelease() = 0;
 
 
-            virtual void SetPhysxActive(const bool b) { _physx_base ? _physx_base->SetActive(b) : void(0); }
-            virtual bool IsPhysxActive() const { return _physx_base ? _physx_base->IsActive() : false; }
+            virtual void SetPhysxActive(const bool b) { _PhysxBase ? _PhysxBase->SetActive(b) : void(0); }
+            virtual bool IsPhysxActive() const { return _PhysxBase ? _PhysxBase->IsActive() : false; }
 
-            virtual void SetKinematic(const bool b) { _physx_base ? _physx_base->SetKinematic(b) : void(0); }
-            virtual bool IsKinematic() const { return _physx_base ? _physx_base->IsKinematic() : false; }
+            virtual void SetKinematic(const bool b) { _PhysxBase ? _PhysxBase->SetKinematic(b) : void(0); }
+            virtual bool IsKinematic() const { return _PhysxBase ? _PhysxBase->IsKinematic() : false; }
 
-            virtual void SetCCD(const bool b) { _physx_base ? _physx_base->SetCCD(b) : void(0); };
-            virtual bool IsCCD() const { return _physx_base ? _physx_base->IsCCD() : false; }
+            virtual void SetCCD(const bool b) { _PhysxBase ? _PhysxBase->SetCCD(b) : void(0); };
+            virtual bool IsCCD() const { return _PhysxBase ? _PhysxBase->IsCCD() : false; }
 
-            virtual void SetTrigger(const bool b) { _physx_base ? _physx_base->SetTrigger(b) : void(0); }
-            virtual bool IsTrigger() const { return _physx_base ? _physx_base->IsTrigger() : false; }
+            virtual void SetTrigger(const bool b) { _PhysxBase ? _PhysxBase->SetTrigger(b) : void(0); }
+            virtual bool IsTrigger() const { return _PhysxBase ? _PhysxBase->IsTrigger() : false; }
 
-            virtual void SetUseGravity(const bool b) { _physx_base ? _physx_base->SetUseGravity(b) : void(0); }
-            virtual bool IsUseGravity() const { return _physx_base ? _physx_base->IsUseGravity() : false; }
+            virtual void SetUseGravity(const bool b) { _PhysxBase ? _PhysxBase->SetUseGravity(b) : void(0); }
+            virtual bool IsUseGravity() const { return _PhysxBase ? _PhysxBase->IsUseGravity() : false; }
 
-            virtual void SetLayer(const int layer) { _physx_base ? _physx_base->SetLayer(layer) : void(0); }
-            virtual int GetLayer() const { return _physx_base ? _physx_base->GetLayer() : 0; }
+            virtual void SetLayer(const int layer) { _PhysxBase ? _PhysxBase->SetLayer(layer) : void(0); }
+            virtual int GetLayer() const { return _PhysxBase ? _PhysxBase->GetLayer() : 0; }
 
-            virtual void SetMass(const float mass) { _physx_base ? _physx_base->SetMass(mass) : void(0); }
-            virtual void SetDrag(const float drag) { _physx_base ? _physx_base->SetDrag(drag) : void(0); }
-            virtual void SetAngularDrag(const float angularDrag) { _physx_base ? _physx_base->SetAngularDrag(angularDrag) : void(0); }
+            virtual void SetMass(const float mass) { _PhysxBase ? _PhysxBase->SetMass(mass) : void(0); }
+            virtual void SetDrag(const float drag) { _PhysxBase ? _PhysxBase->SetDrag(drag) : void(0); }
+            virtual void SetAngularDrag(const float angularDrag) { _PhysxBase ? _PhysxBase->SetAngularDrag(angularDrag) : void(0); }
 
-            virtual void SetInterpolate(const eInterpolate type) { _physx_base ? _physx_base->SetInterpolate(type) : void(0); }
-            virtual void SetCollisionDetection(const eCollisionDetection type) { _physx_base ? _physx_base->SetCollisionDetection(type) : void(0); }
+            virtual void SetInterpolate(const eInterpolate type) { _PhysxBase ? _PhysxBase->SetInterpolate(type) : void(0); }
+            virtual void SetCollisionDetection(const eCollisionDetection type) { _PhysxBase ? _PhysxBase->SetCollisionDetection(type) : void(0); }
 
             virtual void OnTriggerEnter(iCollider* const other) {}
             virtual void OnTriggerExit(iCollider* const other) {}
@@ -155,39 +152,44 @@ namespace XEngine {
             virtual void OnCollisionEnter(iCollision* const other) = 0;
             virtual void OnCollisionExit(iCollision* const other) = 0;
 
-            iPhysxContext(void* const data) : _data(data), _physx_base(nullptr) {}
+            iPhysxContext(void* const data) : _Data(data), _PhysxBase(nullptr) {}
 
             template<typename T>
-            T* GetData() { return dynamic_cast<T*>(_data); }
+            T* GetData() { return dynamic_cast<T*>(_Data); }
 
-            void* const _data;
-            iPhysxBase* const _physx_base;
+            void* const _Data;
+            iPhysxBase* const _PhysxBase;
 
             virtual Vector3 Position() {
-                return position;
+                return _Position;
             }
 
             virtual Vector3 Rotation() {
-                return rotation;
+                return _Rotation;
             }
 
             virtual void SetPosition(const Vector3& pos) {
-                position = pos;
-                _physx_base ? _physx_base->SetPosition(pos) : void(0);
+                _Position = pos;
+                _PhysxBase ? _PhysxBase->SetPosition(pos) : void(0);
             }
 
             virtual void SetRotation(const Vector3& r) {
-                rotation = r;
-                _physx_base ? _physx_base->SetRotation(r) : void(0);
+                _Rotation = r;
+                _PhysxBase ? _PhysxBase->SetRotation(r) : void(0);
             }
 
             virtual void ReleasePhysics() {
-                _physx_base ? _physx_base->Release() : void(0);
+                _PhysxBase ? _PhysxBase->Release() : void(0);
+            }
+
+            virtual void UpdatePositionAndRotation(const Vector3& pos, const Vector3& r) {
+                _Position = pos;
+                _Rotation = r;
             }
 
         private:
-            Vector3 position;
-            Vector3 rotation;
+            Vector3 _Position;
+            Vector3 _Rotation;
         };
 
 

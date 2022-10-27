@@ -7,7 +7,7 @@ namespace XEngine {
     }
 
     PhysxBase::PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context, const char* file, const int line)
-        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _Layer(0), _File(file), _Line(line), _IsRelease(false) {
+        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _Layer(0), _File(file), _Line(line), _IsRelease(false), _UserResetPostionOrRotation(false) {
 
         _Actor->userData = context;
         {
@@ -24,7 +24,7 @@ namespace XEngine {
         Api::iPhysxBase* pb = dynamic_cast<Api::iPhysxBase*>(this);
 
         if (context) {
-            SafeMemory::Memcpy((void*)&(context->_physx_base), sizeof(Api::iPhysxBase*), &pb, sizeof(Api::iPhysxBase*));
+            SafeMemory::Memcpy((void*)&(context->_PhysxBase), sizeof(Api::iPhysxBase*), &pb, sizeof(Api::iPhysxBase*));
             context->OnPhysxCreated(true);
         }
         shape->userData = this;
@@ -122,31 +122,30 @@ namespace XEngine {
 
     }
 
-    Vector3 PhysxBase::Position() const {
-        PxTransform tf = _Shape->getLocalPose();
-        return Vector3(tf.p.x, tf.p.y, tf.p.z);
-    }
-
-    Vector3 PhysxBase::Rotation() const {
-        return Vector3();
-    }
-
     void PhysxBase::SetPosition(const Vector3& position) {
-        PxTransform tf = _Shape->getLocalPose();
-        tf.p.x = position._X;
-        tf.p.y = position._Y;
-        tf.p.z = position._Z;
-        _Shape->setLocalPose(tf);
+        _UserResetPostionOrRotation = true;
     }
 
     void PhysxBase::SetRotation(const Vector3& rotation) {
-        PxTransform tf = _Shape->getLocalPose();
-        Quaternion q = Quaternion::Euler(rotation);
-        tf.q.x = q._X;
-        tf.q.y = q._Y;
-        tf.q.z = q._Z;
-        tf.q.w = q._W;
-        _Shape->setLocalPose(tf);
+        _UserResetPostionOrRotation = true;
+    }
+
+    void PhysxBase::UpdatePositionAndRotation() {
+        if (_Actor && _Context) {
+            if (_UserResetPostionOrRotation) {
+                Vector3 pos = _Context->Position();
+                Quaternion q = Quaternion::Euler(_Context->Rotation());
+                PxTransform tf(PxVec3(pos._X, pos._Y, pos._Z), PxQuat(q._X, q._Z, q._Y, q._W));
+                _Actor->setGlobalPose(tf);
+                _UserResetPostionOrRotation = false;
+            }
+            else {
+                PxTransform tf = _Actor->getGlobalPose();
+                Vector3 pos(tf.p.x, tf.p.y, tf.p.z);
+                Quaternion q(tf.q.x, tf.q.y, tf.q.z, tf.q.w);
+                _Context->UpdatePositionAndRotation(pos, q.EulerAngles());
+            }
+        }
     }
 
     void PhysxBase::Release() {
@@ -154,11 +153,9 @@ namespace XEngine {
             return;
         }
 
-        SafeMemory::Memset((void*)&(_context->_physx_base), sizeof(_context->_physx_base), 0, sizeof(_context->_physx_base));
-        _context->OnPhysxRelease();
-        SafeMemory::Memset((void*)&_context, sizeof(_context), 0, sizeof(_context));
+        SafeMemory::Memset((void*)&(_Context->_PhysxBase), sizeof(_Context->_PhysxBase), 0, sizeof(_Context->_PhysxBase));
+        _Context->OnPhysxRelease();
+        SafeMemory::Memset((void*)&_Context, sizeof(_Context), 0, sizeof(_Context));
         _Scene->Release(this);
-        //_Actor->release();
-        //_Actor->setBaseFlag(PxBaseFlag::eIS_RELEASABLE)
     }
 }

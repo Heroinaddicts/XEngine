@@ -61,6 +61,7 @@ namespace XEngine {
 
     private:
         std::set<PhysicsLayerRelation> _PhysicsLayerRelations;
+        std::set<PhysxBase*> _PhysxBasePool;
         std::set<PhysxBase*> _ReleasePool;
     };
 }

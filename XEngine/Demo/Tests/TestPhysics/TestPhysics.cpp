@@ -9,6 +9,8 @@ iObjLoader* g_objloader = nullptr;
 
 TestPhysics* s_Self = nullptr;
 
+static int s_PhysxObjectCount = 0;
+
 class PhysicsTest : public Api::iPhysxContext {
 public:
     PhysicsTest() : Api::iPhysxContext(nullptr) {}
@@ -19,6 +21,7 @@ public:
             SetLayer(0);
             //SafeTools::Rand(100) > 50 ? SetTrigger(true) : SetTrigger(false);
             SetCCD(true);
+            s_PhysxObjectCount++;
         }
         else {
             xdel this;
@@ -29,6 +32,7 @@ public:
     }
 
     virtual void OnPhysxRelease() override {
+        s_PhysxObjectCount--;
         xdel this;
     }
 
@@ -107,7 +111,7 @@ bool TestPhysics::Launch(iEngine* const engine) {
 
 
     tinyxml2::XMLDocument doc;
-    if (tinyxml2::XMLError::XML_SUCCESS != doc.LoadFile((SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/TestPhysx/SceneObjs.xml").c_str())) {
+    if (tinyxml2::XMLError::XML_SUCCESS != doc.LoadFile((SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/LostCity/SceneObjs.xml").c_str())) {
         XASSERT(false, "load xml error");
         return false;
     }
@@ -128,20 +132,16 @@ bool TestPhysics::Launch(iEngine* const engine) {
         float qz = SafeString::StringToFloat(sceneObj->Attribute("QuaternionZ"));
         float qw = SafeString::StringToFloat(sceneObj->Attribute("QuaternionW"));
 
-        std::string file = SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/TestPhysx/" + sceneObj->Attribute("SceneObj");
+        std::string file = SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/LostCity/" + sceneObj->Attribute("SceneObj");
         const X3DObj* obj = g_objloader->Get3DObj(file);
         scene->CreateTriangleMesh(XEngine::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), Vector3(scalex, scaley, scalez), obj, xnew PhysicsMeshStatic());
         sceneObj = sceneObj->NextSiblingElement("SceneObj");
     }
 
-    for (int i = 0; i < 10; i++) {
-        const X3DObj* obj = g_objloader->Get3DObj("D:/Github/XEngine/XEngine/Bin/Windows/RelWithDebInfo/Env/Config/Objs/TestPhysx/SA_Prop_BurntBrown_Car_01_44742.obj");
-        scene->CreateTriangleMesh(eRigType::Static, Vector3(SafeTools::Rand(80) - 40, 10, SafeTools::Rand(80) - 40), Quaternion(), Vector3(1, 1, 1), obj, nullptr);
-    }
-
-    START_TIMER(engine, this, 4, 5000, Api::Unlimited, 50, scene);
-    START_TIMER(engine, this, 5, 5000, Api::Unlimited, 50, scene);
-    START_TIMER(engine, this, 6, 5000, Api::Unlimited, 50, scene);
+    START_TIMER(engine, this, 4, 5000, Api::Unlimited, 10, scene);
+    START_TIMER(engine, this, 5, 5000, Api::Unlimited, 10, scene);
+    START_TIMER(engine, this, 6, 5000, Api::Unlimited, 10, scene);
+    START_TIMER(engine, this, 7, 5000, Api::Unlimited, 5000, scene);
     scene->Simulate(1 / 60.0f);
     START_TIMER(engine, this, 1, SafeTools::Rand(500), Api::Unlimited, 16, scene);
     scene->RelationPhysicsLayer(0, 1);
@@ -158,18 +158,18 @@ void TestPhysics::OnStart(const int id, void* const context, const int64 timesta
 }
 
 void TestPhysics::OnTimer(const int id, void* const context, const int64 timestamp) {
-    if (id >= 4) {
+    if (id >= 4 && id < 7) {
         iPhysxScene* scene = static_cast<iPhysxScene*>(context);
 
         int index = SafeTools::Rand(300);
         Quaternion qt;
         PhysicsTest* test = xnew PhysicsTest();
         if (index < 150) {
-            scene->CreateBox(eRigType::Dynamic, Vector3(SafeTools::Rand(50) - 25, 30, SafeTools::Rand(50) - 25), qt, Vector3(2, 2, 1), test);
+            scene->CreateBox(eRigType::Dynamic, Vector3(SafeTools::Rand(100) + 200, 30, SafeTools::Rand(100) + 200), qt, Vector3(2, 2, 1), test);
             START_TIMER(g_engine, this, 2, (SafeTools::Rand(5) + 5) * 1000, 1, 1000, test);
         }
         else {
-            scene->CreateCapsule(eRigType::Dynamic, Vector3(SafeTools::Rand(50) - 25, 30, SafeTools::Rand(50) - 25), qt, 1, 2, test);
+            scene->CreateCapsule(eRigType::Dynamic, Vector3(SafeTools::Rand(100) + 200, 30, SafeTools::Rand(100) + 200), qt, 1, 2, test);
             START_TIMER(g_engine, this, 2, (SafeTools::Rand(5) + 5) * 1000, 1, 1000, test);
         }
     }
@@ -181,6 +181,9 @@ void TestPhysics::OnTimer(const int id, void* const context, const int64 timesta
         iPhysxScene* scene = static_cast<iPhysxScene*>(context);
         scene->FetchResults(true);
         scene->Simulate(1 / 60.0f);
+    }
+    else if (7 == id) {
+        TRACE(g_engine, "Physx Object Count %d", s_PhysxObjectCount);
     }
 }
 
