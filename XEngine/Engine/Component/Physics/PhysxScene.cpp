@@ -2,6 +2,7 @@
 #include "SafeSystem.h"
 #include "PhysxBase.h"
 #include "Collider.hpp"
+#include "PhysxSceneFilterCallback.h"
 
 namespace XEngine {
     PhysxScene::PhysxScene(
@@ -20,6 +21,7 @@ namespace XEngine {
         _Scene->setSimulationEventCallback(this);
         _Scene->setCCDContactModifyCallback(this);
         _Scene->setContactModifyCallback(this);
+        _Scene->setSceneQueryUpdateMode(PxSceneQueryUpdateMode::eBUILD_ENABLED_COMMIT_ENABLED);
     }
 
     void PhysxScene::RelationPhysicsLayer(const int layerA, const int layerB) {
@@ -258,7 +260,7 @@ namespace XEngine {
     }
 
     bool PhysxScene::Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit) {
-        return false;
+        return false; // return _Scene->raycast(PxVec3(ray._Origin._X, ray._Origin._Y, ray._Origin._Z), PxVec3(ray._Direction._X, ray._Direction._Y, ray._Direction._Z), distance, *PhysxSceneFilterCallback::GetInstance(), )
     }
 
     void PhysxScene::Simulate(const float elapsed_time) {
@@ -305,7 +307,7 @@ namespace XEngine {
     }
 
     void PhysxScene::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs) {
-        //printf("PhysxScene::onContact, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+        printf("PhysxScene::onContact, %lld\n", SafeSystem::Process::GetCurrentThreadID());
     }
 
     void PhysxScene::onTrigger(PxTriggerPair* pairs, PxU32 count) {

@@ -5,7 +5,6 @@
 
 namespace XEngine {
     class PhysxScene;
-
 #define CREATE_PHYSX_BASE(scene, shape, actor, context) PhysxBase::Create(scene, shape, actor, context, __FILE__, __LINE__)
 
     class PhysxBase : public Api::iPhysxBase {

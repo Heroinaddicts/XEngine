@@ -1,6 +1,6 @@
 #include "Physics.h"
 #include "PhysxScene.h"
-#include "PhysxSimulationFilterCallback.h"
+#include "PhysxSceneFilterCallback.h"
 
 namespace XEngine {
     PhysicsAllocator g_Allocator;
@@ -68,7 +68,8 @@ namespace XEngine {
     Api::iPhysxScene* Physics::CreateScene(const float static_friction, const float dynamic_friction, const float restitution) {
         PxSceneDesc desc(g_PxPhysics->getTolerancesScale());
         desc.filterShader = PhysxScene::PhysxSimulationFilterShader;
-        desc.filterCallback = PhysxSimulationFilterCallback::GetInstance();
+        desc.filterCallback = PhysxSceneFilterCallback::GetInstance();
+
         desc.gravity = PxVec3(0.0f, -98.1f, 0.0f);
         desc.cpuDispatcher = PxDefaultCpuDispatcherCreate(2);
         desc.cudaContextManager = g_CudaContextManager;
