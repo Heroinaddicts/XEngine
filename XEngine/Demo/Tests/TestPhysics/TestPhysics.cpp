@@ -7,6 +7,8 @@
 iEngine* g_engine = nullptr;
 iObjLoader* g_objloader = nullptr;
 
+TestPhysics* s_Self = nullptr;
+
 class PhysicsTest : public Api::iPhysxContext {
 public:
     PhysicsTest() : Api::iPhysxContext(nullptr) {}
@@ -15,7 +17,7 @@ public:
     virtual void OnPhysxCreated(bool success) override {
         if (success) {
             SetLayer(0);
-            SafeTools::Rand(100) > 50 ? SetTrigger(true) : SetTrigger(false);
+            //SafeTools::Rand(100) > 50 ? SetTrigger(true) : SetTrigger(false);
             SetCCD(true);
         }
         else {
@@ -71,24 +73,25 @@ public:
     }
 
     virtual void OnTriggerEnter(iCollider* const other) override {
-        TRACE(g_engine, "PhysicsMeshStatic::OnTriggerEnter %lld", this);
+        //TRACE(g_engine, "PhysicsMeshStatic::OnTriggerEnter %lld", this);
     }
 
     virtual void OnTriggerExit(iCollider* const other) override {
-        TRACE(g_engine, "PhysicsMeshStatic::OnTriggerExit %lld", this);
+        //TRACE(g_engine, "PhysicsMeshStatic::OnTriggerExit %lld", this);
     }
 
     virtual void OnCollisionEnter(iCollision* const other) override {
-        TRACE(g_engine, "PhysicsMeshStatic::OnCollisionEnter %lld", this);
+        //TRACE(g_engine, "PhysicsMeshStatic::OnCollisionEnter %lld", this);
     }
 
     virtual void OnCollisionExit(iCollision* const other) override {
-        TRACE(g_engine, "PhysicsMeshStatic::OnCollisionExit %lld", this);
+        //TRACE(g_engine, "PhysicsMeshStatic::OnCollisionExit %lld", this);
     }
 };
 
 bool TestPhysics::Initialize(iEngine* const engine) {
     g_engine = engine;
+    s_Self = this;
     return true;
 }
 
@@ -102,7 +105,6 @@ bool TestPhysics::Launch(iEngine* const engine) {
     //scene->CreatePlane(0, 1, 0, 0, nullptr);
     int64 tick = SafeSystem::Time::GetMilliSecond();
 
-    START_TIMER(engine, this, 1, SafeTools::Rand(500), Api::Unlimited, 17, scene);
 
     tinyxml2::XMLDocument doc;
     if (tinyxml2::XMLError::XML_SUCCESS != doc.LoadFile((SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/TestPhysx/SceneObjs.xml").c_str())) {
@@ -132,10 +134,16 @@ bool TestPhysics::Launch(iEngine* const engine) {
         sceneObj = sceneObj->NextSiblingElement("SceneObj");
     }
 
+    for (int i = 0; i < 10; i++) {
+        const X3DObj* obj = g_objloader->Get3DObj("D:/Github/XEngine/XEngine/Bin/Windows/RelWithDebInfo/Env/Config/Objs/TestPhysx/SA_Prop_BurntBrown_Car_01_44742.obj");
+        scene->CreateTriangleMesh(eRigType::Static, Vector3(SafeTools::Rand(80) - 40, 10, SafeTools::Rand(80) - 40), Quaternion(), Vector3(1, 1, 1), obj, nullptr);
+    }
+
     START_TIMER(engine, this, 4, 5000, Api::Unlimited, 50, scene);
     START_TIMER(engine, this, 5, 5000, Api::Unlimited, 50, scene);
     START_TIMER(engine, this, 6, 5000, Api::Unlimited, 50, scene);
     scene->Simulate(1 / 60.0f);
+    START_TIMER(engine, this, 1, SafeTools::Rand(500), Api::Unlimited, 16, scene);
     scene->RelationPhysicsLayer(0, 1);
     scene->RelationPhysicsLayer(0, 0);
     return true;
@@ -153,17 +161,17 @@ void TestPhysics::OnTimer(const int id, void* const context, const int64 timesta
     if (id >= 4) {
         iPhysxScene* scene = static_cast<iPhysxScene*>(context);
 
-        int index = SafeTools::Rand(100000000) % 2;
+        int index = SafeTools::Rand(300);
         Quaternion qt;
         PhysicsTest* test = xnew PhysicsTest();
-        if (index == 0) {
+        if (index < 150) {
             scene->CreateBox(eRigType::Dynamic, Vector3(SafeTools::Rand(50) - 25, 30, SafeTools::Rand(50) - 25), qt, Vector3(2, 2, 1), test);
+            START_TIMER(g_engine, this, 2, (SafeTools::Rand(5) + 5) * 1000, 1, 1000, test);
         }
         else {
             scene->CreateCapsule(eRigType::Dynamic, Vector3(SafeTools::Rand(50) - 25, 30, SafeTools::Rand(50) - 25), qt, 1, 2, test);
+            START_TIMER(g_engine, this, 2, (SafeTools::Rand(5) + 5) * 1000, 1, 1000, test);
         }
-
-        START_TIMER(g_engine, this, 2, (SafeTools::Rand(5) + 5) * 1000, 1, 1000, test);
     }
     else if (2 == id) {
         PhysicsTest* test = static_cast<PhysicsTest*>(context);

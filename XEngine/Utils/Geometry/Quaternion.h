@@ -7,7 +7,7 @@ namespace XEngine {
     class Quaternion {
     public:
         virtual ~Quaternion() {}
-        Quaternion() :_X(0), _Y(0), _Z(0), _W(0) {}
+        Quaternion() :_X(0), _Y(0), _Z(0), _W(1) {}
         Quaternion(const Quaternion& q) : _X(q._X), _Y(q._Y), _Z(q._Z), _W(q._W) {}
         Quaternion(float x_, float y_, float z_, float w_) : _X(x_), _Y(y_), _Z(z_), _W(w_) {}
 

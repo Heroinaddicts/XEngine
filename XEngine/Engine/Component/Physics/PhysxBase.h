@@ -59,7 +59,6 @@ namespace XEngine {
         bool _IsRelease;
     private:
         int _Layer;
-        bool _CCD;
     };
 }
 

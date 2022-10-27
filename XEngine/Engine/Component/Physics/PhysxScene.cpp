@@ -170,23 +170,6 @@ namespace XEngine {
         const X3DObj* obj,
         Api::iPhysxContext* context
     ) {
-        PxRigidActor* actor = nullptr;
-        switch (type) {
-        case eRigType::Dynamic: {
-            actor = g_PxPhysics->createRigidDynamic(PxTransform(pos._X, pos._Y, pos._Z, PxQuat(qt._X, qt._Y, qt._Z, qt._W)));
-            break;
-        }
-        case eRigType::Static: {
-            actor = g_PxPhysics->createRigidStatic(PxTransform(pos._X, pos._Y, pos._Z, PxQuat(qt._X, qt._Y, qt._Z, qt._W)));
-            break;
-        }
-        }
-
-        if (nullptr == actor) {
-            context ? context->OnPhysxCreated(false) : void(0);
-            return;
-        }
-
         const PxU32 numVertices = obj->GetV().size();
         const PxU32 numTriangles = obj->GetF().size();
 
@@ -234,7 +217,28 @@ namespace XEngine {
         shape->setContactOffset(0.03f);
         // A negative rest offset helps to avoid jittering when the deformed mesh moves away from objects resting on it.
         // 允许穿透的厚度，当穿透指定的厚度后，就是发生弹开等动作 -0.02f 负数代表穿透后，正数代表穿透前
-        shape->setRestOffset(-0.02);
+        shape->setRestOffset(0.01);
+
+
+        PxRigidActor* actor = nullptr;
+        switch (type) {
+        case eRigType::Dynamic: {
+            PxRigidDynamic* body = g_PxPhysics->createRigidDynamic(PxTransform(pos._X, pos._Y, pos._Z, PxQuat(qt._X, qt._Y, qt._Z, qt._W)));
+            body->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
+            actor = body;
+            break;
+        }
+        case eRigType::Static: {
+            PxRigidStatic* body = g_PxPhysics->createRigidStatic(PxTransform(pos._X, pos._Y, pos._Z, PxQuat(qt._X, qt._Y, qt._Z, qt._W)));
+            actor = body;
+            break;
+        }
+        }
+
+        if (nullptr == actor) {
+            context ? context->OnPhysxCreated(false) : void(0);
+            return;
+        }
 
         if (context) {
             context->SetPosition(pos);
