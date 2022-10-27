@@ -80,12 +80,7 @@ include_directories(\n\
     \"${CMAKE_CURRENT_SOURCE_DIR}\"\n\
 )\n\
 \n\
-set({name}\n\
-    \"${CMAKE_CURRENT_SOURCE_DIR}/Header.h\"\n\
-    \"${CMAKE_CURRENT_SOURCE_DIR}/{name}.h\"\n\
-    \"${CMAKE_CURRENT_SOURCE_DIR}/{name}.cpp\"\n\
-    \"${CMAKE_CURRENT_SOURCE_DIR}/DllExport.cpp\"\n\
-)\n\
+file(GLOB {name} \"*.*\")\
 \n\
 source_group(Api FILES ${Api})\n\
 source_group(Utils\\\\TinyXML FILES ${TinyXML})\n\

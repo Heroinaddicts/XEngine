@@ -3,10 +3,14 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface"
 )
 
-set(Interface
-    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iObjLoader.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iGameObjectManager.h"
-)
+#aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/Interface" Interface) 
+#set(Interface
+#    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iObjLoader.h"
+#    "${CMAKE_CURRENT_SOURCE_DIR}/Interface/iGameObjectManager.h"
+#)
+
+file(GLOB Interface "Interface/*.*")
+file(GLOB Common "Common/*.*")
 
 #Tools
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Tools/RemoteAgent)
@@ -21,3 +25,4 @@ ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Tests/HelloWorld)
 #Components
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Components/ObjLoader)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Components/GameObjectManager)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Tests/TestNewCmakeLists)

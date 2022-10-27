@@ -29,50 +29,11 @@ include_directories(
     "${PROJECT_SOURCE_DIR}/Utils/Geometry"
 )
 
-set(Api
-    "${PROJECT_SOURCE_DIR}/Api/iComponent.h"
-    "${PROJECT_SOURCE_DIR}/Api/iNetApi.h"
-    "${PROJECT_SOURCE_DIR}/Api/iTimerApi.h"
-    "${PROJECT_SOURCE_DIR}/Api/iNavigationApi.h"
-    "${PROJECT_SOURCE_DIR}/Api/iPhysicsApi.h"
-    "${PROJECT_SOURCE_DIR}/Api/iEngine.h"
-    "${PROJECT_SOURCE_DIR}/Api/MultiSys.h"
-    "${PROJECT_SOURCE_DIR}/Api/MultiSys.cpp"
-)
 
-set(Geometry
-    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Geometry.h"
-    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Vector.h"
-    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Vector.cpp"
-    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Quaternion.h"
-    "${PROJECT_SOURCE_DIR}/Utils/Geometry/Quaternion.cpp"
-)
-
-set(TinyXML
-    "${PROJECT_SOURCE_DIR}/Utils/TinyXML/tinyxml2.h"
-    "${PROJECT_SOURCE_DIR}/Utils/TinyXML/tinyxml2.cpp"
-)
-
-set(Utils
-    "${PROJECT_SOURCE_DIR}/Utils/SafeString.h"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeString.cpp"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeMemory.h"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeMemory.cpp"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeThread.h"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeThread.cpp"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeSystem.h"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeSystem.cpp"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeTools.h"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeTools.cpp"
-    "${PROJECT_SOURCE_DIR}/Utils/SafeQueue.h"
-    "${PROJECT_SOURCE_DIR}/Utils/XBuffer.h"
-    "${PROJECT_SOURCE_DIR}/Utils/XPool.h"
-    "${PROJECT_SOURCE_DIR}/Utils/XLock.h"
-    "${PROJECT_SOURCE_DIR}/Utils/X3DObj.h"
-    "${PROJECT_SOURCE_DIR}/Utils/X3DObj.cpp"
-    "${PROJECT_SOURCE_DIR}/Utils/XFile.h"
-    "${PROJECT_SOURCE_DIR}/Utils/XFile.cpp"
-)
+file(GLOB Api "Api/*.*")
+file(GLOB Geometry "Utils/Geometry/*.*")
+file(GLOB TinyXML "Utils/TinyXML/*.*")
+file(GLOB Utils "Utils/*.*")
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/Engine)
 add_subdirectory(${PROJECT_SOURCE_DIR}/Demo)
