@@ -4,8 +4,6 @@
 #include "Collider.hpp"
 
 namespace XEngine {
-
-
     PhysxScene::PhysxScene(
         PxScene* scene,
         const float static_friction,
@@ -19,7 +17,6 @@ namespace XEngine {
         GetWords(this, pfd->word0, pfd->word1);
         _scene->setFilterShaderData(pfd, sizeof(PxFilterData));
 
-        _scene->getFilterCallback()
         _scene->setSimulationEventCallback(this);
         _scene->setCCDContactModifyCallback(this);
         _scene->setContactModifyCallback(this);
@@ -259,7 +256,13 @@ namespace XEngine {
     }
 
     bool PhysxScene::FetchResults(bool block) {
-        return _scene->fetchResults(block);
+        bool ret = _scene->fetchResults(block);
+        for (auto i = _ReleasePool.begin(); i != _ReleasePool.end(); i++) {
+            (*i)->_Actor->release();
+            xdel(*i);
+        }
+        _ReleasePool.clear();
+        return ret;
     }
 
     void PhysxScene::Run(void* constext) {
@@ -269,7 +272,6 @@ namespace XEngine {
     void PhysxScene::onCCDContactModify(PxContactModifyPair* const pairs, PxU32 count) {
         printf("PhysxScene::onCCDContactModify, %lld\n", SafeSystem::Process::GetCurrentThreadID());
     }
-
     void PhysxScene::onContactModify(PxContactModifyPair* const pairs, PxU32 count) {
         printf("PhysxScene::onContactModify, %lld\n", SafeSystem::Process::GetCurrentThreadID());
     }
@@ -287,42 +289,35 @@ namespace XEngine {
     }
 
     void PhysxScene::onContact(const PxContactPairHeader& pairHeader, const PxContactPair* pairs, PxU32 nbPairs) {
-        printf("PhysxScene::onContact, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+        //printf("PhysxScene::onContact, %lld\n", SafeSystem::Process::GetCurrentThreadID());
     }
 
     void PhysxScene::onTrigger(PxTriggerPair* pairs, PxU32 count) {
-        printf("PhysxScene::onTrigger, %lld\n", SafeSystem::Process::GetCurrentThreadID());
+        //printf("PhysxScene::onTrigger, %lld\n", SafeSystem::Process::GetCurrentThreadID());
         for (int i = 0; i < count; i++) {
             PhysxBase* base0 = static_cast<PhysxBase*>(pairs[i].triggerShape->userData);
             PhysxBase* base1 = static_cast<PhysxBase*>(pairs[i].otherShape->userData);
-            if (base0->_context && base1->_context) {
+            if (base0->_context && !base0->_IsRelease && base1->_context && !base1->_IsRelease) {
                 Collider collider1(base1->_context);
                 Collider collider0(base0->_context);
-                if (pairs[i].status | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_FOUND) {
-                    base0->_context->OnTriggerEnter(&collider1);
-                    base1->_context->OnTriggerEnter(&collider0);
+                if (pairs[i].status & PxPairFlag::eNOTIFY_TOUCH_FOUND) {
+                    base0->_context ? base0->_context->OnTriggerEnter(&collider1) : void(0);
+                    base1->_context ? base1->_context->OnTriggerEnter(&collider0) : void(0);;
                 }
 
-                if (pairs[i].status | PxPairFlag::eNOTIFY_THRESHOLD_FORCE_LOST) {
-                    base0->_context->OnTriggerExit(&collider1);
-                    base1->_context->OnTriggerExit(&collider0);
+                if (pairs[i].status & PxPairFlag::eNOTIFY_TOUCH_LOST) {
+                    base0->_context ? base0->_context->OnTriggerExit(&collider1) : void(0);
+                    base1->_context ? base1->_context->OnTriggerExit(&collider0) : void(0);
                 }
             }
         }
     }
 
+    void PhysxScene::Release(PhysxBase* pb) {
+        _ReleasePool.insert(pb);
+    }
+
     void PhysxScene::onAdvance(const PxRigidBody* const* bodyBuffer, const PxTransform* poseBuffer, const PxU32 count) {
         printf("PhysxScene::onAdvance, %lld\n", SafeSystem::Process::GetCurrentThreadID());
-    }
-    PxFilterFlags PhysxSceneSimulationFilterCallback::pairFound(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, const PxActor* a0, const PxShape* s0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, const PxActor* a1, const PxShape* s1, PxPairFlags& pairFlags)
-    {
-        return PxFilterFlags();
-    }
-    void PhysxSceneSimulationFilterCallback::pairLost(PxU32 pairID, PxFilterObjectAttributes attributes0, PxFilterData filterData0, PxFilterObjectAttributes attributes1, PxFilterData filterData1, bool objectRemoved)
-    {
-    }
-    bool PhysxSceneSimulationFilterCallback::statusChange(PxU32& pairID, PxPairFlags& pairFlags, PxFilterFlags& filterFlags)
-    {
-        return false;
     }
 }

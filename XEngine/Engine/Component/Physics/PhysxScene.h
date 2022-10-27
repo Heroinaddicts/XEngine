@@ -4,6 +4,8 @@
 #include "Header.h"
 
 namespace XEngine {
+    class PhysxBase;
+
     class PhysxScene : public Api::iPhysxScene, public PxSimulationEventCallback, public PxContactModifyCallback, public PxCCDContactModifyCallback, public SafeThread {
     public:
         virtual ~PhysxScene() {}
@@ -43,6 +45,7 @@ namespace XEngine {
         // Í¨¹ý PxCCDContactModifyCallback ¼Ì³Ð
         virtual void onCCDContactModify(PxContactModifyPair* const pairs, PxU32 count) override;
 
+        void Release(PhysxBase* pb);
     public:
         static PxFilterFlags PhysxSimulationFilterShader(
             PxFilterObjectAttributes attributes0, PxFilterData filterData0,
@@ -58,6 +61,7 @@ namespace XEngine {
 
     private:
         std::set<PhysicsLayerRelation> _physics_layer_relations;
+        std::set<PhysxBase*> _ReleasePool;
     };
 }
 

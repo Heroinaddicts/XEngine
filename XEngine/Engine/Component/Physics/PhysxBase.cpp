@@ -7,7 +7,7 @@ namespace XEngine {
     }
 
     PhysxBase::PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context, const char* file, const int line)
-        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _Layer(0), _File(file), _Line(line) {
+        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _Layer(0), _File(file), _Line(line), _IsRelease(false) {
 
         _Actor->userData = context;
         {
@@ -27,8 +27,8 @@ namespace XEngine {
             SafeMemory::Memcpy((void*)&(context->_physx_base), sizeof(Api::iPhysxBase*), &pb, sizeof(Api::iPhysxBase*));
             context->OnPhysxCreated(true);
         }
-		shape->userData = this;
-		//shape->setFlags((shape->getFlags() | PxShapeFlag::eSIMULATION_SHAPE | PxShapeFlag::eSCENE_QUERY_SHAPE | PxShapeFlag::eVISUALIZATION) & ~PxShapeFlag::eTRIGGER_SHAPE);
+        shape->userData = this;
+        //shape->setFlags((shape->getFlags() | PxShapeFlag::eSIMULATION_SHAPE | PxShapeFlag::eSCENE_QUERY_SHAPE | PxShapeFlag::eVISUALIZATION) & ~PxShapeFlag::eTRIGGER_SHAPE);
     }
 
     void PhysxBase::SetActive(const bool b) {
@@ -71,14 +71,14 @@ namespace XEngine {
         return body ? body->getRigidBodyFlags().isSet(PxRigidBodyFlag::eENABLE_CCD) : false;
     }
 
-	void PhysxBase::SetTrigger(const bool b) {
+    void PhysxBase::SetTrigger(const bool b) {
         if (b) {
-			_Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
-			_Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
-		}
-		else {
-			_Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);
-			_Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, true);
+            _Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, false);
+            _Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, true);
+        }
+        else {
+            _Shape->setFlag(PxShapeFlag::eTRIGGER_SHAPE, false);
+            _Shape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, true);
         }
     }
 
@@ -150,8 +150,14 @@ namespace XEngine {
     }
 
     void PhysxBase::Release() {
+        if (_IsRelease) {
+            return;
+        }
+
         SafeMemory::Memset((void*)&(_context->_physx_base), sizeof(_context->_physx_base), 0, sizeof(_context->_physx_base));
         _context->OnPhysxRelease();
+        SafeMemory::Memset((void*)&_context, sizeof(_context), 0, sizeof(_context));
+        _Scene->Release(this);
         //_Actor->release();
         //_Actor->setBaseFlag(PxBaseFlag::eIS_RELEASABLE)
     }

@@ -15,7 +15,7 @@ public:
     virtual void OnPhysxCreated(bool success) override {
         if (success) {
             SetLayer(0);
-            SetTrigger(true);
+            SafeTools::Rand(100) > 50 ? SetTrigger(true) : SetTrigger(false);
             SetCCD(true);
         }
         else {
@@ -31,19 +31,19 @@ public:
     }
 
     virtual void OnTriggerEnter(iCollider* const other) override {
-        TRACE(g_engine, "PhysicsTest::OnTriggerEnter %lld", this);
+        //TRACE(g_engine, "PhysicsTest::OnTriggerEnter %lld", this);
     }
 
     virtual void OnTriggerExit(iCollider* const other) override {
-        TRACE(g_engine, "PhysicsTest::OnTriggerExit %lld", this);
+        //TRACE(g_engine, "PhysicsTest::OnTriggerExit %lld", this);
     }
 
     virtual void OnCollisionEnter(iCollision* const other) override {
-        TRACE(g_engine, "PhysicsTest::OnCollisionEnter %lld", this);
+        //TRACE(g_engine, "PhysicsTest::OnCollisionEnter %lld", this);
     }
 
     virtual void OnCollisionExit(iCollision* const other) override {
-        TRACE(g_engine, "PhysicsTest::OnCollisionExit %lld", this);
+        //TRACE(g_engine, "PhysicsTest::OnCollisionExit %lld", this);
     }
 };
 
@@ -71,19 +71,19 @@ public:
     }
 
     virtual void OnTriggerEnter(iCollider* const other) override {
-        TRACE(g_engine, "PhysicsMeshStatic::OnTriggerEnter %lld", this);
+        //TRACE(g_engine, "PhysicsMeshStatic::OnTriggerEnter %lld", this);
     }
 
     virtual void OnTriggerExit(iCollider* const other) override {
-        TRACE(g_engine, "PhysicsMeshStatic::OnTriggerExit %lld", this);
+        //TRACE(g_engine, "PhysicsMeshStatic::OnTriggerExit %lld", this);
     }
 
     virtual void OnCollisionEnter(iCollision* const other) override {
-        TRACE(g_engine, "PhysicsMeshStatic::OnCollisionEnter %lld", this);
+        //TRACE(g_engine, "PhysicsMeshStatic::OnCollisionEnter %lld", this);
     }
 
     virtual void OnCollisionExit(iCollision* const other) override {
-        TRACE(g_engine, "PhysicsMeshStatic::OnCollisionExit %lld", this);
+        //TRACE(g_engine, "PhysicsMeshStatic::OnCollisionExit %lld", this);
     }
 };
 
@@ -132,9 +132,12 @@ bool TestPhysics::Launch(iEngine* const engine) {
         sceneObj = sceneObj->NextSiblingElement("SceneObj");
     }
 
-    START_TIMER(engine, this, 0, 5000, 100, 50, scene);
+    START_TIMER(engine, this, 4, 5000, 10000, 50, scene);
+    START_TIMER(engine, this, 5, 5000, 10000, 50, scene);
+    START_TIMER(engine, this, 6, 5000, 10000, 50, scene);
     scene->Simulate(1 / 60.0f);
     scene->RelationPhysicsLayer(0, 1);
+    scene->RelationPhysicsLayer(0, 0);
     return true;
 }
 
@@ -147,17 +150,24 @@ void TestPhysics::OnStart(const int id, void* const context, const int64 timesta
 }
 
 void TestPhysics::OnTimer(const int id, void* const context, const int64 timestamp) {
-    if (0 == id) {
+    if (id >= 4) {
         iPhysxScene* scene = static_cast<iPhysxScene*>(context);
 
         int index = SafeTools::Rand(100000000) % 2;
         Quaternion qt;
+        PhysicsTest* test = xnew PhysicsTest();
         if (index == 0) {
-            scene->CreateBox(eRigType::Dynamic, Vector3(0, 30, 0), qt, Vector3(2, 2, 1), xnew PhysicsTest());
+            scene->CreateBox(eRigType::Dynamic, Vector3(SafeTools::Rand(50) - 25, 30, SafeTools::Rand(50) - 25), qt, Vector3(2, 2, 1), test);
         }
         else {
-            scene->CreateCapsule(eRigType::Dynamic, Vector3(0, 30, 0), qt, 1, 2, xnew PhysicsTest());
+            scene->CreateCapsule(eRigType::Dynamic, Vector3(SafeTools::Rand(50) - 25, 30, SafeTools::Rand(50) - 25), qt, 1, 2, test);
         }
+
+        START_TIMER(g_engine, this, 2, (SafeTools::Rand(5) + 5) * 1000, 1, 1000, test);
+    }
+    else if (2 == id) {
+        PhysicsTest* test = static_cast<PhysicsTest*>(context);
+        test->ReleasePhysics();
     }
     else if (1 == id) {
         iPhysxScene* scene = static_cast<iPhysxScene*>(context);

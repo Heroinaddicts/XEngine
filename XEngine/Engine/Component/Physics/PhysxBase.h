@@ -12,7 +12,7 @@ namespace XEngine {
     public:
         virtual ~PhysxBase() {}
 
-        static PhysxBase* Create(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* contexnt, const char * file, const int line);
+        static PhysxBase* Create(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* contexnt, const char* file, const int line);
 
         // Í¨¹ý iPhysxBase ¼Ì³Ð
         virtual void SetActive(const bool b) override;
@@ -56,7 +56,7 @@ namespace XEngine {
 
         const std::string _File;
         const int _Line;
-
+        bool _IsRelease;
     private:
         int _Layer;
         bool _CCD;
