@@ -7,12 +7,7 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
-set(HelloWorld
-    "${CMAKE_CURRENT_SOURCE_DIR}/Header.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/HelloWorld.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/DllExport.cpp"
-)
+file(GLOB HelloWorld "*.*")
 
 source_group(Api FILES ${Api})
 source_group(Utils\\TinyXML FILES ${TinyXML})

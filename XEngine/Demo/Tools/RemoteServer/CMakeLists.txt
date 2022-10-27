@@ -7,16 +7,7 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
-set(RemoteServer
-    "${CMAKE_CURRENT_SOURCE_DIR}/Header.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/AgentConnection.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/AgentConnection.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/UserConnection.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/UserConnection.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/RemoteServer.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/RemoteServer.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/DllExport.cpp"
-)
+file(GLOB RemoteServer "*.*")
 
 source_group(Api FILES ${Api})
 source_group(Utils\\Geometry FILES ${Geometry})

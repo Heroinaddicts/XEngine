@@ -7,12 +7,7 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
-set(ObjLoader
-    "${CMAKE_CURRENT_SOURCE_DIR}/Header.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/ObjLoader.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/ObjLoader.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/DllExport.cpp"
-)
+file(GLOB ObjLoader "*.*")
 
 source_group(Api FILES ${Api})
 source_group(Interface FILES ${Interface})

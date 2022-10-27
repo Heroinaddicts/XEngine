@@ -7,11 +7,7 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
-set(ModuleCreator
-    "${CMAKE_CURRENT_SOURCE_DIR}/Header.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Template.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp"
-)
+file(GLOB ModuleCreator "*.*")
 
 source_group(Api FILES ${Api})
 source_group(Utils\\Geometry FILES ${Geometry})

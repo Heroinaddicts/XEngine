@@ -7,12 +7,7 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
-set(Test001
-    "${CMAKE_CURRENT_SOURCE_DIR}/Header.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Test001.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/Test001.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/DllExport.cpp"
-)
+file(GLOB Test001 "*.*")
 
 source_group(Api FILES ${Api})
 source_group(Utils\\Geometry FILES ${Geometry})

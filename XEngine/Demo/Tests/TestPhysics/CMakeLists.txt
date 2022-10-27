@@ -7,12 +7,7 @@ include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
-set(TestPhysics
-    "${CMAKE_CURRENT_SOURCE_DIR}/Header.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/TestPhysics.h"
-    "${CMAKE_CURRENT_SOURCE_DIR}/TestPhysics.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/DllExport.cpp"
-)
+file(GLOB TestPhysics "*.*")
 
 source_group(Api FILES ${Api})
 source_group(Utils\\TinyXML FILES ${TinyXML})
