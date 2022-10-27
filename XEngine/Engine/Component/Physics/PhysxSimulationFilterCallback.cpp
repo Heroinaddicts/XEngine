@@ -2,8 +2,8 @@
 
 namespace XEngine {
     PhysxSimulationFilterCallback* PhysxSimulationFilterCallback::GetInstance() {
-        static PhysxSimulationFilterCallback static_instance;
-        return &static_instance;
+        static PhysxSimulationFilterCallback s_Instance;
+        return &s_Instance;
     }
 
     PxFilterFlags PhysxSimulationFilterCallback::pairFound(

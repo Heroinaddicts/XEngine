@@ -9,21 +9,21 @@ namespace XEngine {
         const float static_friction,
         const float dynamic_friction,
         const float restitution)
-        : _scene(scene),
-        _material(g_pxphysics->createMaterial(static_friction, dynamic_friction, restitution)) {
+        : _Scene(scene),
+        _Material(g_PxPhysics->createMaterial(static_friction, dynamic_friction, restitution)) {
 
-        _scene->userData = this;
+        _Scene->userData = this;
         PxFilterData* pfd = xnew PxFilterData;
         GetWords(this, pfd->word0, pfd->word1);
-        _scene->setFilterShaderData(pfd, sizeof(PxFilterData));
+        _Scene->setFilterShaderData(pfd, sizeof(PxFilterData));
 
-        _scene->setSimulationEventCallback(this);
-        _scene->setCCDContactModifyCallback(this);
-        _scene->setContactModifyCallback(this);
+        _Scene->setSimulationEventCallback(this);
+        _Scene->setCCDContactModifyCallback(this);
+        _Scene->setContactModifyCallback(this);
     }
 
     void PhysxScene::RelationPhysicsLayer(const int layerA, const int layerB) {
-        _physics_layer_relations.insert(PhysicsLayerRelation(layerA, layerB));
+        _PhysicsLayerRelations.insert(PhysicsLayerRelation(layerA, layerB));
     }
 
     PxFilterFlags PhysxScene::PhysxSimulationFilterShader(
@@ -60,7 +60,7 @@ namespace XEngine {
         }
 
         PhysxScene* scene = pb0->GetScene();
-        if (scene->_physics_layer_relations.find(PhysicsLayerRelation(pb0->GetLayer(), pb1->GetLayer())) == scene->_physics_layer_relations.end()) {
+        if (scene->_PhysicsLayerRelations.find(PhysicsLayerRelation(pb0->GetLayer(), pb1->GetLayer())) == scene->_PhysicsLayerRelations.end()) {
             return PxFilterFlag::eSUPPRESS;
         }
 
@@ -75,7 +75,7 @@ namespace XEngine {
     }
 
     void PhysxScene::CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context) {
-        PxRigidStatic* groundPlane = PxCreatePlane(*g_pxphysics, PxPlane(nx, ny, nz, distance), *_material);
+        PxRigidStatic* groundPlane = PxCreatePlane(*g_PxPhysics, PxPlane(nx, ny, nz, distance), *_Material);
         if (nullptr == groundPlane) {
             context ? context->OnPhysxCreated(false) : void(0);
             return;
@@ -84,12 +84,12 @@ namespace XEngine {
         PxShape* shape = nullptr;
         groundPlane->userData = context;
         groundPlane->getShapes(&shape, sizeof(shape));
-        _scene->addActor(*groundPlane);
+        _Scene->addActor(*groundPlane);
         CREATE_PHYSX_BASE(this, shape, groundPlane, context);
     }
 
     void PhysxScene::CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context) {
-        PxShape* shape = g_pxphysics->createShape(PxBoxGeometry(size.x / 2.0f, size.y / 2.0f, size.z / 2.0f), *_material);
+        PxShape* shape = g_PxPhysics->createShape(PxBoxGeometry(size._X / 2.0f, size._Y / 2.0f, size._Z / 2.0f), *_Material);
         if (nullptr == shape) {
             context ? context->OnPhysxCreated(false) : void(0);
             return;
@@ -101,10 +101,10 @@ namespace XEngine {
         PxRigidActor* actor = nullptr;
         switch (type) {
         case eRigType::Dynamic:
-            actor = g_pxphysics->createRigidDynamic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
+            actor = g_PxPhysics->createRigidDynamic(PxTransform(PxVec3(pos._X, pos._Y, pos._Z)));
             break;
         case eRigType::Static:
-            actor = g_pxphysics->createRigidStatic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
+            actor = g_PxPhysics->createRigidStatic(PxTransform(PxVec3(pos._X, pos._Y, pos._Z)));
             break;
         }
 
@@ -121,12 +121,12 @@ namespace XEngine {
 
         CREATE_PHYSX_BASE(this, shape, actor, context);
         actor->attachShape(*shape);
-        _scene->addActor(*actor);
+        _Scene->addActor(*actor);
         shape->release();
     }
 
     void PhysxScene::CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context) {
-        PxShape* shape = g_pxphysics->createShape(PxCapsuleGeometry(radius, height / 2.0f), *_material);
+        PxShape* shape = g_PxPhysics->createShape(PxCapsuleGeometry(radius, height / 2.0f), *_Material);
         if (nullptr == shape) {
             context ? context->OnPhysxCreated(false) : void(0);
             return;
@@ -135,10 +135,10 @@ namespace XEngine {
         PxRigidActor* actor = nullptr;
         switch (type) {
         case eRigType::Dynamic:
-            actor = g_pxphysics->createRigidDynamic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
+            actor = g_PxPhysics->createRigidDynamic(PxTransform(PxVec3(pos._X, pos._Y, pos._Z)));
             break;
         case eRigType::Static:
-            actor = g_pxphysics->createRigidStatic(PxTransform(PxVec3(pos.x, pos.y, pos.z)));
+            actor = g_PxPhysics->createRigidStatic(PxTransform(PxVec3(pos._X, pos._Y, pos._Z)));
             break;
         }
 
@@ -155,7 +155,7 @@ namespace XEngine {
 
         CREATE_PHYSX_BASE(this, shape, actor, context);
         actor->attachShape(*shape);
-        _scene->addActor(*actor);
+        _Scene->addActor(*actor);
         shape->release();
     }
 
@@ -173,11 +173,11 @@ namespace XEngine {
         PxRigidActor* actor = nullptr;
         switch (type) {
         case eRigType::Dynamic: {
-            actor = g_pxphysics->createRigidDynamic(PxTransform(pos.x, pos.y, pos.z, PxQuat(qt.x, qt.y, qt.z, qt.w)));
+            actor = g_PxPhysics->createRigidDynamic(PxTransform(pos._X, pos._Y, pos._Z, PxQuat(qt._X, qt._Y, qt._Z, qt._W)));
             break;
         }
         case eRigType::Static: {
-            actor = g_pxphysics->createRigidStatic(PxTransform(pos.x, pos.y, pos.z, PxQuat(qt.x, qt.y, qt.z, qt.w)));
+            actor = g_PxPhysics->createRigidStatic(PxTransform(pos._X, pos._Y, pos._Z, PxQuat(qt._X, qt._Y, qt._Z, qt._W)));
             break;
         }
         }
@@ -195,17 +195,17 @@ namespace XEngine {
 
         // 加载顶点
         for (int i = 0; i < numVertices; ++i) {
-            PxVec3 vectmp(obj->GetV()[i].x * scale.x, obj->GetV()[i].y * scale.y, obj->GetV()[i].z * scale.z);
+            PxVec3 vectmp(obj->GetV()[i]._X * scale._X, obj->GetV()[i]._Y * scale._Y, obj->GetV()[i]._Z * scale._Z);
             vertices[i] = vectmp;
         }
 
         // 加载面
         auto faceIt = obj->GetF().begin();
         for (int i = 0; i < numTriangles && faceIt != obj->GetF().end(); faceIt++, ++i) {
-            indices[i * 3 + 0] = (*faceIt)[0].u;
-            indices[i * 3 + 1] = (*faceIt)[1].u;
+            indices[i * 3 + 0] = (*faceIt)[0]._U;
+            indices[i * 3 + 1] = (*faceIt)[1]._U;
             if ((*faceIt).size() >= 3)
-                indices[i * 3 + 2] = (*faceIt)[2].u;
+                indices[i * 3 + 2] = (*faceIt)[2]._U;
         }
 
         PxTriangleMeshDesc meshDesc;
@@ -216,14 +216,14 @@ namespace XEngine {
         meshDesc.triangles.count = numTriangles;
         meshDesc.triangles.data = indices;
         meshDesc.triangles.stride = sizeof(PxU32) * 3;
-        PxTriangleMesh* mesh = g_cooking->createTriangleMesh(meshDesc, g_pxphysics->getPhysicsInsertionCallback());
+        PxTriangleMesh* mesh = g_Cooking->createTriangleMesh(meshDesc, g_PxPhysics->getPhysicsInsertionCallback());
         if (nullptr == mesh) {
             context ? context->OnPhysxCreated(false) : void(0);
             return;
         }
 
         PxTriangleMeshGeometry geom(mesh);
-        PxShape* shape = g_pxphysics->createShape(geom, *_material);
+        PxShape* shape = g_PxPhysics->createShape(geom, *_Material);
         if (nullptr == shape) {
             mesh->release();
             context ? context->OnPhysxCreated(false) : void(0);
@@ -243,7 +243,7 @@ namespace XEngine {
 
         CREATE_PHYSX_BASE(this, shape, actor, context);
         actor->attachShape(*shape);
-        _scene->addActor(*actor);
+        _Scene->addActor(*actor);
         shape->release();
     }
 
@@ -252,11 +252,11 @@ namespace XEngine {
     }
 
     void PhysxScene::Simulate(const float elapsed_time) {
-        _scene->simulate(elapsed_time);
+        _Scene->simulate(elapsed_time);
     }
 
     bool PhysxScene::FetchResults(bool block) {
-        bool ret = _scene->fetchResults(block);
+        bool ret = _Scene->fetchResults(block);
         for (auto i = _ReleasePool.begin(); i != _ReleasePool.end(); i++) {
             (*i)->_Actor->release();
             xdel(*i);

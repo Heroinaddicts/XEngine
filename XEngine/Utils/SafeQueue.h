@@ -18,15 +18,15 @@ namespace XEngine {
         };
 
         enum {
-            no_data = 0,
-            has_data = 1
+            NoData = 0,
+            HasData = 1
         };
 
         template<typename T>
         struct QueueSpace {
             char sign;
             T data;
-            QueueSpace() : sign(no_data) {}
+            QueueSpace() : sign(NoData) {}
         };
 
         template<typename T>
@@ -34,60 +34,60 @@ namespace XEngine {
         public:
             virtual ~SpscQueue() {}
             SpscQueue(const int size)
-                : _read_index(0),
-                _write_index(0),
-                _read_count(0),
-                _write_count(0),
-                _size(size),
-                _queue(xnew QueueSpace<T>[size]) {
-                XASSERT(_queue, "Failed to allocate memory");
+                : _ReadIndex(0),
+                _WriteIndex(0),
+                _ReadCount(0),
+                _WriteCount(0),
+                _Size(size),
+                _Queue(xnew QueueSpace<T>[size]) {
+                XASSERT(_Queue, "Failed to allocate memory");
             }
 
             virtual bool Push(const T& o) {
-                if (_queue[_write_index].sign != no_data) {
+                if (_Queue[_WriteIndex].sign != NoData) {
                     XASSERT(false, "SpscQueue is full");
                     return false;
                 }
 
-                _queue[_write_index].data = o;
-                _queue[_write_index++].sign = has_data;
-                _write_count++;
-                if (_write_index >= _size) {
-                    _write_index = 0;
+                _Queue[_WriteIndex].data = o;
+                _Queue[_WriteIndex++].sign = HasData;
+                _WriteCount++;
+                if (_WriteIndex >= _Size) {
+                    _WriteIndex = 0;
                 }
 
                 return true;
             }
 
             virtual bool Pull(OUT T& o) {
-                if (_queue[_read_index].sign != has_data) {
+                if (_Queue[_ReadIndex].sign != HasData) {
                     return false;
                 }
 
-                o = _queue[_read_index].data;
-                _queue[_read_index++].sign = no_data;
-                _read_count++;
+                o = _Queue[_ReadIndex].data;
+                _Queue[_ReadIndex++].sign = NoData;
+                _ReadCount++;
 
-                if (_read_index >= _size) {
-                    _read_index = 0;
+                if (_ReadIndex >= _Size) {
+                    _ReadIndex = 0;
                 }
 
                 return true;
             }
 
             virtual bool Count() {
-                XASSERT(_write_count >= _read_count, "SpscQueue opt overstep");
-                return _write_count - _read_count;
+                XASSERT(_WriteCount >= _ReadCount, "SpscQueue opt overstep");
+                return _WriteCount - _ReadCount;
             }
 
         private:
-            const int _size;
-            QueueSpace<T>* const _queue;
+            const int _Size;
+            QueueSpace<T>* const _Queue;
 
-            int _read_index;
-            int _write_index;
-            int _read_count;
-            int _write_count;
+            int _ReadIndex;
+            int _WriteIndex;
+            int _ReadCount;
+            int _WriteCount;
         };
     }
 }

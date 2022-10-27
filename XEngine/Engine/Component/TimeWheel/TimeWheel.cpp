@@ -30,14 +30,14 @@ namespace XEngine {
     }
 
     bool TimeWheel::Initialize(Api::iEngine* const engine) {
-        _time_gears[4] = xnew TimeGear(tq_tvn_size, 0);
-        _time_gears[3] = xnew TimeGear(tq_tvn_size, _time_gears[4]);
-        _time_gears[2] = xnew TimeGear(tq_tvn_size, _time_gears[3]);
-        _time_gears[1] = xnew TimeGear(tq_tvn_size, _time_gears[2]);
-        _time_gears[0] = xnew TimeGear(tq_tvr_size, _time_gears[1]);
+        _TimeGears[4] = xnew TimeGear(TQTvnSize, 0);
+        _TimeGears[3] = xnew TimeGear(TQTvnSize, _TimeGears[4]);
+        _TimeGears[2] = xnew TimeGear(TQTvnSize, _TimeGears[3]);
+        _TimeGears[1] = xnew TimeGear(TQTvnSize, _TimeGears[2]);
+        _TimeGears[0] = xnew TimeGear(TQTvrSize, _TimeGears[1]);
 
-        _running = xnew TimeBaseList;
-        _suspended = xnew TimeBaseList;
+        _Running = xnew TimeBaseList;
+        _Suspended = xnew TimeBaseList;
         return true;
     }
 
@@ -47,11 +47,11 @@ namespace XEngine {
 
     void TimeWheel::Release(Api::iEngine* const engine) {
         for (int i = 0; i < 5; ++i) {
-            xdel _time_gears[i];
-            _time_gears[i] = nullptr;
+            xdel _TimeGears[i];
+            _TimeGears[i] = nullptr;
         }
-        xdel _running;
-        xdel _suspended;
+        xdel _Running;
+        xdel _Suspended;
         xdel this;
     }
 
@@ -68,19 +68,19 @@ namespace XEngine {
             _Update_();
         last += count * JIFF;
 
-        while (!_running->Empty()) {
-            TimeBase* base = _running->PopFront();
+        while (!_Running->Empty()) {
+            TimeBase* base = _Running->PopFront();
             if (!base) {
-                XERROR(engine, "where is timer base, _running %x", _running);
+                XERROR(engine, "where is timer base, _running %x", _Running);
             }
 
             base->OnTimer();
             if (!base->IsValid())
                 Remove(base);
             else if (base->IsPaused())
-                _suspended->PushBack(base);
+                _Suspended->PushBack(base);
             else {
-                base->AdjustExpire(_jiff);
+                base->AdjustExpire(_Jiff);
                 Schedule(base);
             }
         }
@@ -99,7 +99,7 @@ namespace XEngine {
         if (nullptr == base) {
             XASSERT(interval > 0 && delay >= 0, "wtf");
             base = CreateTimerBase(timer, id, context, count, interval >= JIFF ? interval : JIFF, file, line);
-            base->SetExpire(_jiff + delay / JIFF);
+            base->SetExpire(_Jiff + delay / JIFF);
             Schedule(base);
         }
     }
@@ -134,14 +134,14 @@ namespace XEngine {
         if (!base->IsValid())
             return;
 
-        base->Pause(_jiff);
+        base->Pause(_Jiff);
         if (base->IsValid() && !base->IsPolling()) {
             if (!base->GetList()) {
                 //error(core::getInstance(), "base is not in a pause timer list, timer %x, id %d", timer, id);
             }
 
             base->GetList()->Remove(base);
-            _suspended->PushBack(base);
+            _Suspended->PushBack(base);
         }
     }
 
@@ -152,14 +152,14 @@ namespace XEngine {
             return;
         }
 
-        if (base->GetList() != _suspended) {
+        if (base->GetList() != _Suspended) {
             //error(core::getInstance(), "base %x is not in supended list, timer %x, id %d", base, timer, id);
         }
 
         if (!base->IsValid())
             return;
 
-        base->Resume(_jiff);
+        base->Resume(_Jiff);
         if (base->IsValid() && !base->IsPolling()) {
             base->GetList()->Remove(base);
             Schedule(base);
@@ -208,39 +208,39 @@ namespace XEngine {
     }
 
     void TimeWheel::MoveToRunning(TimeBase* base) {
-        _running->PushBack(base);
+        _Running->PushBack(base);
     }
 
     TimeBaseList* TimeWheel::FindTimerList(unsigned_int64 expire) {
-        unsigned_int64 live = expire - _jiff;
+        unsigned_int64 live = expire - _Jiff;
         TimeBaseList* list = 0;
-        if (live < tq_tvr_size)
-            list = _time_gears[0]->GetTimerList(expire & tq_tvr_mask);
-        else if (live < (1 << (tq_tvr_bits + tq_tvn_bits)))
-            list = _time_gears[1]->GetTimerList((expire >> tq_tvr_bits) & tq_tvn_mask);
-        else if (live < (1 << (tq_tvr_bits + 2 * tq_tvn_bits)))
-            list = _time_gears[2]->GetTimerList((expire >> (tq_tvr_bits + tq_tvn_bits)) & tq_tvn_mask);
-        else if (live < (1 << (tq_tvr_bits + 3 * tq_tvn_bits)))
-            list = _time_gears[3]->GetTimerList((expire >> (tq_tvr_bits + 2 * tq_tvn_bits)) & tq_tvn_mask);
+        if (live < TQTvrSize)
+            list = _TimeGears[0]->GetTimerList(expire & TQTvrMask);
+        else if (live < (1 << (TQTvrBits + TQTvnBits)))
+            list = _TimeGears[1]->GetTimerList((expire >> TQTvrBits) & TQTvnMask);
+        else if (live < (1 << (TQTvrBits + 2 * TQTvnBits)))
+            list = _TimeGears[2]->GetTimerList((expire >> (TQTvrBits + TQTvnBits)) & TQTvnMask);
+        else if (live < (1 << (TQTvrBits + 3 * TQTvnBits)))
+            list = _TimeGears[3]->GetTimerList((expire >> (TQTvrBits + 2 * TQTvnBits)) & TQTvnMask);
         else if ((long long)live < 0)
-            list = _running;
+            list = _Running;
         else
-            list = _time_gears[4]->GetTimerList((expire >> (tq_tvr_bits + 3 * tq_tvn_bits)) & tq_tvn_mask);
+            list = _TimeGears[4]->GetTimerList((expire >> (TQTvrBits + 3 * TQTvnBits)) & TQTvnMask);
 
         return list;
     }
 
     void TimeWheel::_Update_() {
-        XASSERT(_time_gears[0], "where is timer gear");
-        _time_gears[0]->CheckHighGear();
-        ++_jiff;
-        _time_gears[0]->Update();
+        XASSERT(_TimeGears[0], "where is timer gear");
+        _TimeGears[0]->CheckHighGear();
+        ++_Jiff;
+        _TimeGears[0]->Update();
     }
 
     void TimeWheel::Remove(TimeBase* base) {
         TIME_MAP::iterator itor = static_timer_map.find(base->GetTimer());
         if (itor != static_timer_map.end()) {
-            TIMEBASE_MAP::iterator ifind = itor->second.find(TimerContext(base->_id, base->_context));
+            TIMEBASE_MAP::iterator ifind = itor->second.find(TimerContext(base->_Id, base->_Context));
             if (ifind != itor->second.end() && ifind->second == base) {
                 itor->second.erase(ifind);
             }

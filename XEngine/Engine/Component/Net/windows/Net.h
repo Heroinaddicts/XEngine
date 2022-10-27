@@ -29,17 +29,17 @@ namespace XEngine {
 
     public:
         inline void TcpNeedSend(Tcper* pipe) {
-            _tcp_need_send.insert(pipe);
+            _TcpNeedSendPool.insert(pipe);
         }
 
         inline void TcpNoNeedSend(Tcper* pipe) {
-            _tcp_need_send.erase(pipe);
+            _TcpNeedSendPool.erase(pipe);
         }
 
     private:
         Net() {}
 
-        std::set<Tcper*> _tcp_need_send;
+        std::set<Tcper*> _TcpNeedSendPool;
     };
 }
 

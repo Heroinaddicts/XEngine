@@ -8,61 +8,61 @@ namespace XEngine {
     }
 
     void TimeBase::OnTimer() {
-        XASSERT(_timer, "where is timer ???");
+        XASSERT(_Timer, "where is timer ???");
         const int64 tick = SafeSystem::Time::GetMilliSecond();
-        _polling = true;
-        if (!_started) {
-            _timer->OnStart(_id, _context, tick);
-            _started = true;
-            XASSERT(_valid, "wtf");
+        _Polling = true;
+        if (!_Started) {
+            _Timer->OnStart(_Id, _Context, tick);
+            _Started = true;
+            XASSERT(_Valid, "wtf");
         }
 
-        if (_valid) {
-            _timer->OnTimer(_id, _context, tick);
-            if (_count > 0) {
-                _count--;
+        if (_Valid) {
+            _Timer->OnTimer(_Id, _Context, tick);
+            if (_Count > 0) {
+                _Count--;
             }
         }
 
-        _polling = false;
-        _expire += _interval;
+        _Polling = false;
+        _Expire += _Interval;
 
-        if (_count == 0 && _valid) {
-            _valid = false;
-            _timer->OnEnd(_id, _context, true, tick);
+        if (_Count == 0 && _Valid) {
+            _Valid = false;
+            _Timer->OnEnd(_Id, _Context, true, tick);
         }
     }
 
     void TimeBase::AdjustExpire(unsigned_int64 now) {
-        long long live = (long long)(_expire - now);
-        if (live < 0 && abs(live) > _interval) {
-            _expire += (abs(live) / _interval) * _interval;
+        long long live = (long long)(_Expire - now);
+        if (live < 0 && abs(live) > _Interval) {
+            _Expire += (abs(live) / _Interval) * _Interval;
         }
     }
 
     void TimeBase::ForceEnd() {
-        XASSERT(_valid, "timer is already invalid");
+        XASSERT(_Valid, "timer is already invalid");
 
-        _valid = false;
-        _timer->OnEnd(_id, _context, false, SafeSystem::Time::GetMilliSecond());
+        _Valid = false;
+        _Timer->OnEnd(_Id, _Context, false, SafeSystem::Time::GetMilliSecond());
     }
 
     void TimeBase::Pause(unsigned_int32 jiff) {
-        if (_valid) {
-            XASSERT(!_paused, "timer already is paused");
-            _pause_tick = jiff;
-            _paused = true;
-            _timer->OnPause(_id, _context, SafeSystem::Time::GetMilliSecond());
+        if (_Valid) {
+            XASSERT(!_Paused, "timer already is paused");
+            _PauseTick = jiff;
+            _Paused = true;
+            _Timer->OnPause(_Id, _Context, SafeSystem::Time::GetMilliSecond());
         }
     }
 
     void TimeBase::Resume(unsigned_int32 jiff) {
-        if (_valid) {
-            XASSERT(_paused, "timer is not paused");
+        if (_Valid) {
+            XASSERT(_Paused, "timer is not paused");
 
-            _expire = jiff + _expire - _pause_tick;
-            _paused = false;
-            _timer->OnResume(_id, _context, SafeSystem::Time::GetMilliSecond());
+            _Expire = jiff + _Expire - _PauseTick;
+            _Paused = false;
+            _Timer->OnResume(_Id, _Context, SafeSystem::Time::GetMilliSecond());
         }
     }
 
@@ -71,23 +71,23 @@ namespace XEngine {
     }
 
     TimeBase::TimeBase(Api::iTimer* timer, const int id, void* const context, int count, int interval, const char* file, const int line)
-        : _timer(timer), _id(id), _interval(interval), _context(context)
+        : _Timer(timer), _Id(id), _Interval(interval), _Context(context)
 #ifdef _DEBUG
-        , _file(file), _line(line)
+        , _File(file), _Line(line)
 #endif //_DEBUG
-        {
-        _list = nullptr;
-        _next = nullptr;
-        _prev = nullptr;
+    {
+        _List = nullptr;
+        _Next = nullptr;
+        _Prev = nullptr;
 
-        _valid = true;
-        _polling = false;
+        _Valid = true;
+        _Polling = false;
 
-        _expire = 0;
-        _count = count;
-        _started = false;
+        _Expire = 0;
+        _Count = count;
+        _Started = false;
 
-        _pause_tick = 0;
-        _paused = false;
+        _PauseTick = 0;
+        _Paused = false;
     }
 }

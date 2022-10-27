@@ -22,67 +22,67 @@ namespace XEngine {
     class LockAndAutoFree {
     public:
         virtual ~LockAndAutoFree() {
-            _lock->Unlock();
+            _Lock->Unlock();
         }
 
-        LockAndAutoFree(iLock* lock, const char* file, const int line) : _lock(lock) {
+        LockAndAutoFree(iLock* lock, const char* file, const int line) : _Lock(lock) {
             XASSERT(nullptr != lock, "lock nullptr");
-            _lock->Lock(file, line);
+            _Lock->Lock(file, line);
         }
 
         void Free() {
-            _lock->Unlock();
+            _Lock->Unlock();
         }
 
     private:
-        iLock* const _lock;
+        iLock* const _Lock;
     };
 
     class SpinLock : public iLock {
     public:
         virtual ~SpinLock() {}
-        SpinLock() : _lock_thread_id(SafeSystem::Process::INVAILD_ID), _ref(0) {}
+        SpinLock() : _LockThreadID(SafeSystem::Process::INVAILD_ID), _Ref(0) {}
 
 
         virtual bool TryLock() {
-            return _flag.test_and_set(std::memory_order_acquire);
+            return _Flag.test_and_set(std::memory_order_acquire);
         }
 
         virtual void Lock(const char* file, const int line) {
-            if (_lock_thread_id == SafeSystem::Process::INVAILD_ID || _lock_thread_id != SafeSystem::Process::GetCurrentThreadID()) {
-                while (_flag.test_and_set(std::memory_order_acquire)) {}
-                _lock_thread_id = SafeSystem::Process::GetCurrentThreadID();
+            if (_LockThreadID == SafeSystem::Process::INVAILD_ID || _LockThreadID != SafeSystem::Process::GetCurrentThreadID()) {
+                while (_Flag.test_and_set(std::memory_order_acquire)) {}
+                _LockThreadID = SafeSystem::Process::GetCurrentThreadID();
             }
-            _ref++;
+            _Ref++;
 #ifdef _DEBUG
-            _file = file;
-            _line = line;
+            _File = file;
+            _Line = line;
 #endif
         }
 
         virtual void Unlock() {
-            XASSERT(_lock_thread_id == SafeSystem::Process::GetCurrentThreadID(), "wtf");
-            _ref--;
-            if (0 == _ref) {
-                _lock_thread_id = SafeSystem::Process::INVAILD_ID;
-                _flag.clear(std::memory_order_release);
+            XASSERT(_LockThreadID == SafeSystem::Process::GetCurrentThreadID(), "wtf");
+            _Ref--;
+            if (0 == _Ref) {
+                _LockThreadID = SafeSystem::Process::INVAILD_ID;
+                _Flag.clear(std::memory_order_release);
             }
         }
 
         virtual void ForceUnlock() {
-            _ref = 0;
-            _lock_thread_id = SafeSystem::Process::INVAILD_ID;
-            _flag.clear(std::memory_order_release);
+            _Ref = 0;
+            _LockThreadID = SafeSystem::Process::INVAILD_ID;
+            _Flag.clear(std::memory_order_release);
         }
 
     private:
-        std::atomic_flag _flag = ATOMIC_FLAG_INIT;
-        unsigned_int64 _lock_thread_id;
-        int _ref;
+        std::atomic_flag _Flag = ATOMIC_FLAG_INIT;
+        unsigned_int64 _LockThreadID;
+        int _Ref;
 
 #ifdef _DEBUG
-        std::string _file;
-        int _line;
+        std::string _File;
+        int _Line;
 #endif //_DEBUG
     };
 }

@@ -50,55 +50,55 @@ namespace XEngine {
         }
     };
 
-    extern PhysicsAllocator g_allocator;
-    extern PhysicsErrorCallback g_error_callback;
+    extern PhysicsAllocator g_Allocator;
+    extern PhysicsErrorCallback g_ErrorCallback;
 
-    extern PxFoundation* g_pxfoundation;
-    extern PxPhysics* g_pxphysics;
-    extern PxCooking* g_cooking;
-    extern PxDefaultCpuDispatcher* g_pxdispatcher;
-    extern PxPvd* g_pxpvd;
-    extern PxCudaContextManager* g_cuda_context_manager;
+    extern PxFoundation* g_PxFoundation;
+    extern PxPhysics* g_PxPhysics;
+    extern PxCooking* g_Cooking;
+    extern PxDefaultCpuDispatcher* g_Pxdispatcher;
+    extern PxPvd* g_Pxpvd;
+    extern PxCudaContextManager* g_CudaContextManager;
 
 
 #pragma pack(push, 1)
     struct UserDataIdentity {
         union {
             struct {
-                const PxU32 worda;
-                const PxU32 wordb;
+                const PxU32 _WordA;
+                const PxU32 _WordB;
             };
-            void* const data;
+            void* const _Data;
         };
 
-        UserDataIdentity(PxU32 w0, PxU32 w1) : worda(w0), wordb(w1) {}
-        UserDataIdentity(void* p) : data(p) {}
+        UserDataIdentity(PxU32 w0, PxU32 w1) : _WordA(w0), _WordB(w1) {}
+        UserDataIdentity(void* p) : _Data(p) {}
     };
 #pragma pack(pop)
 
     __forceinline void* GetUserData(PxU32 a, PxU32 b) {
-        return UserDataIdentity(a, b).data;
+        return UserDataIdentity(a, b)._Data;
     }
 
     __forceinline void GetWords(void* p, PxU32& a, PxU32& b) {
         UserDataIdentity udi(p);
-        a = udi.worda;
-        b = udi.wordb;
+        a = udi._WordA;
+        b = udi._WordB;
     }
 
     struct PhysicsLayerRelation {
-        const int layerA;
-        const int layerB;
+        const int _LayerA;
+        const int _LayerB;
 
-        PhysicsLayerRelation(int a, int b) : layerA(a), layerB(b) {}
-        PhysicsLayerRelation(const PhysicsLayerRelation& target) : layerA(target.layerA), layerB(target.layerB) {}
+        PhysicsLayerRelation(int a, int b) : _LayerA(a), _LayerB(b) {}
+        PhysicsLayerRelation(const PhysicsLayerRelation& target) : _LayerA(target._LayerA), _LayerB(target._LayerB) {}
 
         bool operator==(const PhysicsLayerRelation& target) const {
-            return (layerA == target.layerA && layerB == target.layerB) || (layerA == target.layerB && layerB == target.layerA);
+            return (_LayerA == target._LayerA && _LayerB == target._LayerB) || (_LayerA == target._LayerB && _LayerB == target._LayerA);
         }
 
         bool operator <(const PhysicsLayerRelation& target) const {
-            return (layerA + layerB) < (target.layerA + target.layerB);
+            return (_LayerA + _LayerB) < (target._LayerA + target._LayerB);
         }
     };
 }

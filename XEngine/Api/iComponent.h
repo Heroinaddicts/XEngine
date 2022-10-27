@@ -10,14 +10,14 @@ namespace XEngine {
         class iComponent {
         public:
             virtual ~iComponent() {}
-            iComponent() : _name(""), _next(nullptr) {}
+            iComponent() : _Name(""), _Next(nullptr) {}
 
             virtual bool Initialize(iEngine* const engine) = 0;
             virtual bool Launch(iEngine* const engine) = 0;
             virtual bool Destroy(iEngine* const engine) = 0;
 
-            const char* const _name;
-            iComponent* const _next;
+            const char* const _Name;
+            iComponent* const _Next;
         };
     }
 }
@@ -43,8 +43,8 @@ public:\
     Factory##Component(XEngine::Api::iComponent * & pComponent) {\
         XEngine::Api::iComponent * p = xnew Component();\
         const char * temp = #Component; \
-        memcpy((void *)&(p->_name), &temp, sizeof(const char *));\
-        memcpy((void *)&(p->_next), &pComponent, sizeof(pComponent));\
+        memcpy((void *)&(p->_Name), &temp, sizeof(const char *));\
+        memcpy((void *)&(p->_Next), &pComponent, sizeof(pComponent));\
         pComponent = p;\
     }\
 };\

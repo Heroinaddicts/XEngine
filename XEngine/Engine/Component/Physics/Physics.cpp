@@ -3,41 +3,41 @@
 #include "PhysxSimulationFilterCallback.h"
 
 namespace XEngine {
-    PhysicsAllocator g_allocator;
-    PhysicsErrorCallback g_error_callback;
+    PhysicsAllocator g_Allocator;
+    PhysicsErrorCallback g_ErrorCallback;
 
-    PxFoundation* g_pxfoundation = nullptr;
-    PxPhysics* g_pxphysics = nullptr;
-    PxCooking* g_cooking = nullptr;
-    PxDefaultCpuDispatcher* g_pxdispatcher = nullptr;
-    PxPvd* g_pxpvd = nullptr;
-    PxCudaContextManager* g_cuda_context_manager = nullptr;
+    PxFoundation* g_PxFoundation = nullptr;
+    PxPhysics* g_PxPhysics = nullptr;
+    PxCooking* g_Cooking = nullptr;
+    PxDefaultCpuDispatcher* g_Pxdispatcher = nullptr;
+    PxPvd* g_Pxpvd = nullptr;
+    PxCudaContextManager* g_CudaContextManager = nullptr;
 
     iPhysics* Physics::GetInstance() {
-        static Physics static_physics;
-        return &static_physics;
+        static Physics s_PhysicsInstance;
+        return &s_PhysicsInstance;
     }
 
     bool Physics::Initialize(Api::iEngine* const engine) {
-        g_pxfoundation = PxCreateFoundation(PX_PHYSICS_VERSION, g_allocator, g_error_callback);
-        XASSERT(g_pxfoundation, "create foundation error");
+        g_PxFoundation = PxCreateFoundation(PX_PHYSICS_VERSION, g_Allocator, g_ErrorCallback);
+        XASSERT(g_PxFoundation, "create foundation error");
 
         const char* pvd_host = engine->GetLaunchParameter("pvd_host");
         const char* pvd_port = engine->GetLaunchParameter("pvd_port");
         if (pvd_host && pvd_port) {
-            g_pxpvd = PxCreatePvd(*g_pxfoundation);
+            g_Pxpvd = PxCreatePvd(*g_PxFoundation);
             PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(pvd_host, SafeString::StringToInt(pvd_port), 10);
-            g_pxpvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
+            g_Pxpvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
         }
         PxTolerancesScale scale;
         scale.length = 1;        // typical length of an object
         scale.speed = 9.81;         // typical speed of an object, gravity*1s is a reasonable choice
 
-        g_pxphysics = PxCreatePhysics(PX_PHYSICS_VERSION, *g_pxfoundation, scale, true, g_pxpvd);
-        XASSERT(g_pxphysics, "create physics error");
-        g_cooking = PxCreateCooking(PX_PHYSICS_VERSION, *g_pxfoundation, PxCookingParams(PxTolerancesScale()));
+        g_PxPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *g_PxFoundation, scale, true, g_Pxpvd);
+        XASSERT(g_PxPhysics, "create physics error");
+        g_Cooking = PxCreateCooking(PX_PHYSICS_VERSION, *g_PxFoundation, PxCookingParams(PxTolerancesScale()));
         PxCudaContextManagerDesc ccm_desc;
-        g_cuda_context_manager = PxCreateCudaContextManager(*g_pxfoundation, ccm_desc, PxGetProfilerCallback());
+        g_CudaContextManager = PxCreateCudaContextManager(*g_PxFoundation, ccm_desc, PxGetProfilerCallback());
         return true;
     }
 
@@ -66,16 +66,16 @@ namespace XEngine {
     }
 
     Api::iPhysxScene* Physics::CreateScene(const float static_friction, const float dynamic_friction, const float restitution) {
-        PxSceneDesc desc(g_pxphysics->getTolerancesScale());
+        PxSceneDesc desc(g_PxPhysics->getTolerancesScale());
         desc.filterShader = PhysxScene::PhysxSimulationFilterShader;
         desc.filterCallback = PhysxSimulationFilterCallback::GetInstance();
         desc.gravity = PxVec3(0.0f, -98.1f, 0.0f);
         desc.cpuDispatcher = PxDefaultCpuDispatcherCreate(2);
-        desc.cudaContextManager = g_cuda_context_manager;
+        desc.cudaContextManager = g_CudaContextManager;
         desc.flags | PxSceneFlag::eENABLE_GPU_DYNAMICS | PxSceneFlag::eENABLE_ACTIVE_ACTORS | PxSceneFlag::eENABLE_CCD;
         desc.broadPhaseType = PxBroadPhaseType::eGPU;
 
-        PxScene* px_scene = g_pxphysics->createScene(desc);
+        PxScene* px_scene = g_PxPhysics->createScene(desc);
         XASSERT(px_scene, "create physx scene error");
         px_scene->setCCDMaxPasses(0);
         if (px_scene) {
@@ -98,7 +98,7 @@ namespace XEngine {
         PhysxScene* p = dynamic_cast<PhysxScene*>(scene);
         XASSERT(p, "wtf");
         if (p) {
-            p->_scene->release();
+            p->_Scene->release();
             xdel scene;
         }
         else {

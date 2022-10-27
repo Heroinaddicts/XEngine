@@ -11,12 +11,12 @@ namespace XEngine {
 #define JIFF 2
 
     enum {
-        tq_tvn_bits = 6,
-        tq_tvr_bits = 8,
-        tq_tvn_size = 1 << tq_tvn_bits,//64
-        tq_tvr_size = 1 << tq_tvr_bits,//256
-        tq_tvn_mask = tq_tvn_size - 1,//63
-        tq_tvr_mask = tq_tvr_size - 1,//255
+        TQTvnBits = 6,
+        TQTvrBits = 8,
+        TQTvnSize = 1 << TQTvnBits,//64
+        TQTvrSize = 1 << TQTvrBits,//256
+        TQTvnMask = TQTvnSize - 1,//63
+        TQTvrMask = TQTvrSize - 1,//255
     };
 
 }

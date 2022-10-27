@@ -42,21 +42,21 @@ namespace XEngine {
         virtual void Run(void* constext);
 
     private:
-        Navigation() : _load_queue(MESHLOAD_QUEUE_SIZE), _loaded_queue(MESHLOAD_QUEUE_SIZE) {}
+        Navigation() : _LoadQueue(MESHLOAD_QUEUE_SIZE), _LoadedQueue(MESHLOAD_QUEUE_SIZE) {}
 
         std::map<std::string, Navmesh*> _mesh_map;
 
         struct AsyncMeshLoader {
-            Navmesh* mesh;
-            void(*call)(Api::iNavmesh* mesh);
-            AsyncMeshLoader() : mesh(nullptr), call(nullptr) {}
-            AsyncMeshLoader(Navmesh* mesh_, void(* const call_)(Api::iNavmesh* mesh)) : mesh(mesh_), call(call_) {}
+            Navmesh* _Mesh;
+            void(*_Call)(Api::iNavmesh* mesh);
+            AsyncMeshLoader() : _Mesh(nullptr), _Call(nullptr) {}
+            AsyncMeshLoader(Navmesh* mesh_, void(* const call_)(Api::iNavmesh* mesh)) : _Mesh(mesh_), _Call(call_) {}
         };
-        SafeQueue::SpscQueue<AsyncMeshLoader> _load_queue;
-        SafeQueue::SpscQueue<AsyncMeshLoader> _loaded_queue;
+        SafeQueue::SpscQueue<AsyncMeshLoader> _LoadQueue;
+        SafeQueue::SpscQueue<AsyncMeshLoader> _LoadedQueue;
 
-        SpinLock _pull_lock;
-        SpinLock _push_lock;
+        SpinLock _PullLock;
+        SpinLock _PushLock;
     };
 }
 

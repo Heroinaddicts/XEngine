@@ -33,15 +33,15 @@ namespace XEngine {
         class iTcpSocket : public iSocket {
         public:
             virtual ~iTcpSocket() {}
-            iTcpSocket() : _pipe(nullptr) {}
+            iTcpSocket() : _Pipe(nullptr) {}
 
-            iTcpPipe* const _pipe;
+            iTcpPipe* const _Pipe;
         };
 
         class iTcpSession : public iTcpSocket {
         public:
             virtual ~iTcpSession() {}
-            iTcpSession() : _initiative(false), _ip(""), _port(0) {}
+            iTcpSession() : _Initiative(false), _Ip(""), _Port(0) {}
 
             /*
             * 收到消息时回调(前提是没有Pause)
@@ -54,28 +54,28 @@ namespace XEngine {
             virtual void OnDisconnect() = 0;
             virtual void OnConnectFailed() = 0;
 
-            inline void Close() const { if (this && _pipe) { _pipe->Close(); } }
-            inline void Send(const void* context, const int size, bool immediately = true) const { if (this && _pipe) { _pipe->Send(context, size, immediately); } }
-            inline void Pause() { if (this && _pipe) { _pipe->Pause(); } }
-            inline void Resume() { if (this && _pipe) { _pipe->Resume(); } }
+            inline void Close() const { if (this && _Pipe) { _Pipe->Close(); } }
+            inline void Send(const void* context, const int size, bool immediately = true) const { if (this && _Pipe) { _Pipe->Send(context, size, immediately); } }
+            inline void Pause() { if (this && _Pipe) { _Pipe->Pause(); } }
+            inline void Resume() { if (this && _Pipe) { _Pipe->Resume(); } }
 
-            const bool _initiative; //是否是主动链接
-            const std::string _ip;
-            const int _port;
+            const bool _Initiative; //是否是主动链接
+            const std::string _Ip;
+            const int _Port;
         };
 
         class iTcpServer {
         public:
-            iTcpServer() : _ac(nullptr) {}
+            iTcpServer() : _Accepter(nullptr) {}
             virtual ~iTcpServer() {}
 
             virtual iTcpSession* OnMallocConnection(const char* remote_ip, const int remote_port) = 0;
             virtual void OnError(iTcpSession* session) = 0;
             virtual void OnRelease() = 0;
 
-            virtual void Release() { _ac->Release(); }
+            virtual void Release() { _Accepter->Release(); }
 
-            iAccepter* const _ac;
+            iAccepter* const _Accepter;
         };
 
         class iNetApi {

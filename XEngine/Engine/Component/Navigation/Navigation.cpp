@@ -3,13 +3,13 @@
 #include "SafeString.h"
 
 namespace XEngine {
-    Api::iEngine* g_engine = nullptr;
+    Api::iEngine* g_Engine = nullptr;
     iNavigation* Navigation::GetInstance() {
         static Navigation static_navigtaion;
         return &static_navigtaion;
     }
     bool Navigation::Initialize(Api::iEngine* const engine) {
-        g_engine = engine;
+        g_Engine = engine;
         return true;
     }
 
@@ -42,12 +42,12 @@ namespace XEngine {
 
     void Navigation::LaterUpdate(Api::iEngine* const engine) {
         AsyncMeshLoader loader;
-        while (_loaded_queue.Pull(loader)) {
-            if (loader.mesh) {
-                _mesh_map.insert(std::make_pair(loader.mesh->_file, loader.mesh));
+        while (_LoadedQueue.Pull(loader)) {
+            if (loader._Mesh) {
+                _mesh_map.insert(std::make_pair(loader._Mesh->_File, loader._Mesh));
             }
 
-            loader.call(loader.mesh);
+            loader._Call(loader._Mesh);
         }
     }
 
@@ -70,8 +70,8 @@ namespace XEngine {
         }
 
         Navmesh* mesh = xnew Navmesh(file);
-        if (false == _load_queue.Push(AsyncMeshLoader(mesh, func))) {
-            XERROR(g_engine, "async load mesh queue is full, load %s error", file.c_str());
+        if (false == _LoadQueue.Push(AsyncMeshLoader(mesh, func))) {
+            XERROR(g_Engine, "async load mesh queue is full, load %s error", file.c_str());
             xdel mesh;
             mesh = nullptr;
             func(nullptr);
@@ -87,18 +87,18 @@ namespace XEngine {
         while (true) {
             bool ret = false;
             {
-                AUTO_LOCK(_pull_lock);
-                ret = _load_queue.Pull(loader);
+                AUTO_LOCK(_PullLock);
+                ret = _LoadQueue.Pull(loader);
             }
 
             if (ret) {
-                if (!loader.mesh->Load()) {
-                    xdel loader.mesh;
-                    loader.mesh = nullptr;
+                if (!loader._Mesh->Load()) {
+                    xdel loader._Mesh;
+                    loader._Mesh = nullptr;
                 }
 
-                AUTO_LOCK(_push_lock);
-                _loaded_queue.Push(loader);
+                AUTO_LOCK(_PushLock);
+                _LoadedQueue.Push(loader);
             }
             else {
                 SafeSystem::Time::MillisecondSleep(1);

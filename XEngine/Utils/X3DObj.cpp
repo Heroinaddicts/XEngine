@@ -28,7 +28,7 @@ namespace XEngine {
                 float y = SafeString::StringToFloat(res[1]);
                 float z = SafeString::StringToFloat(res[2]);
 
-                _vs.push_back(Vector3(x, y, z));
+                _Vs.push_back(Vector3(x, y, z));
             }
             else if (SafeString::StringStartWith(buff, "vn ") && len >= 8) {  // "vn 0 0 0"
                 std::vector<std::string> res;
@@ -42,7 +42,7 @@ namespace XEngine {
                 float y = SafeString::StringToFloat(res[1]);
                 float z = SafeString::StringToFloat(res[2]);
 
-                _vns.push_back(Vector3(x, y, z));
+                _Vns.push_back(Vector3(x, y, z));
             }
             else if (SafeString::StringStartWith(buff, "vt ") && len >= 6) { // "vt 0 0"
                 std::vector<std::string> res;
@@ -54,7 +54,7 @@ namespace XEngine {
 
                 float x = SafeString::StringToFloat(res[0]);
                 float y = SafeString::StringToFloat(res[1]);
-                _vts.push_back(Vector2(x, y));
+                _Vts.push_back(Vector2(x, y));
             }
             else if (SafeString::StringStartWith(buff, "f ") && len >= 7) { // "f 0 0 0"
                 std::vector<std::string> res;
@@ -66,11 +66,11 @@ namespace XEngine {
                 std::vector<Face> f;
                 for (int i = 0; i < count; i++) {
                     Face temp;
-                    temp.u = SafeString::StringToInt(res[i]) - 1;
+                    temp._U = SafeString::StringToInt(res[i]) - 1;
                     f.push_back(temp);
                 }
 
-                _fs.push_back(f);
+                _Fs.push_back(f);
             }
             else {
                 XASSERT(false, "X3DObj format error %s", buff);

@@ -5,23 +5,23 @@ namespace XEngine {
     void TimeBaseList::PushBack(TimeBase* p) {
         p->SetList(this);
         p->SetNext(nullptr);
-        p->SetPrev(_tail);
-        if (_tail)
-            _tail->SetNext(p);
+        p->SetPrev(_Tail);
+        if (_Tail)
+            _Tail->SetNext(p);
         else
-            _head = p;
+            _Head = p;
 
-        _tail = p;
+        _Tail = p;
     }
 
     TimeBase* TimeBaseList::PopFront() {
-        TimeBase* p = _head;
-        if (_head) {
-            _head = _head->GetNext();
-            if (!_head)
-                _tail = nullptr;
+        TimeBase* p = _Head;
+        if (_Head) {
+            _Head = _Head->GetNext();
+            if (!_Head)
+                _Tail = nullptr;
             else
-                _head->SetPrev(nullptr);
+                _Head->SetPrev(nullptr);
 
             p->SetNext(nullptr);
             p->SetPrev(nullptr);
@@ -37,11 +37,11 @@ namespace XEngine {
         if (p->GetNext())
             p->GetNext()->SetPrev(p->GetPrev());
 
-        if (p == _head)
-            _head = _head->GetNext();
+        if (p == _Head)
+            _Head = _Head->GetNext();
 
-        if (p == _tail)
-            _tail = _tail->GetPrev();
+        if (p == _Tail)
+            _Tail = _Tail->GetPrev();
 
         p->SetNext(nullptr);
         p->SetPrev(nullptr);

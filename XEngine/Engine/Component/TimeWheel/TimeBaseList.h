@@ -7,21 +7,21 @@ namespace XEngine {
     class TimeBase;
     class TimeBaseList {
     public:
-        TimeBaseList() : _head(nullptr), _tail(nullptr) {}
+        TimeBaseList() : _Head(nullptr), _Tail(nullptr) {}
         virtual ~TimeBaseList() {}
 
         void PushBack(TimeBase* p);
         TimeBase* PopFront();
         void Remove(TimeBase* p);
 
-        inline bool Empty() { return _head == nullptr; }
+        inline bool Empty() { return _Head == nullptr; }
 
     private:
         TimeBaseList(TimeBaseList&);
         TimeBaseList& operator=(TimeBaseList&);
 
-        TimeBase* _head;
-        TimeBase* _tail;
+        TimeBase* _Head;
+        TimeBase* _Tail;
     };
 }
 

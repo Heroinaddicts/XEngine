@@ -21,18 +21,18 @@ namespace XEngine {
 
 
     public:
-        const std::string _file;
+        const std::string _File;
 
-        dtNavMesh* _mesh;
-        dtNavMeshQuery* _query;
-        dtCrowd* _crowd;
-        dtTileCache* _tile_cache;
+        dtNavMesh* _Mesh;
+        dtNavMeshQuery* _Query;
+        dtCrowd* _DtCrowd;
+        dtTileCache* _DtTileCache;
 
-        LinearAllocator* _talloc;
-        FastLZCompressor* _tcomp;
-        MeshProcess* _tmproc;
+        LinearAllocator* _Talloc;
+        FastLZCompressor* _Tcomp;
+        MeshProcess* _Tmproc;
 
-        dtQueryFilter _filter;
+        dtQueryFilter _Filter;
     };
 }
 

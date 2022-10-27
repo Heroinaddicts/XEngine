@@ -4,43 +4,43 @@
 #include "SafeMemory.h"
 
 namespace XEngine {
-    template <typename T, int chunk_count = 1, int chunk_size = 64>
+    template <typename T, int ChunkCount = 1, int ChunkSize = 64>
     class XPool {
         enum {
-            in_use,
-            is_free,
+            InUse,
+            IsFree,
         };
 
         struct ChunkList;
         struct Chunk {
-            char buffer[sizeof(T)];
-            ChunkList* parent;
-            Chunk* prev;
-            Chunk* next;
-            int len;
-            int8 state;
+            char _Buffer[sizeof(T)];
+            ChunkList* _Parent;
+            Chunk* _Prev;
+            Chunk* _Next;
+            int _Len;
+            int8 _State;
 #ifdef _DEBUG
-            char file[128];
-            int line;
+            char _File[128];
+            int _Line;
 #endif
         };
 
         struct ChunkList {
-            int count;
-            ChunkList* prev;
-            ChunkList* next;
-            Chunk chunks[chunk_size];
+            int _Count;
+            ChunkList* _Prev;
+            ChunkList* _Next;
+            Chunk _Chunks[ChunkSize];
         };
 
     public:
-        XPool() : _head(nullptr), _list_head(nullptr), _chunk_count(0) {
-            AllocChunk(chunk_count);
+        XPool() : _Head(nullptr), _ListHead(nullptr), _ChunkCount(0) {
+            AllocChunk(ChunkCount);
         }
 
         ~XPool() {
-            while (_list_head != nullptr) {
-                auto tmp = _list_head;
-                _list_head = _list_head->next;
+            while (_ListHead != nullptr) {
+                auto tmp = _ListHead;
+                _ListHead = _ListHead->_Next;
 
                 xfree(tmp);
             }
@@ -53,7 +53,7 @@ namespace XEngine {
         T* CreateObject() {
             Chunk* chunk = Create();
 #endif
-            T* t = xnew(chunk->buffer) T();
+            T* t = xnew(chunk->_Buffer) T();
             return t;
         }
 
@@ -65,7 +65,7 @@ namespace XEngine {
         T* CreateObject(Args... args) {
             Chunk* chunk = Create();
 #endif
-            T* t = xnew(chunk->buffer) T(args...);
+            T* t = xnew(chunk->_Buffer) T(args...);
             return t;
         }
 
@@ -78,7 +78,7 @@ namespace XEngine {
             Recover((Chunk*)t);
         }
 
-        int Count() { return _chunk_count * chunk_size; }
+        int Count() { return _ChunkCount * ChunkSize; }
 
     private:
 #ifdef _DEBUG
@@ -87,30 +87,30 @@ namespace XEngine {
         Chunk* Create() {
 #endif
             Chunk* ret = nullptr;
-            if (_head == nullptr)
+            if (_Head == nullptr)
                 AllocChunk(1);
 
-            ret = _head;
-            Remove(_head);
-            XASSERT(ret->state == is_free && ret->len == sizeof(Chunk), "chunk invalid");
-            ++ret->parent->count;
-            ret->state = in_use;
+            ret = _Head;
+            Remove(_Head);
+            XASSERT(ret->_State == IsFree && ret->_Len == sizeof(Chunk), "chunk invalid");
+            ++ret->_Parent->_Count;
+            ret->_State = InUse;
 #ifdef _DEBUG
-            sprintf_s(ret->file, sizeof(ret->file), "%s", file);
-            ret->line = line;
+            sprintf_s(ret->_File, sizeof(ret->_File), "%s", file);
+            ret->_Line = line;
 #endif
             return ret;
         }
 
-        void Recover(Chunk * _chunk) {
-            XASSERT(_chunk->state == in_use && _chunk->len == sizeof(Chunk), "Recover invalid chunk");
-            XASSERT(_chunk->parent->count > 0, "chunk list error");
-            --_chunk->parent->count;
-            _chunk->state = is_free;
-            if (_chunk->parent->count == 0 && _chunk_count > chunk_count)
-                FreeChunkList(_chunk->parent);
+        void Recover(Chunk * chunk) {
+            XASSERT(chunk->_State == InUse && chunk->_Len == sizeof(Chunk), "Recover invalid chunk");
+            XASSERT(chunk->_Parent->_Count > 0, "chunk list error");
+            --chunk->_Parent->_Count;
+            chunk->_State = IsFree;
+            if (chunk->_Parent->_Count == 0 && _ChunkCount > ChunkCount)
+                FreeChunkList(chunk->_Parent);
             else
-                Add(_chunk);
+                Add(chunk);
         }
 
         void AllocChunk(int count) {
@@ -119,74 +119,74 @@ namespace XEngine {
                 XASSERT(new_list, "xnew chunk faild");
                 ArrangeChunkList(new_list);
 
-                new_list->next = _list_head;
-                if (_list_head != nullptr)
-                    _list_head->prev = new_list;
-                _list_head = new_list;
+                new_list->_Next = _ListHead;
+                if (_ListHead != nullptr)
+                    _ListHead->_Prev = new_list;
+                _ListHead = new_list;
             }
 
-            _chunk_count += count;
+            _ChunkCount += count;
         }
 
         inline void FreeChunkList(ChunkList * chunk_list) {
-            for (int i = 0; i < chunk_size; ++i) {
-                XASSERT(chunk_list->chunks[i].state == is_free, "free chunk list but child chunk is not free");
-                Remove(&(chunk_list->chunks[i]));
+            for (int i = 0; i < ChunkSize; ++i) {
+                XASSERT(chunk_list->_Chunks[i]._State == IsFree, "free chunk list but child chunk is not free");
+                Remove(&(chunk_list->_Chunks[i]));
             }
 
-            if (chunk_list->next != nullptr)
-                chunk_list->next->prev = chunk_list->prev;
+            if (chunk_list->_Next != nullptr)
+                chunk_list->_Next->_Prev = chunk_list->_Prev;
 
-            if (chunk_list->prev != nullptr)
-                chunk_list->prev->next = chunk_list->next;
+            if (chunk_list->_Prev != nullptr)
+                chunk_list->_Prev->_Next = chunk_list->_Next;
 
-            if (_list_head == chunk_list)
-                _list_head = chunk_list->next;
+            if (_ListHead == chunk_list)
+                _ListHead = chunk_list->_Next;
 
             xfree(chunk_list);
-            --_chunk_count;
+            --_ChunkCount;
         }
 
         inline void ArrangeChunkList(ChunkList * chunk_list) {
-            chunk_list->prev = nullptr;
-            chunk_list->next = nullptr;
-            chunk_list->count = 0;
-            for (int i = 0; i < chunk_size; ++i) {
-                chunk_list->chunks[i].parent = chunk_list;
-                chunk_list->chunks[i].state = is_free;
-                chunk_list->chunks[i].len = sizeof(Chunk);
-                chunk_list->chunks[i].prev = nullptr;
-                chunk_list->chunks[i].next = nullptr;
+            chunk_list->_Prev = nullptr;
+            chunk_list->_Next = nullptr;
+            chunk_list->_Count = 0;
+            for (int i = 0; i < ChunkSize; ++i) {
+                chunk_list->_Chunks[i]._Parent = chunk_list;
+                chunk_list->_Chunks[i]._State = IsFree;
+                chunk_list->_Chunks[i]._Len = sizeof(Chunk);
+                chunk_list->_Chunks[i]._Prev = nullptr;
+                chunk_list->_Chunks[i]._Next = nullptr;
 
-                Add(&(chunk_list->chunks[i]));
+                Add(&(chunk_list->_Chunks[i]));
             }
         }
 
         inline void Add(Chunk * chunk) {
-            chunk->next = _head;
-            if (_head != nullptr)
-                _head->prev = chunk;
-            _head = chunk;
+            chunk->_Next = _Head;
+            if (_Head != nullptr)
+                _Head->_Prev = chunk;
+            _Head = chunk;
         }
 
         inline void Remove(Chunk * chunk) {
-            if (chunk->next != nullptr)
-                chunk->next->prev = chunk->prev;
+            if (chunk->_Next != nullptr)
+                chunk->_Next->_Prev = chunk->_Prev;
 
-            if (chunk->prev != nullptr)
-                chunk->prev->next = chunk->next;
+            if (chunk->_Prev != nullptr)
+                chunk->_Prev->_Next = chunk->_Next;
 
-            if (_head == chunk)
-                _head = chunk->next;
+            if (_Head == chunk)
+                _Head = chunk->_Next;
 
-            chunk->next = nullptr;
-            chunk->prev = nullptr;
+            chunk->_Next = nullptr;
+            chunk->_Prev = nullptr;
         }
 
     private:
-        Chunk* _head;
-        ChunkList* _list_head;
-        int _chunk_count;
+        Chunk* _Head;
+        ChunkList* _ListHead;
+        int _ChunkCount;
     };
 }
 

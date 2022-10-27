@@ -24,20 +24,20 @@ namespace XEngine {
         bool AsyncRecv();
 
     private:
-        bool _sending, _recving, _caching;
+        bool _IsSending, _IsRecving, _IsCached;
 
-        char _recv_temp[PACK_MAX_SIZE];
+        char _RecvTemp[PACK_MAX_SIZE];
 
-        XBuffer _send_buff;
-        XBuffer _recv_buff;
+        XBuffer _SendBuff;
+        XBuffer _RecvBuff;
 
-        OVERLAPPEDEX _send_ex;
-        OVERLAPPEDEX _recv_ex;
+        OVERLAPPEDEX _SendEx;
+        OVERLAPPEDEX _RecvEx;
 
-        Api::iTcpSession* const _session;
-        int _socket;
+        Api::iTcpSession* const _Session;
+        int _Socket;
 
-        Net* _net;
+        Net* _Net;
     };
 }
 

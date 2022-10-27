@@ -14,16 +14,16 @@ namespace XEngine {
 
         bool Load(const std::string& path);
 
-        __forceinline const std::vector<Vector3>& GetV() const { return _vs; }
-        __forceinline const std::vector<Vector3>& GetVN() const { return _vns; }
-        __forceinline const std::vector<Vector2>& GetVT() const { return _vts; }
-        __forceinline const std::vector<std::vector<Face>>& GetF() const { return _fs; }
+        __forceinline const std::vector<Vector3>& GetV() const { return _Vs; }
+        __forceinline const std::vector<Vector3>& GetVN() const { return _Vns; }
+        __forceinline const std::vector<Vector2>& GetVT() const { return _Vts; }
+        __forceinline const std::vector<std::vector<Face>>& GetF() const { return _Fs; }
 
     private:
-        std::vector<Vector3> _vs;
-        std::vector<Vector3> _vns;
-        std::vector<Vector2> _vts;
-        std::vector<std::vector<Face>> _fs;
+        std::vector<Vector3> _Vs;
+        std::vector<Vector3> _Vns;
+        std::vector<Vector2> _Vts;
+        std::vector<std::vector<Face>> _Fs;
     };
 }
 

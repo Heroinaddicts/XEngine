@@ -15,8 +15,8 @@ namespace XEngine {
 
 
     iLogic* Logic::GetInstance() {
-        static Logic static_logic;
-        return &static_logic;
+        static Logic s_Logic;
+        return &s_Logic;
     }
 
     Api::iComponent* Logic::FindComponent(const std::string& name) {
@@ -49,7 +49,7 @@ namespace XEngine {
                 __GetComponents fun = (__GetComponents)::GetProcAddress(hinst, "GetComponents");
 #else
                 std::string path = _ComponentPath + "/" + names[i] + ".so";
-                void * handle = dlopen(path.c_str(), RTLD_LAZY);
+                void* handle = dlopen(path.c_str(), RTLD_LAZY);
                 if (!handle) {
                     XERROR(engine, "load %s error %s\n", path.c_str(), errno);
                     return false;
@@ -60,12 +60,12 @@ namespace XEngine {
                 XASSERT(fun, "Can not export dll function GetComponents, dll %s", path.c_str());
                 Api::iComponent* component = fun();
                 if (false == component->Initialize(engine)) {
-                    XERROR(engine, "Component %s Initialize failed", component->_name);
+                    XERROR(engine, "Component %s Initialize failed", component->_Name);
                     return false;
                 }
 
-                XLOG(engine, "Component %s Initialized", component->_name);
-                _ComponentMap.insert(std::make_pair(component->_name, component));
+                XLOG(engine, "Component %s Initialized", component->_Name);
+                _ComponentMap.insert(std::make_pair(component->_Name, component));
             }
         }
 
@@ -75,10 +75,10 @@ namespace XEngine {
     bool Logic::Launch(Api::iEngine* const engine) {
         for (auto itor = _ComponentMap.begin(); itor != _ComponentMap.end(); itor++) {
             if (false == itor->second->Launch(engine)) {
-                XERROR(engine, "Component %s Launch failed", itor->second->_name);
+                XERROR(engine, "Component %s Launch failed", itor->second->_Name);
                 return false;
             }
-            XLOG(engine, "Component %s Launched", itor->second->_name);
+            XLOG(engine, "Component %s Launched", itor->second->_Name);
         }
 
         return true;
@@ -87,7 +87,7 @@ namespace XEngine {
     void Logic::Release(Api::iEngine* const engine) {
         for (auto itor = _ComponentMap.begin(); itor != _ComponentMap.end(); itor++) {
             if (false == itor->second->Destroy(engine)) {
-                XERROR(engine, "component %s Destroy failed", itor->second->_name);
+                XERROR(engine, "component %s Destroy failed", itor->second->_Name);
             }
         }
     }

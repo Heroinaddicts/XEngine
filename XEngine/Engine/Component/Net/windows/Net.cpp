@@ -5,12 +5,12 @@
 #include "SafeSystem.h"
 
 namespace XEngine {
-    XPool<OVERLAPPEDEX> g_overlappedex_pool;
-    HANDLE g_complete_port;
+    XPool<OVERLAPPEDEX> g_OverlappedexPool;
+    HANDLE g_CompletePort;
 
     iNet* Net::GetInstance() {
-        static Net static_net;
-        return &static_net;
+        static Net s_Instance;
+        return &s_Instance;
     }
 
     bool Net::Initialize(Api::iEngine* const engine) {
@@ -26,8 +26,8 @@ namespace XEngine {
             WSACleanup();
             return false;
         }
-        g_complete_port = CreateIoCompletionPort(INVALID_HANDLE_VALUE, nullptr, 0, 0);
-        if (nullptr == g_complete_port) {
+        g_CompletePort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, nullptr, 0, 0);
+        if (nullptr == g_CompletePort) {
             XERROR(engine, "CreateIoCompletionPort error : %s", strerror(::GetLastError()));
             return false;
         }
@@ -50,7 +50,7 @@ namespace XEngine {
             OVERLAPPEDEX* plus = nullptr;
             SetLastError(0);
 
-            BOOL res = GetQueuedCompletionStatus(g_complete_port, &bytes, (PULONG_PTR)&sock, (LPOVERLAPPED*)&plus, 0);
+            BOOL res = GetQueuedCompletionStatus(g_CompletePort, &bytes, (PULONG_PTR)&sock, (LPOVERLAPPED*)&plus, 0);
             int err = GetLastError();
             if (!res) {
                 if (WAIT_TIMEOUT == err) {
@@ -58,7 +58,7 @@ namespace XEngine {
                 }
             }
 
-            plus->_completer->OnCompleted(plus, plus->_type, err, bytes);
+            plus->_Completer->OnCompleted(plus, plus->_Type, err, bytes);
         } while (SafeSystem::Time::GetMilliSecond() - tick < 2);
     }
 
@@ -70,10 +70,10 @@ namespace XEngine {
     }
 
     void Net::LaterUpdate(Api::iEngine* const engine) {
-        for (auto i = _tcp_need_send.begin(); i != _tcp_need_send.end(); i++) {
+        for (auto i = _TcpNeedSendPool.begin(); i != _TcpNeedSendPool.end(); i++) {
             (*i)->AsyncSend();
         }
-        _tcp_need_send.clear();
+        _TcpNeedSendPool.clear();
     }
 
     bool Net::LaunchTcpSession(Api::iTcpSession* session, const char* host, const int port, int max_ss, int max_rs) {
@@ -83,14 +83,14 @@ namespace XEngine {
         LINGER linger = { 1,0 };
 
         bool initiative = true;
-        SafeMemory::Memcpy((void*)&session->_initiative, sizeof(bool), &initiative, sizeof(initiative));
+        SafeMemory::Memcpy((void*)&session->_Initiative, sizeof(bool), &initiative, sizeof(initiative));
 
-        if (!GetIpByHost(host, (std::string&)session->_ip)) {
+        if (!GetIpByHost(host, (std::string&)session->_Ip)) {
             session->OnConnectFailed();
             return false;
         }
 
-        ((int)session->_port) = port;
+        ((int)session->_Port) = port;
 
         int socket = INVALID_SOCKET;
         sockaddr_in addr;
@@ -103,13 +103,13 @@ namespace XEngine {
                 (char*)&linger, sizeof(linger))
             || SOCKET_ERROR == ioctlsocket(socket, FIONBIO, &ul)
             || (SOCKET_ERROR == ::bind(socket, (struct sockaddr*)&addr, sizeof(struct sockaddr_in)))
-            || CreateIoCompletionPort((HANDLE)socket, (HANDLE)g_complete_port, (u_long)socket, 0) != g_complete_port) {
+            || CreateIoCompletionPort((HANDLE)socket, (HANDLE)g_CompletePort, (u_long)socket, 0) != g_CompletePort) {
             SAFE_CLOSE_SOCKET(socket);
             session->OnConnectFailed();
             return false;
         }
 
-        Tcper* pipe = Tcper::Create(session, session->_ip, session->_port, max_ss, max_rs, socket, true);
+        Tcper* pipe = Tcper::Create(session, session->_Ip, session->_Port, max_ss, max_rs, socket, true);
         if (nullptr == pipe) {
             SAFE_CLOSE_SOCKET(socket);
             session->OnConnectFailed();
@@ -117,7 +117,7 @@ namespace XEngine {
         }
 
         Api::iTcpPipe* ipipe = pipe;
-        SafeMemory::Memcpy((void*)&session->_pipe, sizeof(session->_pipe), &ipipe, sizeof(ipipe));
+        SafeMemory::Memcpy((void*)&session->_Pipe, sizeof(session->_Pipe), &ipipe, sizeof(ipipe));
         return true;
     }
 

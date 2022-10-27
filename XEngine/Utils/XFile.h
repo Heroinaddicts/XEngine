@@ -8,15 +8,15 @@ namespace XEngine {
     class XFile {
     public:
         virtual ~XFile() {
-            if (_file) {
+            if (_File) {
                 Close();
             }
         }
-        XFile() : _file(nullptr) {}
+        XFile() : _File(nullptr) {}
 
         __forceinline bool Open(const std::string& path, const std::string& model = "a+") {
-            _file = fopen(path.c_str(), model.c_str());
-            if (nullptr == _file) {
+            _File = fopen(path.c_str(), model.c_str());
+            if (nullptr == _File) {
                 XASSERT(false, "XFILE open %s", path.c_str());
                 return false;
             }
@@ -25,29 +25,29 @@ namespace XEngine {
         }
 
         __forceinline bool GetLine(char* buff, const int len) {
-            return fgets(buff, len, _file) != nullptr;
+            return fgets(buff, len, _File) != nullptr;
         }
 
         XFile& operator << (const std::string& content) {
-            fwrite(content.c_str(), content.size(), 1, _file);
+            fwrite(content.c_str(), content.size(), 1, _File);
             return *this;
         }
 
         __forceinline void Save() {
-            if (_file) {
-                fflush(_file);
+            if (_File) {
+                fflush(_File);
             }
         }
 
         __forceinline void Close() {
-            if (_file) {
-                fclose(_file);
-                _file = nullptr;
+            if (_File) {
+                fclose(_File);
+                _File = nullptr;
             }
         }
 
     private:
-        FILE* _file;
+        FILE* _File;
     };
 }
 

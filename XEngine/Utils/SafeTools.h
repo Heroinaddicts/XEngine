@@ -20,9 +20,9 @@ namespace XEngine {
             }
         };
 
-        static unsigned_int64 static_seed = 0;
+        static unsigned_int64 s_Seed = 0;
         inline void SetSeed(const unsigned_int64 seed) {
-            static_seed = seed;
+            s_Seed = seed;
         }
 
         inline void SetSeed() {
@@ -33,12 +33,12 @@ namespace XEngine {
             if (0 == range) {
                 return 0;
             }
-            if (static_seed == 0) {
-                static_seed = SafeSystem::Time::GetMilliSecond();
+            if (s_Seed == 0) {
+                s_Seed = SafeSystem::Time::GetMilliSecond();
             }
 
-            static_seed = (((static_seed = static_seed * 214013L + 2531011L) >> 16) & 0x7fff);
-            return static_seed % range;
+            s_Seed = (((s_Seed = s_Seed * 214013L + 2531011L) >> 16) & 0x7fff);
+            return s_Seed % range;
         }
     }
 }

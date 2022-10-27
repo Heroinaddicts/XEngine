@@ -307,5 +307,5 @@ namespace XEngine {
         }
     };
 
-    extern Api::iEngine* g_engine;
+    extern Api::iEngine* g_Engine;
 }

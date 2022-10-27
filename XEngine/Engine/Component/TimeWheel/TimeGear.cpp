@@ -4,44 +4,44 @@
 
 namespace XEngine {
     TimeGear::TimeGear(int maxMoveDst, TimeGear* nextGear)
-        : _timer_vec(nullptr),
-        _next(nextGear),
-        _cur_move_dst(0),
-        _max_move_dst(maxMoveDst) {
+        : _TimeVec(nullptr),
+        _Next(nextGear),
+        _CurrentMoveDst(0),
+        _MaxMoveDst(maxMoveDst) {
 
-        _timer_vec = xnew TimeBaseList[_max_move_dst];
+        _TimeVec = xnew TimeBaseList[_MaxMoveDst];
     }
 
     TimeGear::~TimeGear() {
-        if (_timer_vec) {
-            xdel[] _timer_vec;
-            _timer_vec = nullptr;
+        if (_TimeVec) {
+            xdel[] _TimeVec;
+            _TimeVec = nullptr;
         }
     }
 
     TimeBaseList* TimeGear::GetTimerList(int index) {
-        XASSERT(index < _max_move_dst, "index out of range");
-        return _timer_vec + index;
+        XASSERT(index < _MaxMoveDst, "index out of range");
+        return _TimeVec + index;
     }
 
     void TimeGear::CheckHighGear() {
-        if (_cur_move_dst >= _max_move_dst)
-            _cur_move_dst = 0;
+        if (_CurrentMoveDst >= _MaxMoveDst)
+            _CurrentMoveDst = 0;
 
-        if (_cur_move_dst == 0) {
-            if (_next) {
-                _next->UpdateToLowGear();
+        if (_CurrentMoveDst == 0) {
+            if (_Next) {
+                _Next->UpdateToLowGear();
             }
         }
     }
 
     void TimeGear::Update() {
-        if (_cur_move_dst >= _max_move_dst)
-            _cur_move_dst = 0;
+        if (_CurrentMoveDst >= _MaxMoveDst)
+            _CurrentMoveDst = 0;
 
-        TimeBaseList* currentList = &_timer_vec[_cur_move_dst];
+        TimeBaseList* currentList = &_TimeVec[_CurrentMoveDst];
         if (!currentList) {
-            _cur_move_dst++;
+            _CurrentMoveDst++;
             return;
         }
 
@@ -53,23 +53,23 @@ namespace XEngine {
             dynamic_cast<TimeWheel*>(TimeWheel::GetInstance())->MoveToRunning(base);
         }
 
-        ++_cur_move_dst;
-        if (_cur_move_dst == _max_move_dst)
-            _cur_move_dst = 0;
+        ++_CurrentMoveDst;
+        if (_CurrentMoveDst == _MaxMoveDst)
+            _CurrentMoveDst = 0;
     }
 
     void TimeGear::UpdateToLowGear() {
-        if (_cur_move_dst >= _max_move_dst)
-            _cur_move_dst = 0;
+        if (_CurrentMoveDst >= _MaxMoveDst)
+            _CurrentMoveDst = 0;
 
-        if (_cur_move_dst == 0) {
-            if (_next)
-                _next->UpdateToLowGear();
+        if (_CurrentMoveDst == 0) {
+            if (_Next)
+                _Next->UpdateToLowGear();
         }
 
-        TimeBaseList* currentList = &_timer_vec[_cur_move_dst];
+        TimeBaseList* currentList = &_TimeVec[_CurrentMoveDst];
         if (!currentList) {
-            ++_cur_move_dst;
+            ++_CurrentMoveDst;
             return;
         }
 
@@ -81,6 +81,6 @@ namespace XEngine {
             dynamic_cast<TimeWheel*>(TimeWheel::GetInstance())->Schedule(base);
         }
 
-        ++_cur_move_dst;
+        ++_CurrentMoveDst;
     }
 }

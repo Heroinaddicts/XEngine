@@ -133,19 +133,19 @@ namespace XEngine {
 
     void PhysxBase::SetPosition(const Vector3& position) {
         PxTransform tf = _Shape->getLocalPose();
-        tf.p.x = position.x;
-        tf.p.y = position.y;
-        tf.p.z = position.z;
+        tf.p.x = position._X;
+        tf.p.y = position._Y;
+        tf.p.z = position._Z;
         _Shape->setLocalPose(tf);
     }
 
     void PhysxBase::SetRotation(const Vector3& rotation) {
         PxTransform tf = _Shape->getLocalPose();
         Quaternion q = Quaternion::Euler(rotation);
-        tf.q.x = q.x;
-        tf.q.y = q.y;
-        tf.q.z = q.z;
-        tf.q.w = q.w;
+        tf.q.x = q._X;
+        tf.q.y = q._Y;
+        tf.q.z = q._Z;
+        tf.q.w = q._W;
         _Shape->setLocalPose(tf);
     }
 

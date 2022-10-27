@@ -30,7 +30,6 @@ include_directories(
 )
 
 set(Api
-    "${PROJECT_SOURCE_DIR}/Api/iGameObject.h"
     "${PROJECT_SOURCE_DIR}/Api/iComponent.h"
     "${PROJECT_SOURCE_DIR}/Api/iNetApi.h"
     "${PROJECT_SOURCE_DIR}/Api/iTimerApi.h"

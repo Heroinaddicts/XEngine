@@ -16,24 +16,24 @@ namespace XEngine {
         virtual void Release();
         bool AsyncAccept();
 
-        Api::iTcpServer* const _server;
-        const int _ssize;
-        const int _rsize;
+        Api::iTcpServer* const _Server;
+        const int _SendSize;
+        const int _RecvSize;
 
-        const std::string _listen_ip;
-        const int _listen_port;
+        const std::string _ListenIP;
+        const int _ListenPort;
 
     private:
         friend XPool<Accepter>;
         Accepter(Api::iTcpServer* server, const std::string& ip, const int port, const int s_size, const int r_size);
 
     private:
-        char _temp[accept_temp_size];
+        char _Temp[accept_temp_size];
 
     private:
-        int _socket;
-        sockaddr_in _addr;
-        OVERLAPPEDEX _ex;
+        int _Socket;
+        sockaddr_in _Addr;
+        OVERLAPPEDEX _Ex;
     };
 }
 

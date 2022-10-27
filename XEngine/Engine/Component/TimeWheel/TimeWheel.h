@@ -35,10 +35,10 @@ namespace XEngine {
 
         void Schedule(TimeBase* base);
         void MoveToRunning(TimeBase* base);
-        inline unsigned_int64 Jiff() const { return _jiff; }
+        inline unsigned_int64 Jiff() const { return _Jiff; }
     private:
-        TimeWheel() : _jiff(0) {
-            SafeMemory::Memset(_time_gears, sizeof(_time_gears), 0, sizeof(_time_gears));
+        TimeWheel() : _Jiff(0) {
+            SafeMemory::Memset(_TimeGears, sizeof(_TimeGears), 0, sizeof(_TimeGears));
         }
         ~TimeWheel() {}
 
@@ -47,10 +47,10 @@ namespace XEngine {
         void Remove(TimeBase* base);
 
     private:
-        unsigned_int64 _jiff;
-        TimeGear* _time_gears[5];
-        TimeBaseList* _running;
-        TimeBaseList* _suspended;
+        unsigned_int64 _Jiff;
+        TimeGear* _TimeGears[5];
+        TimeBaseList* _Running;
+        TimeBaseList* _Suspended;
     };
 }
 

@@ -16,10 +16,10 @@ namespace XEngine {
         void UpdateToLowGear();
 
     private:
-        TimeBaseList* _timer_vec;//
-        TimeGear* _next;//
-        int _cur_move_dst;//
-        int _max_move_dst;//
+        TimeBaseList* _TimeVec;//
+        TimeGear* _Next;//
+        int _CurrentMoveDst;//
+        int _MaxMoveDst;//
     };
 }
 

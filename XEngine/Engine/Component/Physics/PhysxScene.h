@@ -56,11 +56,11 @@ namespace XEngine {
         virtual void Run(void* constext);
 
     public:
-        PxScene* const _scene;
-        PxMaterial* const _material;
+        PxScene* const _Scene;
+        PxMaterial* const _Material;
 
     private:
-        std::set<PhysicsLayerRelation> _physics_layer_relations;
+        std::set<PhysicsLayerRelation> _PhysicsLayerRelations;
         std::set<PhysxBase*> _ReleasePool;
     };
 }

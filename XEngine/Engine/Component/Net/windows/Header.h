@@ -16,78 +16,78 @@
 #define PACK_MAX_SIZE 512
 
 namespace XEngine {
-	enum eCompletion {
-		accepted,
-		connected,
-		sended,
-		recved
-	};
+    enum class eCompletion {
+        Accepted,
+        Connected,
+        Sended,
+        Recved
+    };
 
-	class iCompleted;
-	struct OVERLAPPEDEX {
-		OVERLAPPED _ol;
-		WSABUF _wbuf;
-		int _socket;
-		sockaddr_in _remote;
+    class iCompleted;
+    struct OVERLAPPEDEX {
+        OVERLAPPED _Ol;
+        WSABUF _Wbuff;
+        int _Socket;
+        sockaddr_in _Remote;
 
-		const eCompletion _type;
-		iCompleted* const _completer;
+        const eCompletion _Type;
+        iCompleted* const _Completer;
 
-		OVERLAPPEDEX(const eCompletion type, iCompleted* const completer) : _type(type), _completer(completer) {
-			SafeMemory::Memset(&_ol, sizeof(_ol), 0, sizeof(_ol));
-		}
-	};
+        OVERLAPPEDEX(const eCompletion type, iCompleted* const completer) : _Type(type), _Completer(completer) {
+            SafeMemory::Memset(&_Ol, sizeof(_Ol), 0, sizeof(_Ol));
+        }
+    };
 
-	class iCompleted {
-	public:
-		virtual ~iCompleted() {}
+    class iCompleted {
+    public:
+        virtual ~iCompleted() {}
 
-		virtual void OnCompleted(OVERLAPPEDEX* const ex, const eCompletion type, const int code, const int size) = 0;
-	};
+        virtual void OnCompleted(OVERLAPPEDEX* const ex, const eCompletion type, const int code, const int size) = 0;
+    };
 
-	static LPFN_ACCEPTEX GetAcceptExFun() {
-		static LPFN_ACCEPTEX fun = nullptr;
-		if (nullptr == fun) {
-			GUID guid = WSAID_ACCEPTEX;
-			DWORD dwBytes = 0;
-			SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-			WSAIoctl(sock, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), &fun, sizeof(fun), &dwBytes, nullptr, nullptr);
+    static LPFN_ACCEPTEX GetAcceptExFun() {
+        static LPFN_ACCEPTEX fun = nullptr;
+        if (nullptr == fun) {
+            GUID guid = WSAID_ACCEPTEX;
+            DWORD dwBytes = 0;
+            SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+            WSAIoctl(sock, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), &fun, sizeof(fun), &dwBytes, nullptr, nullptr);
 
-			XASSERT(fun, "Get AcceptEx fun error, error code : %d", GetLastError());
-		}
+            XASSERT(fun, "Get AcceptEx fun error, error code : %d", GetLastError());
+        }
 
-		return fun;
-	}
+        return fun;
+    }
 
-	static LPFN_CONNECTEX GetConnectExFun() {
-		static LPFN_CONNECTEX fun = nullptr;
-		if (nullptr == fun) {
-			GUID guid = WSAID_CONNECTEX;
-			DWORD bytes = 0;
-			SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-			WSAIoctl(sock, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), &fun, sizeof(fun), &bytes, nullptr, nullptr);
-			XASSERT(fun, "get connectex fun error %d", GetLastError());
-		}
+    static LPFN_CONNECTEX GetConnectExFun() {
+        static LPFN_CONNECTEX fun = nullptr;
+        if (nullptr == fun) {
+            GUID guid = WSAID_CONNECTEX;
+            DWORD bytes = 0;
+            SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+            WSAIoctl(sock, SIO_GET_EXTENSION_FUNCTION_POINTER, &guid, sizeof(guid), &fun, sizeof(fun), &bytes, nullptr, nullptr);
+            XASSERT(fun, "get connectex fun error %d", GetLastError());
+        }
 
-		return fun;
-	}
+        return fun;
+    }
 
-	static bool GetIpByHost(const char* host, OUT std::string& ip) {
-		struct hostent* hp;
-		if ((hp = gethostbyname(host)) == nullptr) {
-			return false;
-		}
+    static bool GetIpByHost(const char* host, OUT std::string& ip) {
+        struct hostent* hp;
+        if ((hp = gethostbyname(host)) == nullptr) {
+            return false;
+        }
 
-		ip = inet_ntoa(*(struct in_addr*)hp->h_addr);
-		return true;
-	}
+        ip = inet_ntoa(*(struct in_addr*)hp->h_addr);
+        return true;
+    }
 
 #   define SAFE_CLOSE_SOCKET(sock) {\
         closesocket(sock); \
         sock = INVALID_SOCKET; \
     }
 
-	extern XPool<OVERLAPPEDEX> g_overlappedex_pool;
+    extern XPool<OVERLAPPEDEX> g_OverlappedexPool;
 
-	extern HANDLE g_complete_port;
+    extern HANDLE g_CompletePort;
 }
