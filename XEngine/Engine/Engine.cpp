@@ -4,6 +4,7 @@
 #include "TimeWheel/TimeWheel.h"
 #include "Navigation/Navigation.h"
 #include "Physics/Physics.h"
+#include "GameObjectManager/GameObjectManager.h"
 
 #include "SafeString.h"
 #include "SafeSystem.h"
@@ -24,6 +25,7 @@ XEngine::iNet* g_Net = nullptr;
 XEngine::iTimeWheel* g_Timewheel = nullptr;
 XEngine::iNavigation* g_Navigation = nullptr;
 XEngine::iPhysics* g_Physics = nullptr;
+XEngine::iGameObjectManager* g_GameObjectManager = nullptr;
 
 static int s_FixedTimeStep = 33333;
 
@@ -41,20 +43,24 @@ namespace XEngine {
         return nullptr;
     }
 
-    Api::iNetApi* Engine::GetNetApi() {
+    Api::iNetApi* Engine::GetNetApi() const {
         return g_Net;
     }
 
-    Api::iTimerApi* Engine::GetTimerApi() {
+    Api::iTimerApi* Engine::GetTimerApi() const {
         return g_Timewheel;
     }
 
-    Api::iNavigationApi* Engine::GetNavigationApi() {
+    Api::iNavigationApi* Engine::GetNavigationApi() const {
         return g_Navigation;
     }
 
-    Api::iPhysicsApi* Engine::GetPhysicsApi() {
+    Api::iPhysicsApi* Engine::GetPhysicsApi() const {
         return g_Physics;
+    }
+
+    Api::iGameObjectApi* Engine::GetGameObjectApi() const {
+        return nullptr;
     }
 
     float Engine::GetFixedTimeStep() {

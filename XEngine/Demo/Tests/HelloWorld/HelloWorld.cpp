@@ -1,6 +1,6 @@
 #include "HelloWorld.h"
 
-iEngine * g_engine = nullptr;
+iEngine* g_engine = nullptr;
 
 bool HelloWorld::Initialize(iEngine* const engine) {
     g_engine = engine;

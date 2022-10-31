@@ -87,7 +87,7 @@ namespace XEngine {
     void Logic::Release(Api::iEngine* const engine) {
         for (auto itor = _ModuleMap.begin(); itor != _ModuleMap.end(); itor++) {
             if (false == itor->second->Destroy(engine)) {
-                XERROR(engine, "module %s Destroy failed", itor->second->_Name);
+                XERROR(engine, "Module %s Destroy failed", itor->second->_Name);
             }
         }
     }

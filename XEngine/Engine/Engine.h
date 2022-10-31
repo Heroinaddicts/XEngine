@@ -13,10 +13,11 @@ namespace XEngine {
         virtual ~Engine() {}
         virtual const char* GetLaunchParameter(const std::string& name);
 
-        virtual Api::iNetApi* GetNetApi();
-        virtual Api::iTimerApi* GetTimerApi();
-        virtual Api::iNavigationApi* GetNavigationApi();
-        virtual Api::iPhysicsApi* GetPhysicsApi();
+        virtual Api::iNetApi* GetNetApi() const;
+        virtual Api::iTimerApi* GetTimerApi() const;
+        virtual Api::iNavigationApi* GetNavigationApi() const;
+        virtual Api::iPhysicsApi* GetPhysicsApi() const;
+        virtual Api::iGameObjectApi* GetGameObjectApi() const;
 
         virtual float GetFixedTimeStep();
 

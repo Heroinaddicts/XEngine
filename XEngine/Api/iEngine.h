@@ -5,11 +5,13 @@
 
 namespace XEngine {
     namespace Api {
+        class iModule;
+
         class iNetApi;
         class iTimerApi;
         class iNavigationApi;
         class iPhysicsApi;
-        class iModule;
+        class iGameObjectApi;
 
         class iEngine {
         public:
@@ -17,10 +19,11 @@ namespace XEngine {
 
             virtual const char* GetLaunchParameter(const std::string& name) = 0;
 
-            virtual iNetApi* GetNetApi() = 0;
-            virtual iTimerApi* GetTimerApi() = 0;
-            virtual iNavigationApi* GetNavigationApi() = 0;
-            virtual iPhysicsApi* GetPhysicsApi() = 0;
+            virtual iNetApi* GetNetApi() const = 0;
+            virtual iTimerApi* GetTimerApi() const = 0;
+            virtual iNavigationApi* GetNavigationApi() const = 0;
+            virtual iPhysicsApi* GetPhysicsApi() const = 0;
+            virtual iGameObjectApi* GetGameObjectApi() const = 0;
 
             virtual float GetFixedTimeStep() = 0;
 

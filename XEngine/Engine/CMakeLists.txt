@@ -42,6 +42,7 @@ file(GLOB TimeWheel "Component/TimeWheel/*.*")
 file(GLOB_RECURSE Recast "Component/Navigation/Racast/*.*")
 file(GLOB Navigation "Component/Navigation/*.*")
 file(GLOB Physics "Component/Physics/*.*")
+file(GLOB GameObjectManager "Component/GameObjectManager/*.*")
 file(GLOB Engine "*.*")
 
 source_group(Api FILES ${Api})
@@ -55,6 +56,7 @@ source_group(Component\\TimeWheel FILES ${TimeWheel})
 source_group(Component\\Navigation\\Recast FILES ${Recast})
 source_group(Component\\Navigation FILES ${Navigation})
 source_group(Component\\Physics FILES ${Physics})
+source_group(Component\\GameObjectManager FILES ${GameObjectManager})
 source_group(\\ FILES ${Engine})
 
 if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
@@ -127,6 +129,7 @@ add_executable(XEngine
     ${Recast}
     ${Navigation}
     ${Physics}
+    ${GameObjectManager}
     ${Geometry}
     ${Utils}
     ${Engine}

@@ -11,4 +11,6 @@ using namespace XEngine::Api;
 extern iEngine* g_engine;
 extern iHelloWorld* g_HelloWorld;
 
+#include <map>
+
 #endif //__Header_h__

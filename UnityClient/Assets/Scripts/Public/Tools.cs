@@ -105,8 +105,8 @@ namespace Tools
             public static Vector2 CalcVector2ByAngleAndDistance(float angle, float distance)
             {
                 return new Vector2(
-//                     TrigonometricCache.GetInstance().CalcCos(angle) * distance,
-//                     TrigonometricCache.GetInstance().CalcSin(angle) * distance
+                //                     TrigonometricCache.GetInstance().CalcCos(angle) * distance,
+                //                     TrigonometricCache.GetInstance().CalcSin(angle) * distance
                 );
             }
 
