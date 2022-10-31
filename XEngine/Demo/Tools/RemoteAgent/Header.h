@@ -1,7 +1,7 @@
 #ifndef __Header_h__
 #define __Header_h__
 
-#include "iComponent.h"
+#include "iModule.h"
 #include "iNetApi.h"
 #include "iTimerApi.h"
 #include "SafeString.h"

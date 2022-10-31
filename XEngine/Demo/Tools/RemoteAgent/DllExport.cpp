@@ -1,4 +1,4 @@
 #include "RemoteAgent.h"
 
 DLL_INSTANCE;
-CREATE_COMPONENT(RemoteAgent);
+CREATE_MODULE(RemoteAgent);

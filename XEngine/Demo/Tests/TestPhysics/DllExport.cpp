@@ -1,4 +1,4 @@
 #include "TestPhysics.h"
 
 DLL_INSTANCE;
-CREATE_COMPONENT(TestPhysics);
+CREATE_MODULE(TestPhysics);

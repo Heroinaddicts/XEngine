@@ -1,7 +1,7 @@
 #ifndef __iObjLoader_h__
 #define __iObjLoader_h__
 
-#include "iComponent.h"
+#include "iModule.h"
 
 namespace XEngine {
     class X3DObj;

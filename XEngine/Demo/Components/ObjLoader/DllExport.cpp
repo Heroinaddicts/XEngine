@@ -1,4 +1,4 @@
 #include "ObjLoader.h"
 
 DLL_INSTANCE;
-CREATE_COMPONENT(ObjLoader);
+CREATE_MODULE(ObjLoader);

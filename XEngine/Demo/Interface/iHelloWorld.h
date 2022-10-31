@@ -1,7 +1,7 @@
 #ifndef __iHelloWorld_h__
 #define __iHelloWorld_h__
 
-#include "iComponent.h"
+#include "iModule.h"
 
 namespace XEngine {
     class iHelloWorld : public Api::iModule {

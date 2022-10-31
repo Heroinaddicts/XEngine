@@ -2,7 +2,7 @@
 #define __Engine_h__
 
 #include "iEngine.h"
-#include "iComponent.h"
+#include "iModule.h"
 #include <string>
 
 namespace XEngine {

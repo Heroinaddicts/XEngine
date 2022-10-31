@@ -1,4 +1,4 @@
 #include "RemoteServer.h"
 
 DLL_INSTANCE;
-CREATE_COMPONENT(RemoteServer);
+CREATE_MODULE(RemoteServer);

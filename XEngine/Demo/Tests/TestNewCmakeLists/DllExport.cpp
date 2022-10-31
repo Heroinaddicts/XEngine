@@ -1,4 +1,4 @@
 #include "TestNewCmakeLists.h"
 
 DLL_INSTANCE;
-CREATE_COMPONENT(TestNewCmakeLists);
+CREATE_MODULE(TestNewCmakeLists);

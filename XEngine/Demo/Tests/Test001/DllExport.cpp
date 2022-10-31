@@ -1,4 +1,4 @@
 #include "Test001.h"
 
 DLL_INSTANCE;
-CREATE_COMPONENT(Test001);
+CREATE_MODULE(Test001);

@@ -1,7 +1,7 @@
 #ifndef __iGameObjectManager_h__
 #define __iGameObjectManager_h__
 
-#include "iComponent.h"
+#include "iModule.h"
 #include "GameObjectTemplate.h"
 
 namespace XEngine {

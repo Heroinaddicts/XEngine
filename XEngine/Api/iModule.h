@@ -1,5 +1,5 @@
-#ifndef __iComponent_h__
-#define __iComponent_h__
+#ifndef __iModule_h__
+#define __iModule_h__
 
 #include "MultiSys.h"
 #include "iEngine.h"
@@ -38,7 +38,7 @@ namespace XEngine {
     }
 #endif //WIN32
 
-#define CREATE_COMPONENT(Module) \
+#define CREATE_MODULE(Module) \
 class Factory##Module {\
 public:\
     Factory##Module(XEngine::Api::iModule * & pModule) {\
@@ -51,4 +51,4 @@ public:\
 };\
 Factory##Module factroy##Module(static_modules);
 
-#endif //__iComponent_h__
+#endif //__iModule_h__
