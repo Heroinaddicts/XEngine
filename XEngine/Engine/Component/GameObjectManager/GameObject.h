@@ -10,13 +10,13 @@ namespace XEngine {
         GameObject() : _IsInited(false), _IsReleased(false) {}
 
         // 通过 iGameObject 继承
-        virtual void Destroy(bool immediate) override;
-        // 通过 iGameObject 继承
         virtual void OnCreate() override;
         virtual void OnStart() override;
         virtual void OnUpdate() override;
         virtual void OnFixedUpdate() override;
         virtual void OnDestroy() override;
+
+        __forceinline const std::map<std::string, Api::iComponent*>& GetComponents() const { return _ComponentMap; }
 
     protected:
         virtual bool AddComponent(const std::string& type_name, Api::iComponent* component, const char* file, const int line) override;

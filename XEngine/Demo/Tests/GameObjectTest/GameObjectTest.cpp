@@ -8,10 +8,6 @@ public:
     virtual ~ComponentTest() {}
 
     // 通过 iComponent 继承
-    virtual void Destroy(bool immediate) override {
-    }
-
-    // 通过 iComponent 继承
     virtual void OnCreate() override {
 
     }

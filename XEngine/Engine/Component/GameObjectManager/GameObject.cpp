@@ -1,14 +1,6 @@
 #include "GameObject.h"
 
 namespace XEngine {
-    void GameObject::Destroy(bool immediate) {
-        for (auto i = _ComponentMap.begin(); i != _ComponentMap.end(); i++) {
-            i->second->Destroy(immediate);
-        }
-
-        xdel this;
-    }
-
     bool GameObject::AddComponent(const std::string& type_name, Api::iComponent* component, const char* file, const int line) {
         if (_ComponentMap.find(type_name) != _ComponentMap.end()) {
             return false;
@@ -69,7 +61,6 @@ namespace XEngine {
             for (auto i = _ComponentMap.begin(); i != _ComponentMap.end(); i++) {
                 i->second->OnDestroy();
             }
-            g_GameObjectReleased.push_back(this);
         }
     }
 }

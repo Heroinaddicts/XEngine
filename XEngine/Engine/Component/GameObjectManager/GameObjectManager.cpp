@@ -4,7 +4,7 @@
 namespace XEngine {
     std::set<GameObject*> g_GameObjectSet;
     std::list<GameObject*> g_GameObjectCreated;
-    std::list<GameObject*> g_GameObjectReleased;
+    std::set<GameObject*> g_GameObjectReleased;
 
     bool GameObjectManager::Initialize(Api::iEngine* const engine) {
         return true;
@@ -33,6 +33,7 @@ namespace XEngine {
         g_GameObjectCreated.clear();
 
         for (auto i = g_GameObjectReleased.begin(); i != g_GameObjectReleased.end(); i++) {
+            (*i)->OnDestroy();
             g_GameObjectSet.erase(*i);
         }
         g_GameObjectReleased.clear();
@@ -57,7 +58,6 @@ namespace XEngine {
     }
 
     void GameObjectManager::DestroyGameObject(Api::iGameObject* gameObject) {
-
+        g_GameObjectReleased.insert(dynamic_cast<GameObject*>(gameObject));
     }
-
 }
