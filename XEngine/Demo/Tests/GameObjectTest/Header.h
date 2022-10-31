@@ -8,6 +8,7 @@ using namespace XEngine;
 using namespace XEngine::Api;
 
 extern iEngine* g_engine;
+extern iGameObjectApi* g_GameObjectApi;
 class GameObjectTest;
 extern GameObjectTest* g_GameObjectTest;
 

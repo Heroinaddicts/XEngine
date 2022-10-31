@@ -60,7 +60,7 @@ namespace XEngine {
     }
 
     Api::iGameObjectApi* Engine::GetGameObjectApi() const {
-        return nullptr;
+        return g_GameObjectManager;
     }
 
     float Engine::GetFixedTimeStep() {
@@ -130,6 +130,7 @@ int main(int argc, const char** args, const char** env) {
         g_Timewheel = XEngine::TimeWheel::GetInstance();
         g_Navigation = XEngine::Navigation::GetInstance();
         g_Physics = XEngine::Physics::GetInstance();
+        g_GameObjectManager = XEngine::GameObjectManager::GetInstance();
     }
 
 
@@ -139,6 +140,7 @@ int main(int argc, const char** args, const char** env) {
         g_Timewheel->Initialize(engine);
         g_Net->Initialize(engine);
         g_Logic->Initialize(engine);
+        g_GameObjectManager->Initialize(engine);
     }
 
     { // Launche
@@ -146,7 +148,8 @@ int main(int argc, const char** args, const char** env) {
         g_Navigation->Launch(engine);
         g_Timewheel->Launch(engine);
         g_Net->Launch(engine);
-        g_Logic->Launch(engine);
+		g_Logic->Launch(engine);
+		g_GameObjectManager->Launch(engine);
     }
 
     unsigned_int64 tick = XEngine::SafeSystem::Time::GetMicroSecond();
@@ -155,19 +158,22 @@ int main(int argc, const char** args, const char** env) {
         g_Timewheel->EarlyUpdate(engine);
         g_Net->EarlyUpdate(engine);
         g_Logic->EarlyUpdate(engine);
-        g_Physics->EarlyUpdate(engine);
+		g_Physics->EarlyUpdate(engine);
+		g_GameObjectManager->EarlyUpdate(engine);
 
         g_Navigation->Update(engine);
         g_Timewheel->Update(engine);
         g_Net->Update(engine);
         g_Logic->Update(engine);
-        g_Physics->Update(engine);
+		g_Physics->Update(engine);
+		g_GameObjectManager->Update(engine);
 
         g_Navigation->LaterUpdate(engine);
         g_Timewheel->LaterUpdate(engine);
         g_Logic->LaterUpdate(engine);
         g_Physics->LaterUpdate(engine);
-        g_Net->LaterUpdate(engine);
+		g_Net->LaterUpdate(engine);
+		g_GameObjectManager->LaterUpdate(engine);
 
         unsigned_int64 tick2 = XEngine::SafeSystem::Time::GetMicroSecond();
         if (tick2 - tick >= s_FixedTimeStep) {
@@ -175,7 +181,8 @@ int main(int argc, const char** args, const char** env) {
             g_Timewheel->FixedUpdate(engine);
             g_Net->FixedUpdate(engine);
             g_Logic->FixedUpdate(engine);
-            g_Physics->FixedUpdate(engine);
+			g_Physics->FixedUpdate(engine);
+			g_GameObjectManager->FixedUpdate(engine);
             tick += s_FixedTimeStep;
         }
         else {

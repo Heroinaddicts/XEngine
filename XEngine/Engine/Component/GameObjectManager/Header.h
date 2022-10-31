@@ -6,6 +6,7 @@
 #include <map>
 #include "SafeMemory.h"
 #include "SafeString.h"
+#include "SafeSystem.h"
 
 namespace XEngine {
     class GameObject;

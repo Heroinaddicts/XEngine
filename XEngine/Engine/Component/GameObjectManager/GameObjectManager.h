@@ -9,6 +9,8 @@ namespace XEngine {
     public:
         virtual ~GameObjectManager() {}
 
+        static GameObjectManager* GetInstance();
+
         // Í¨¹ý iGameObjectManager ¼Ì³Ð
         virtual bool Initialize(Api::iEngine* const engine) override;
         virtual bool Launch(Api::iEngine* const engine) override;

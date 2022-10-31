@@ -6,6 +6,11 @@ namespace XEngine {
     std::list<GameObject*> g_GameObjectCreated;
     std::set<GameObject*> g_GameObjectReleased;
 
+    GameObjectManager* GameObjectManager::GetInstance() {
+        static GameObjectManager s_Instance;
+        return &s_Instance;
+    }
+
     bool GameObjectManager::Initialize(Api::iEngine* const engine) {
         return true;
     }
@@ -23,6 +28,7 @@ namespace XEngine {
     }
 
     void GameObjectManager::Update(Api::iEngine* const engine) {
+        int64 tick = SafeSystem::Time::GetMilliSecond();
         for (auto i = g_GameObjectSet.begin(); i != g_GameObjectSet.end(); i++) {
             (*i)->OnUpdate();
         }
@@ -37,6 +43,7 @@ namespace XEngine {
             g_GameObjectSet.erase(*i);
         }
         g_GameObjectReleased.clear();
+        XLOG(engine, "GameObjectManager::Update use %lld ms", SafeSystem::Time::GetMilliSecond() - tick);
     }
 
     void GameObjectManager::FixedUpdate(Api::iEngine* const engine) {

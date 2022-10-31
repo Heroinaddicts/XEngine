@@ -9,6 +9,9 @@ namespace XEngine {
         SafeMemory::Memcpy((void*)&(component->_File), sizeof(component->_File), &file, sizeof(file));
         SafeMemory::Memcpy((void*)&(component->_Line), sizeof(component->_Line), &line, sizeof(line));
 
+        iGameObject* temp = this;
+        SafeMemory::Memcpy((void*)&(component->_GameObject), sizeof(component->_GameObject), &temp, sizeof(temp));
+
         _ComponentMap.insert(std::make_pair(type_name, component));
         return true;
     }

@@ -1,6 +1,7 @@
 #include "GameObjectTest.h"
 
 iEngine* g_engine = nullptr;
+iGameObjectApi* g_GameObjectApi = nullptr;
 GameObjectTest* g_GameObjectTest = nullptr;
 
 class ComponentTest : public Api::iComponent {
@@ -9,23 +10,24 @@ public:
 
     // Í¨¹ý iComponent ¼Ì³Ð
     virtual void OnCreate() override {
-
+        //TRACE(g_engine, "ComponentTest::OnCreate");
     }
 
-    virtual void OnStart() override {
-
+	virtual void OnStart() override {
+		//TRACE(g_engine, "ComponentTest::OnStart");
     }
 
-    virtual void OnUpdate() override {
-
+	virtual void OnUpdate() override {
+		//TRACE(g_engine, "ComponentTest::OnUpdate");
+		//g_GameObjectApi->DestroyGameObject(this->_GameObject);
     }
 
     virtual void OnFixedUpdate() override {
-
+		//TRACE(g_engine, "ComponentTest::OnFixedUpdate");
     }
 
     virtual void OnDestroy() override {
-
+		//TRACE(g_engine, "ComponentTest::OnDestroy");
     }
 };
 
@@ -33,10 +35,11 @@ bool GameObjectTest::Initialize(iEngine* const engine) {
     g_GameObjectTest = this;
     g_engine = engine;
 
-    iGameObjectApi* gameObjectApi = engine->GetGameObjectApi();
-
-    iGameObject* gameObject = CREATE_GAMEOBJECT(gameObjectApi);
-    ADD_COMPONENT(gameObject, ComponentTest);
+    g_GameObjectApi = engine->GetGameObjectApi();
+    for (int i = 0; i < 50000; i++) {
+		iGameObject* gameObject = CREATE_GAMEOBJECT(g_GameObjectApi);
+		ADD_COMPONENT(gameObject, ComponentTest);
+    }
     return true;
 }
 
