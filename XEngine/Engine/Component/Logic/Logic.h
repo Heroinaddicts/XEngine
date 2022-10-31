@@ -10,7 +10,7 @@ namespace XEngine {
 
         static iLogic* GetInstance();
 
-        virtual Api::iComponent* FindComponent(const std::string& name) override;
+        virtual Api::iModule* FindModule(const std::string& name) override;
         // 通过 iLogic 继承
         virtual bool Initialize(Api::iEngine* const engine) override;
         virtual bool Launch(Api::iEngine* const engine) override;
@@ -24,8 +24,8 @@ namespace XEngine {
         Logic() {}
 
     private:
-        std::string _ComponentPath;
-        std::map<std::string, Api::iComponent*> _ComponentMap;
+        std::string _ModulePath;
+        std::map<std::string, Api::iModule*> _ModuleMap;
     };
 }
 

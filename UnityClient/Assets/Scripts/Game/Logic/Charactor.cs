@@ -28,6 +28,9 @@ public abstract class Charactor : BaseObject
         charactorAttr = GetComponent<CharactorAttr>();
         moveParam = new PointMove(transform);
         moveParam.moveCallback = OnMove;
+
+        //GetComponent<Collider>().Raycast()
+        //Physics.Raycast()
     }
 
 

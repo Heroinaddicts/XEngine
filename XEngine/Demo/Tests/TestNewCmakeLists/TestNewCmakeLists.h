@@ -3,7 +3,7 @@
 
 #include "Header.h"
 
-class TestNewCmakeLists : public iComponent {
+class TestNewCmakeLists : public iModule {
 public:
     virtual ~TestNewCmakeLists() {}
     virtual bool Initialize(iEngine* const engine);

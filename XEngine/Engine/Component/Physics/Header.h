@@ -87,10 +87,10 @@ namespace XEngine {
     }
 
     struct PhysicsLayerRelation {
-        const int _LayerA;
-        const int _LayerB;
+        const eLayer _LayerA;
+        const eLayer _LayerB;
 
-        PhysicsLayerRelation(int a, int b) : _LayerA(a), _LayerB(b) {}
+        PhysicsLayerRelation(eLayer a, eLayer b) : _LayerA(a), _LayerB(b) {}
         PhysicsLayerRelation(const PhysicsLayerRelation& target) : _LayerA(target._LayerA), _LayerB(target._LayerB) {}
 
         bool operator==(const PhysicsLayerRelation& target) const {
@@ -98,7 +98,7 @@ namespace XEngine {
         }
 
         bool operator <(const PhysicsLayerRelation& target) const {
-            return (_LayerA + _LayerB) < (target._LayerA + target._LayerB);
+            return ((int)_LayerA + (int)_LayerB) < ((int)target._LayerA + (int)target._LayerB);
         }
     };
 }

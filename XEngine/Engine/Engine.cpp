@@ -79,8 +79,8 @@ namespace XEngine {
         return false;
     }
 
-    Api::iComponent* Engine::FindComponent(const std::string& name) {
-        return g_Logic->FindComponent(name);
+    Api::iModule* Engine::FindModule(const std::string& name) {
+        return g_Logic->FindModule(name);
     }
 }
 

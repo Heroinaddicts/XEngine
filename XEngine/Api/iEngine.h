@@ -9,7 +9,7 @@ namespace XEngine {
         class iTimerApi;
         class iNavigationApi;
         class iPhysicsApi;
-        class iComponent;
+        class iModule;
 
         class iEngine {
         public:
@@ -30,12 +30,12 @@ namespace XEngine {
             virtual void Shutdown() = 0;
 
             template<typename T>
-            T* GetComponent(const std::string& name) {
-                return dynamic_cast<T*>(FindComponent(name));
+            T* GetModule(const std::string& name) {
+                return dynamic_cast<T*>(FindModule(name));
             }
 
         protected:
-            virtual iComponent* FindComponent(const std::string& name) = 0;
+            virtual iModule* FindModule(const std::string& name) = 0;
         };
     }
 }

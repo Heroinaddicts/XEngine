@@ -3,7 +3,7 @@
 
 #include "Header.h"
 
-class GameObjectManager : public iComponent {
+class GameObjectManager : public iModule {
 public:
     virtual ~GameObjectManager() {}
     virtual bool Initialize(iEngine* const engine);

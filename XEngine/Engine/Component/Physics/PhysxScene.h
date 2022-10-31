@@ -11,7 +11,7 @@ namespace XEngine {
         virtual ~PhysxScene() {}
         PhysxScene(PxScene* scene, const float static_friction, const float dynamic_friction, const float restitution);
 
-        virtual void RelationPhysicsLayer(const int layerA, const int layerB);
+        virtual void RelationPhysicsLayer(const eLayer layerA, const eLayer layerB);
 
         virtual void CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context);
         virtual void CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context);

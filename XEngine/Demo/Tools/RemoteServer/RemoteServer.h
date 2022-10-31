@@ -3,7 +3,7 @@
 
 #include "Header.h"
 
-class RemoteServer : public iComponent{
+class RemoteServer : public iModule {
 public:
     virtual ~RemoteServer() {}
     virtual bool Initialize(iEngine* const engine);

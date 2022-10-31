@@ -2,7 +2,7 @@
 #include "SafeSystem.h"
 #include "PhysxBase.h"
 #include "Collider.hpp"
-#include "PhysxSceneFilterCallback.h"
+#include "PhysxSceneFilter.h"
 
 namespace XEngine {
     PhysxScene::PhysxScene(
@@ -24,7 +24,7 @@ namespace XEngine {
         _Scene->setSceneQueryUpdateMode(PxSceneQueryUpdateMode::eBUILD_ENABLED_COMMIT_ENABLED);
     }
 
-    void PhysxScene::RelationPhysicsLayer(const int layerA, const int layerB) {
+    void PhysxScene::RelationPhysicsLayer(const eLayer layerA, const eLayer layerB) {
         _PhysicsLayerRelations.insert(PhysicsLayerRelation(layerA, layerB));
     }
 
@@ -290,6 +290,7 @@ namespace XEngine {
     void PhysxScene::onCCDContactModify(PxContactModifyPair* const pairs, PxU32 count) {
         printf("PhysxScene::onCCDContactModify, %lld\n", SafeSystem::Process::GetCurrentThreadID());
     }
+
     void PhysxScene::onContactModify(PxContactModifyPair* const pairs, PxU32 count) {
         printf("PhysxScene::onContactModify, %lld\n", SafeSystem::Process::GetCurrentThreadID());
     }

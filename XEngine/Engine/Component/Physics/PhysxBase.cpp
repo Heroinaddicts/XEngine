@@ -7,7 +7,7 @@ namespace XEngine {
     }
 
     PhysxBase::PhysxBase(PhysxScene* scene, PxShape* shape, PxRigidActor* actor, Api::iPhysxContext* context, const char* file, const int line)
-        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _Layer(0), _File(file), _Line(line), _IsRelease(false), _UserResetPostionOrRotation(false) {
+        : iPhysxBase(context), _Scene(scene), _Shape(shape), _Actor(actor), _File(file), _Line(line), _IsRelease(false), _UserResetPostionOrRotation(false), _Layer(eLayer::Default) {
 
         _Actor->userData = context;
         {
@@ -82,26 +82,6 @@ namespace XEngine {
         }
     }
 
-    bool PhysxBase::IsTrigger() const {
-        return _Shape->getFlags().isSet(PxShapeFlag::eTRIGGER_SHAPE);
-    }
-
-    void PhysxBase::SetUseGravity(const bool b) {
-        _Actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, b);
-    }
-
-    bool PhysxBase::IsUseGravity() const {
-        return !_Actor->getActorFlags().isSet(PxActorFlag::eDISABLE_GRAVITY);
-    }
-
-    void PhysxBase::SetLayer(const int layer) {
-        _Layer = layer;
-    }
-
-    int PhysxBase::GetLayer() const {
-        return _Layer;
-    }
-
     void PhysxBase::SetMass(const float mass) {
 
     }
@@ -122,14 +102,6 @@ namespace XEngine {
 
     }
 
-    void PhysxBase::SetPosition(const Vector3& position) {
-        _UserResetPostionOrRotation = true;
-    }
-
-    void PhysxBase::SetRotation(const Vector3& rotation) {
-        _UserResetPostionOrRotation = true;
-    }
-
     void PhysxBase::UpdatePositionAndRotation() {
         if (_Actor && _Context) {
             if (_UserResetPostionOrRotation) {
@@ -146,6 +118,11 @@ namespace XEngine {
                 _Context->UpdatePositionAndRotation(pos, q.EulerAngles());
             }
         }
+    }
+
+    bool PhysxBase::Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit, int layer) {
+
+        return false;
     }
 
     void PhysxBase::Release() {

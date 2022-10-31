@@ -13,7 +13,7 @@ namespace XEngine {
 
     };
 
-    class iGameObjectManager : public Api::iComponent {
+    class iGameObjectManager : public Api::iModule {
     public:
         virtual ~iGameObjectManager() {}
     };

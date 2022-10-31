@@ -8,7 +8,7 @@ namespace XEngine {
     public:
         virtual ~iLogic() {}
 
-        virtual Api::iComponent* FindComponent(const std::string& name) = 0;
+        virtual Api::iModule* FindModule(const std::string& name) = 0;
     };
 }
 

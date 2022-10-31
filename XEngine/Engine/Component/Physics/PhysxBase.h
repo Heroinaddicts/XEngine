@@ -24,23 +24,26 @@ namespace XEngine {
         virtual bool IsCCD() const override;
 
         virtual void SetTrigger(const bool b) override;
-        virtual bool IsTrigger() const override;
+        __forceinline bool IsTrigger() const override { return _Shape->getFlags().isSet(PxShapeFlag::eTRIGGER_SHAPE); }
 
-        virtual void SetUseGravity(const bool b) override;
-        virtual bool IsUseGravity() const override;
+        __forceinline void SetUseGravity(const bool b) override { _Actor->setActorFlag(PxActorFlag::eDISABLE_GRAVITY, b); }
+        __forceinline bool IsUseGravity() const override { return !_Actor->getActorFlags().isSet(PxActorFlag::eDISABLE_GRAVITY); }
 
-        virtual void SetLayer(const int layer) override;
-        virtual int GetLayer() const override;
+        __forceinline void SetLayer(const eLayer layer) override { _Layer = layer; }
+        __forceinline eLayer GetLayer() const override { return _Layer; }
 
         virtual void SetMass(const float mass) override;
         virtual void SetDrag(const float drag) override;
         virtual void SetAngularDrag(const float angularDrag) override;
         virtual void SetInterpolate(const eInterpolate type) override;
         virtual void SetCollisionDetection(const eCollisionDetection type) override;
-        virtual void SetPosition(const Vector3& position) override;
-        virtual void SetRotation(const Vector3& rotation) override;
+
+        __forceinline void SetPosition(const Vector3& position) override { _UserResetPostionOrRotation = true; }
+        __forceinline void SetRotation(const Vector3& rotation) override { _UserResetPostionOrRotation = true; }
 
         virtual void UpdatePositionAndRotation();
+
+        virtual bool Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit, int layer);
 
         virtual void Release() override;
 
@@ -59,7 +62,7 @@ namespace XEngine {
         bool _IsRelease;
         bool _UserResetPostionOrRotation;
     private:
-        int _Layer;
+        eLayer _Layer;
     };
 }
 

@@ -3,7 +3,7 @@
 
 #include "Header.h"
 
-class RemoteAgent : public iComponent {
+class RemoteAgent : public iModule {
 public:
     virtual ~RemoteAgent() {}
     virtual bool Initialize(iEngine* const engine);

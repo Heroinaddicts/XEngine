@@ -5,7 +5,7 @@
 
 namespace XEngine {
     class X3DObj;
-    class iObjLoader : public Api::iComponent {
+    class iObjLoader : public Api::iModule {
     public:
         virtual ~iObjLoader() {}
 

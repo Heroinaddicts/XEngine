@@ -3,7 +3,7 @@
 
 #include "Header.h"
 
-class HelloWorld : public iComponent {
+class HelloWorld : public iModule {
 public:
     virtual ~HelloWorld() {}
     virtual bool Initialize(iEngine* const engine);

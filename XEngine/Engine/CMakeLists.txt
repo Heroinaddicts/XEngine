@@ -32,7 +32,6 @@ set(iEngineComponent
 file(GLOB Interface "Interface/*.*")
 file(GLOB Logic "Component/Logic/*.*")
 
-
 if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
 file(GLOB Net "Component/Net/Windows/*.*")
 elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
@@ -44,7 +43,6 @@ file(GLOB_RECURSE Recast "Component/Navigation/Racast/*.*")
 file(GLOB Navigation "Component/Navigation/*.*")
 file(GLOB Physics "Component/Physics/*.*")
 file(GLOB Engine "*.*")
-
 
 source_group(Api FILES ${Api})
 source_group(Interface FILES ${iEngineComponent})

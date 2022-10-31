@@ -11,7 +11,7 @@
 #endif //linux
 
 namespace XEngine {
-    typedef Api::iComponent* (*__GetComponents)(void);
+    typedef Api::iModule* (*__GetModules)(void);
 
 
     iLogic* Logic::GetInstance() {
@@ -19,9 +19,9 @@ namespace XEngine {
         return &s_Logic;
     }
 
-    Api::iComponent* Logic::FindComponent(const std::string& name) {
-        auto itor = _ComponentMap.find(name);
-        if (_ComponentMap.end() != itor) {
+    Api::iModule* Logic::FindModule(const std::string& name) {
+        auto itor = _ModuleMap.find(name);
+        if (_ModuleMap.end() != itor) {
             return itor->second;
         }
 
@@ -29,43 +29,43 @@ namespace XEngine {
     }
 
     bool Logic::Initialize(Api::iEngine* const engine) {
-        const char* component_path = engine->GetLaunchParameter("component_path");
-        component_path ? _ComponentPath = component_path : _ComponentPath = SafeSystem::File::GetApplicationPath();
+        const char* module_path = engine->GetLaunchParameter("module_path");
+        module_path ? _ModulePath = module_path : _ModulePath = SafeSystem::File::GetApplicationPath();
 
-        const char* components = engine->GetLaunchParameter("components");
-        if (components) {
+        const char* modules = engine->GetLaunchParameter("modules");
+        if (modules) {
             std::vector<std::string> names;
-            int count = SafeString::Split(components, ";", names);
+            int count = SafeString::Split(modules, ";", names);
 
             for (int i = 0; i < count; i++) {
 #ifdef WIN32
-                std::string path = _ComponentPath + "/" + names[i] + ".dll";
+                std::string path = _ModulePath + "/" + names[i] + ".dll";
                 HINSTANCE hinst = ::LoadLibrary(path.c_str());
                 if (!hinst) {
                     XERROR(engine, "load %s error %s\n", path.c_str(), strerror(::GetLastError()));
                     return false;
                 }
 
-                __GetComponents fun = (__GetComponents)::GetProcAddress(hinst, "GetComponents");
+                __GetModules fun = (__GetModules)::GetProcAddress(hinst, GET_MODULES_FUNC_NAME);
 #else
-                std::string path = _ComponentPath + "/" + names[i] + ".so";
+                std::string path = _ModulePath + "/" + names[i] + ".so";
                 void* handle = dlopen(path.c_str(), RTLD_LAZY);
                 if (!handle) {
                     XERROR(engine, "load %s error %s\n", path.c_str(), errno);
                     return false;
                 }
 
-                __GetComponents fun = (__GetComponents)dlsym(handle, "GetComponents");
+                __GetModules fun = (__GetModules)dlsym(handle, GET_MODULES_FUNC_NAME);
 #endif //WIN32
-                XASSERT(fun, "Can not export dll function GetComponents, dll %s", path.c_str());
-                Api::iComponent* component = fun();
-                if (false == component->Initialize(engine)) {
-                    XERROR(engine, "Component %s Initialize failed", component->_Name);
+                XASSERT(fun, "Can not export dll function GetModules, dll %s", path.c_str());
+                Api::iModule* module = fun();
+                if (false == module->Initialize(engine)) {
+                    XERROR(engine, "Module %s Initialize failed", module->_Name);
                     return false;
                 }
 
-                XLOG(engine, "Component %s Initialized", component->_Name);
-                _ComponentMap.insert(std::make_pair(component->_Name, component));
+                XLOG(engine, "Module %s Initialized", module->_Name);
+                _ModuleMap.insert(std::make_pair(module->_Name, module));
             }
         }
 
@@ -73,21 +73,21 @@ namespace XEngine {
     }
 
     bool Logic::Launch(Api::iEngine* const engine) {
-        for (auto itor = _ComponentMap.begin(); itor != _ComponentMap.end(); itor++) {
+        for (auto itor = _ModuleMap.begin(); itor != _ModuleMap.end(); itor++) {
             if (false == itor->second->Launch(engine)) {
-                XERROR(engine, "Component %s Launch failed", itor->second->_Name);
+                XERROR(engine, "Module %s Launch failed", itor->second->_Name);
                 return false;
             }
-            XLOG(engine, "Component %s Launched", itor->second->_Name);
+            XLOG(engine, "Module %s Launched", itor->second->_Name);
         }
 
         return true;
     }
 
     void Logic::Release(Api::iEngine* const engine) {
-        for (auto itor = _ComponentMap.begin(); itor != _ComponentMap.end(); itor++) {
+        for (auto itor = _ModuleMap.begin(); itor != _ModuleMap.end(); itor++) {
             if (false == itor->second->Destroy(engine)) {
-                XERROR(engine, "component %s Destroy failed", itor->second->_Name);
+                XERROR(engine, "module %s Destroy failed", itor->second->_Name);
             }
         }
     }

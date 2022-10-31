@@ -4,7 +4,7 @@
 #include "iComponent.h"
 
 namespace XEngine {
-    class iHelloWorld : public Api::iComponent {
+    class iHelloWorld : public Api::iModule {
     public:
         virtual ~iHelloWorld() {}
     };

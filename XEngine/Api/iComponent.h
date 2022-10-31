@@ -7,47 +7,48 @@
 
 namespace XEngine {
     namespace Api {
-        class iComponent {
+        class iModule {
         public:
-            virtual ~iComponent() {}
-            iComponent() : _Name(""), _Next(nullptr) {}
+            virtual ~iModule() {}
+            iModule() : _Name(""), _Next(nullptr) {}
 
             virtual bool Initialize(iEngine* const engine) = 0;
             virtual bool Launch(iEngine* const engine) = 0;
             virtual bool Destroy(iEngine* const engine) = 0;
 
             const char* const _Name;
-            iComponent* const _Next;
+            iModule* const _Next;
         };
     }
 }
 
+#define GET_MODULES_FUNC_NAME "GetModules"
 
 #ifdef WIN32
 #define DLL_INSTANCE \
-    static XEngine::Api::iComponent * static_components = nullptr; \
-    extern "C" __declspec(dllexport) XEngine::Api::iComponent * __cdecl GetComponents() {\
-        return static_components; \
+    static XEngine::Api::iModule * static_modules = nullptr; \
+    extern "C" __declspec(dllexport) XEngine::Api::iModule * __cdecl GetModules() {\
+        return static_modules; \
     }
 #else
 #define DLL_INSTANCE \
-    static XEngine::Api::iComponent * static_components = nullptr; \
-    extern "C" XEngine::Api::iComponent * GetComponents() { \
-        return static_components; \
+    static XEngine::Api::iModule * static_modules = nullptr; \
+    extern "C" XEngine::Api::iModule * GetModules() { \
+        return static_modules; \
     }
 #endif //WIN32
 
-#define CREATE_COMPONENT(Component) \
-class Factory##Component {\
+#define CREATE_COMPONENT(Module) \
+class Factory##Module {\
 public:\
-    Factory##Component(XEngine::Api::iComponent * & pComponent) {\
-        XEngine::Api::iComponent * p = xnew Component();\
-        const char * temp = #Component; \
+    Factory##Module(XEngine::Api::iModule * & pModule) {\
+        XEngine::Api::iModule * p = xnew Module();\
+        const char * temp = #Module; \
         memcpy((void *)&(p->_Name), &temp, sizeof(const char *));\
-        memcpy((void *)&(p->_Next), &pComponent, sizeof(pComponent));\
-        pComponent = p;\
+        memcpy((void *)&(p->_Next), &pModule, sizeof(pModule));\
+        pModule = p;\
     }\
 };\
-Factory##Component factroy##Component(static_components);
+Factory##Module factroy##Module(static_modules);
 
 #endif //__iComponent_h__

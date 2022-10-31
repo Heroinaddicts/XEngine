@@ -4,7 +4,7 @@
 #include "iComponent.h"
 
 namespace XEngine {
-    class iTestNewCmakeLists : public Api::iComponent {
+    class iTestNewCmakeLists : public Api::iModule {
     public:
         virtual ~iTestNewCmakeLists() {}
     };

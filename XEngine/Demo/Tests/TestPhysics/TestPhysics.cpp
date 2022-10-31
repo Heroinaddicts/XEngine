@@ -18,7 +18,7 @@ public:
     // 通过 iPhysxContext 继承
     virtual void OnPhysxCreated(bool success) override {
         if (success) {
-            SetLayer(0);
+            //SetLayer(eLayer::);
             //SafeTools::Rand(100) > 50 ? SetTrigger(true) : SetTrigger(false);
             SetCCD(true);
             s_PhysxObjectCount++;
@@ -60,7 +60,7 @@ public:
     // 通过 iPhysxContext 继承
     virtual void OnPhysxCreated(bool success) override {
         if (success) {
-            SetLayer(1);
+            SetLayer(eLayer::Default);
             SetTrigger(false);
             SetCCD(true);
         }
@@ -102,8 +102,8 @@ bool TestPhysics::Initialize(iEngine* const engine) {
 bool TestPhysics::Launch(iEngine* const engine) {
     TRACE(engine, "Main thread id %lld", SafeSystem::Process::GetCurrentThreadID());
 
-    g_objloader = engine->GetComponent<iObjLoader>("ObjLoader");
-    XASSERT(g_objloader, "GetComponent Error");
+    g_objloader = engine->GetModule<iObjLoader>("ObjLoader");
+    XASSERT(g_objloader, "GetModule Error");
 
     iPhysxScene* scene = engine->GetPhysicsApi()->CreateScene(0.5f, 0.5f, 0.3f);
     //scene->CreatePlane(0, 1, 0, 0, nullptr);
@@ -144,8 +144,8 @@ bool TestPhysics::Launch(iEngine* const engine) {
     START_TIMER(engine, this, 7, 5000, Api::Unlimited, 5000, scene);
     scene->Simulate(1 / 60.0f);
     START_TIMER(engine, this, 1, SafeTools::Rand(500), Api::Unlimited, 16, scene);
-    scene->RelationPhysicsLayer(0, 1);
-    scene->RelationPhysicsLayer(0, 0);
+    //     scene->RelationPhysicsLayer(0, 1);
+    //     scene->RelationPhysicsLayer(0, 0);
     return true;
 }
 

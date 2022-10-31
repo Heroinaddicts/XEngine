@@ -54,6 +54,43 @@ namespace XEngine {
         ContinuousSpeculative
     };
 
+    enum class eLayer {  //You can use UserDefine like this >> #define Monster eLayer::UserDefine0
+        Default = 1 << 0,
+        TransparentFX = 1 << 1,
+        IgnoreRaycast = 1 << 2,
+        UserDefine0 = 1 << 3,
+        Water = 1 << 4,
+        UI = 1 << 5,
+        UserDefine1 = 1 << 6,
+        UserDefine2 = 1 << 7,
+        UserDefine3 = 1 << 8,
+        UserDefine4 = 1 << 9,
+        UserDefine5 = 1 << 10,
+        UserDefine6 = 1 << 11,
+        UserDefine7 = 1 << 12,
+        UserDefine8 = 1 << 13,
+        UserDefine9 = 1 << 14,
+        UserDefine10 = 1 << 15,
+        UserDefine11 = 1 << 16,
+        UserDefine12 = 1 << 17,
+        UserDefine13 = 1 << 18,
+        UserDefine14 = 1 << 19,
+        UserDefine15 = 1 << 20,
+        UserDefine16 = 1 << 21,
+        UserDefine17 = 1 << 22,
+        UserDefine18 = 1 << 23,
+        UserDefine19 = 1 << 24,
+        UserDefine20 = 1 << 25,
+        UserDefine21 = 1 << 26,
+        UserDefine22 = 1 << 27,
+        UserDefine23 = 1 << 28,
+        UserDefine24 = 1 << 29,
+        UserDefine25 = 1 << 30,
+        UserDefine26 = 1 << 31
+    };
+
+
+
     namespace Api {
         class iPhysxBase {
         public:
@@ -75,8 +112,8 @@ namespace XEngine {
             virtual void SetUseGravity(const bool b) = 0;
             virtual bool IsUseGravity() const = 0;
 
-            virtual void SetLayer(const int layer) = 0;
-            virtual int GetLayer() const = 0;
+            virtual void SetLayer(const eLayer layer) = 0;
+            virtual eLayer GetLayer() const = 0;
 
             virtual void SetMass(const float mass) = 0;
             virtual void SetDrag(const float drag) = 0;
@@ -89,6 +126,8 @@ namespace XEngine {
 
             virtual void SetPosition(const Vector3& position) = 0;
             virtual void SetRotation(const Vector3& rotation) = 0;
+
+            virtual bool Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit, int layer) = 0;
 
             virtual void Release() = 0;
 
@@ -120,7 +159,6 @@ namespace XEngine {
             virtual void OnPhysxAwake() = 0;
             virtual void OnPhysxRelease() = 0;
 
-
             virtual void SetPhysxActive(const bool b) { _PhysxBase ? _PhysxBase->SetActive(b) : void(0); }
             virtual bool IsPhysxActive() const { return _PhysxBase ? _PhysxBase->IsActive() : false; }
 
@@ -136,8 +174,8 @@ namespace XEngine {
             virtual void SetUseGravity(const bool b) { _PhysxBase ? _PhysxBase->SetUseGravity(b) : void(0); }
             virtual bool IsUseGravity() const { return _PhysxBase ? _PhysxBase->IsUseGravity() : false; }
 
-            virtual void SetLayer(const int layer) { _PhysxBase ? _PhysxBase->SetLayer(layer) : void(0); }
-            virtual int GetLayer() const { return _PhysxBase ? _PhysxBase->GetLayer() : 0; }
+            virtual void SetLayer(const eLayer layer) { _PhysxBase ? _PhysxBase->SetLayer(layer) : void(0); }
+            virtual eLayer GetLayer() const { return _PhysxBase ? _PhysxBase->GetLayer() : eLayer::Default; }
 
             virtual void SetMass(const float mass) { _PhysxBase ? _PhysxBase->SetMass(mass) : void(0); }
             virtual void SetDrag(const float drag) { _PhysxBase ? _PhysxBase->SetDrag(drag) : void(0); }
@@ -197,7 +235,7 @@ namespace XEngine {
         public:
             virtual ~iPhysxScene() {}
 
-            virtual void RelationPhysicsLayer(const int layerA, const int layerB) = 0;
+            virtual void RelationPhysicsLayer(const eLayer layerA, const eLayer layerB) = 0;
 
             virtual void CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context = nullptr) = 0;
             virtual void CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context = nullptr) = 0;

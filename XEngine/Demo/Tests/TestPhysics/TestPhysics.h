@@ -3,7 +3,7 @@
 
 #include "Header.h"
 
-class TestPhysics : public iComponent, public iTimer {
+class TestPhysics : public iModule, public iTimer {
 public:
     virtual ~TestPhysics() {}
     virtual bool Initialize(iEngine* const engine);

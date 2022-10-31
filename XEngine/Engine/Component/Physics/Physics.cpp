@@ -1,6 +1,6 @@
 #include "Physics.h"
 #include "PhysxScene.h"
-#include "PhysxSceneFilterCallback.h"
+#include "PhysxSceneFilter.h"
 
 namespace XEngine {
     PhysicsAllocator g_Allocator;

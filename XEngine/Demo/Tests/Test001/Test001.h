@@ -3,7 +3,7 @@
 
 #include "Header.h"
 
-class Test001 : public iComponent, public iTcpServer {
+class Test001 : public iModule, public iTcpServer {
 public:
     virtual ~Test001() {}
     virtual bool Initialize(iEngine* const engine);

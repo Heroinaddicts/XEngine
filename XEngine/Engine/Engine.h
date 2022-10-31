@@ -29,7 +29,7 @@ namespace XEngine {
         bool isShutdown();
 
     protected:
-        virtual Api::iComponent* FindComponent(const std::string& name) override;
+        virtual Api::iModule* FindModule(const std::string& name) override;
 
     private:
         Engine() {}
