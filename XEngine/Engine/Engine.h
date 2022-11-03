@@ -35,6 +35,8 @@ namespace XEngine {
     private:
         Engine() {}
     };
+
+    extern Engine* const g_Engine;
 }
 
 #endif //__Engine_h__

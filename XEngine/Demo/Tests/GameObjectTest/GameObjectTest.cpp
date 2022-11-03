@@ -1,8 +1,11 @@
 #include "GameObjectTest.h"
+#include "SafeTools.h"
 
 iEngine* g_engine = nullptr;
 iGameObjectApi* g_GameObjectApi = nullptr;
 GameObjectTest* g_GameObjectTest = nullptr;
+
+int g_CompoentTestCount = 0;
 
 class ComponentTest : public Api::iComponent {
 public:
@@ -10,24 +13,40 @@ public:
 
     // Í¨¹ý iComponent ¼Ì³Ð
     virtual void OnCreate() override {
-        //TRACE(g_engine, "ComponentTest::OnCreate");
+        TRACE(g_engine, "ComponentTest::OnCreate %d", ++g_CompoentTestCount);
     }
 
-	virtual void OnStart() override {
-		//TRACE(g_engine, "ComponentTest::OnStart");
-    }
+    virtual void OnUpdate() override {
+        if (SafeTools::Rand(10000) >= 9950) {
+            std::vector<ComponentTest*> tests;
+            _GameObject->GetComponents<ComponentTest>(tests);
 
-	virtual void OnUpdate() override {
-		//TRACE(g_engine, "ComponentTest::OnUpdate");
-		//g_GameObjectApi->DestroyGameObject(this->_GameObject);
+            for (int i = 0; i < tests.size(); i++) {
+                _GameObject->RemoveComponent<ComponentTest>(tests[i]);
+            }
+        }
     }
 
     virtual void OnFixedUpdate() override {
-		//TRACE(g_engine, "ComponentTest::OnFixedUpdate");
+        //TRACE(g_engine, "ComponentTest::OnFixedUpdate");
     }
 
     virtual void OnDestroy() override {
-		//TRACE(g_engine, "ComponentTest::OnDestroy");
+    }
+};
+
+class ComponentTest2 : public Api::iComponent {
+public:
+    virtual ~ComponentTest2() {}
+
+    virtual void OnFixedUpdate() {
+        if (SafeTools::Rand(10000) >= 9950) {
+            g_GameObjectApi->DestroyGameObject(_GameObject);
+        }
+    }
+
+    virtual void OnDestroy() override {
+        TRACE(g_engine, "ComponentTest2::OnDestroy %d", --g_CompoentTestCount);
     }
 };
 
@@ -36,9 +55,10 @@ bool GameObjectTest::Initialize(iEngine* const engine) {
     g_engine = engine;
 
     g_GameObjectApi = engine->GetGameObjectApi();
-    for (int i = 0; i < 50000; i++) {
-		iGameObject* gameObject = CREATE_GAMEOBJECT(g_GameObjectApi);
-		ADD_COMPONENT(gameObject, ComponentTest);
+    for (int i = 0; i < 1000; i++) {
+        iGameObject* gameObject = CREATE_GAMEOBJECT(g_GameObjectApi);
+        gameObject->AddComponent<ComponentTest>();
+        gameObject->AddComponent<ComponentTest2>();
     }
     return true;
 }

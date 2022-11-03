@@ -1,6 +1,6 @@
 #pragma once
 
-#include "iEngine.h"
+#include "Engine.h"
 #include "iNavigation.h"
 
 #include "DetourCommon.h"
@@ -306,6 +306,4 @@ namespace XEngine {
             return *bufferSize < 0 ? DT_FAILURE : DT_SUCCESS;
         }
     };
-
-    extern Api::iEngine* g_Engine;
 }

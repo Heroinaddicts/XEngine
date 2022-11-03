@@ -45,7 +45,7 @@ namespace XEngine {
 
 #define TRACE(engine, format, ...) {\
     char log[512] = {0};\
-    sprintf_s(log, sizeof(log), "TRACE LOG : %s:%d >>>> "#format, __FILE__, __LINE__, ##__VA_ARGS__);\
+    sprintf_s(log, sizeof(log), "TRACE LOG : %s:%d >>>> "##format, __FILE__, __LINE__, ##__VA_ARGS__);\
     engine->LogAsync(log);\
 }
 

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <typeinfo>
 
 #pragma execution_character_set("utf-8")
 

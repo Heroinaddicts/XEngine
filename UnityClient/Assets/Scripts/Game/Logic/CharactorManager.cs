@@ -43,6 +43,8 @@ public class CharactorManager : Singleton<CharactorManager>
             oObject enemyInfo = info.Objects[i];
             SpawnCharactor(enemyInfo.ConfigId, enemyInfo.Gid, enemyInfo.Type, new Vector3(enemyInfo.Pos.X, enemyInfo.Pos.Y, enemyInfo.Pos.Z), Quaternion.identity);
         }
+
+        gameObject.AddComponent<Rigidbody>();
     }
 
     public void OnSPIDObjectDisAppear(in Connection con, in oOBJECT_DISAPPER info)

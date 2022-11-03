@@ -5,6 +5,7 @@
 #include "iPhysics.h"
 #include "Engine.h"
 #include "PxPhysicsAPI.h"
+#include "iGameObjectApi.h"
 #include <set>
 using namespace physx;
 
@@ -46,7 +47,7 @@ namespace XEngine {
         }
 
         virtual void reportError(PxErrorCode::Enum code, const char* message, const char* file, int line) {
-            XLOG(Engine::GetInstance(), "physx error, code %d, message %s, file %s, line %d", code, message, file, line);
+            XLOG(g_Engine, "physx error, code %d, message %s, file %s, line %d", code, message, file, line);
         }
     };
 

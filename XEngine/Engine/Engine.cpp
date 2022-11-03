@@ -29,11 +29,16 @@ XEngine::iGameObjectManager* g_GameObjectManager = nullptr;
 
 static int s_FixedTimeStep = 33333;
 
+
+
 namespace XEngine {
     Engine* Engine::GetInstance() {
-        static Engine s_Engine;
-        return &s_Engine;
+        static Engine s_Instance;
+        return &s_Instance;
     }
+
+    Engine* const g_Engine = Engine::GetInstance();
+
     const char* Engine::GetLaunchParameter(const std::string& name) {
         auto itor = s_ParameterMap.find(name);
         if (itor != s_ParameterMap.end()) {
@@ -112,14 +117,43 @@ bool AnalysisLaunchParameters(const int argc, const char** args, const char** en
     return true;
 }
 
+class A {
+public:
+    virtual ~A() {}
+    A() {
+
+    }
+};
+
+class B : public A {
+public:
+    virtual ~B() {}
+};
+
+void Test() {
+    int i = 100;
+    const type_info& t1 = typeid(i);
+
+    //type_info::type_info info;
+    printf(t1.name());
+    printf("=====");
+    printf(t1.raw_name());
+
+    A* b = new B();
+
+    const type_info& tb = typeid(*b);
+    printf("test %s\n", tb.name());
+}
+
 int main(int argc, const char** args, const char** env) {
+    Test();
+
     if (!AnalysisLaunchParameters(argc, args, env)) {
         XASSERT(false, "AnalysisLaunchParameters error");
         return 0;
     }
 
-    XEngine::Engine* engine = XEngine::Engine::GetInstance();
-    const char* fixedTimeStepStr = engine->GetLaunchParameter("fixedTimeStep");
+    const char* fixedTimeStepStr = XEngine::g_Engine->GetLaunchParameter("fixedTimeStep");
     if (fixedTimeStepStr) {
         s_FixedTimeStep = XEngine::SafeString::StringToFloat(fixedTimeStepStr) * 1000;
     }
@@ -135,65 +169,67 @@ int main(int argc, const char** args, const char** env) {
 
 
     { // Initialize
-        g_Physics->Initialize(engine);
-        g_Navigation->Initialize(engine);
-        g_Timewheel->Initialize(engine);
-        g_Net->Initialize(engine);
-        g_Logic->Initialize(engine);
-        g_GameObjectManager->Initialize(engine);
+        g_Physics->Initialize(XEngine::g_Engine);
+        g_Navigation->Initialize(XEngine::g_Engine);
+        g_Timewheel->Initialize(XEngine::g_Engine);
+        g_Net->Initialize(XEngine::g_Engine);
+        g_Logic->Initialize(XEngine::g_Engine);
+        g_GameObjectManager->Initialize(XEngine::g_Engine);
     }
 
     { // Launche
-        g_Physics->Launch(engine);
-        g_Navigation->Launch(engine);
-        g_Timewheel->Launch(engine);
-        g_Net->Launch(engine);
-		g_Logic->Launch(engine);
-		g_GameObjectManager->Launch(engine);
+        g_Physics->Launch(XEngine::g_Engine);
+        g_Navigation->Launch(XEngine::g_Engine);
+        g_Timewheel->Launch(XEngine::g_Engine);
+        g_Net->Launch(XEngine::g_Engine);
+        g_Logic->Launch(XEngine::g_Engine);
+        g_GameObjectManager->Launch(XEngine::g_Engine);
     }
 
     unsigned_int64 tick = XEngine::SafeSystem::Time::GetMicroSecond();
-    while (!engine->isShutdown()) {
-        g_Navigation->EarlyUpdate(engine);
-        g_Timewheel->EarlyUpdate(engine);
-        g_Net->EarlyUpdate(engine);
-        g_Logic->EarlyUpdate(engine);
-		g_Physics->EarlyUpdate(engine);
-		g_GameObjectManager->EarlyUpdate(engine);
+    while (!XEngine::g_Engine->isShutdown()) {
+        g_Navigation->EarlyUpdate(XEngine::g_Engine);
+        g_Timewheel->EarlyUpdate(XEngine::g_Engine);
+        g_Net->EarlyUpdate(XEngine::g_Engine);
+        g_Logic->EarlyUpdate(XEngine::g_Engine);
+        g_GameObjectManager->EarlyUpdate(XEngine::g_Engine);
+        g_Physics->EarlyUpdate(XEngine::g_Engine);
 
-        g_Navigation->Update(engine);
-        g_Timewheel->Update(engine);
-        g_Net->Update(engine);
-        g_Logic->Update(engine);
-		g_Physics->Update(engine);
-		g_GameObjectManager->Update(engine);
-
-        g_Navigation->LaterUpdate(engine);
-        g_Timewheel->LaterUpdate(engine);
-        g_Logic->LaterUpdate(engine);
-        g_Physics->LaterUpdate(engine);
-		g_Net->LaterUpdate(engine);
-		g_GameObjectManager->LaterUpdate(engine);
+        g_Navigation->Update(XEngine::g_Engine);
+        g_Timewheel->Update(XEngine::g_Engine);
+        g_Net->Update(XEngine::g_Engine);
+        g_Logic->Update(XEngine::g_Engine);
+        g_GameObjectManager->Update(XEngine::g_Engine);
+        g_Physics->Update(XEngine::g_Engine);
 
         unsigned_int64 tick2 = XEngine::SafeSystem::Time::GetMicroSecond();
         if (tick2 - tick >= s_FixedTimeStep) {
-            g_Navigation->FixedUpdate(engine);
-            g_Timewheel->FixedUpdate(engine);
-            g_Net->FixedUpdate(engine);
-            g_Logic->FixedUpdate(engine);
-			g_Physics->FixedUpdate(engine);
-			g_GameObjectManager->FixedUpdate(engine);
+            g_Navigation->FixedUpdate(XEngine::g_Engine);
+            g_Timewheel->FixedUpdate(XEngine::g_Engine);
+            g_Net->FixedUpdate(XEngine::g_Engine);
+            g_Logic->FixedUpdate(XEngine::g_Engine);
+            g_GameObjectManager->FixedUpdate(XEngine::g_Engine);
+            g_Physics->FixedUpdate(XEngine::g_Engine);
             tick += s_FixedTimeStep;
         }
-        else {
-            XEngine::SafeSystem::Time::MillisecondSleep(0);
-        }
+
+        g_Navigation->LaterUpdate(XEngine::g_Engine);
+        g_Timewheel->LaterUpdate(XEngine::g_Engine);
+        g_Logic->LaterUpdate(XEngine::g_Engine);
+        g_GameObjectManager->LaterUpdate(XEngine::g_Engine);
+        g_Physics->LaterUpdate(XEngine::g_Engine);
+        g_Net->LaterUpdate(XEngine::g_Engine);
     }
 
     { // Release
-        g_Logic->Release(engine);
-        g_Net->Release(engine);
+        g_Navigation->Release(XEngine::g_Engine);
+        g_Timewheel->Release(XEngine::g_Engine);
+        g_Logic->Release(XEngine::g_Engine);
+        g_GameObjectManager->Release(XEngine::g_Engine);
+        g_Physics->Release(XEngine::g_Engine);
+        g_Net->Release(XEngine::g_Engine);
     }
+
 
     return 0;
 }

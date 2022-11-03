@@ -5,6 +5,11 @@ using System;
 
 public abstract class Charactor : BaseObject
 {
+    public void OnCollisionEnter(Collision collision)
+    {
+
+    }
+
     [System.NonSerialized] protected CharactorAttr charactorAttr;
     protected event Action<Charactor> evntOnDead;
     protected event Action<Charactor> evntOnBirth;

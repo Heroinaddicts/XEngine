@@ -4,7 +4,7 @@
 #include "Header.h"
 
 namespace XEngine {
-    class PhysxBase;
+    class PhysxComponent;
 
     class PhysxScene : public Api::iPhysxScene, public PxSimulationEventCallback, public PxContactModifyCallback, public PxCCDContactModifyCallback, public SafeThread {
     public:
@@ -13,18 +13,18 @@ namespace XEngine {
 
         virtual void RelationPhysicsLayer(const eLayer layerA, const eLayer layerB);
 
-        virtual void CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context);
-        virtual void CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context);
-        virtual void CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context);
-        virtual void CreateConvexMesh(const eRigType type, const Quaternion& qt, Api::iPhysxContext* const context);
-        virtual void CreateTriangleMesh(
+        virtual Api::iPhysxComponent* CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iGameObject* gameObject) override;
+        virtual Api::iPhysxComponent* CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iGameObject* gameObject) override;
+        virtual Api::iPhysxComponent* CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iGameObject* gameObject) override;
+        virtual Api::iPhysxComponent* CreateConvexMesh(const eRigType type, const Quaternion& qt, Api::iGameObject* gameObject) override;
+        virtual Api::iPhysxComponent* CreateTriangleMesh(
             const eRigType type,
             const Vector3& pos,
             const Quaternion& qt,
             const Vector3& scale,
             const X3DObj* obj,
-            Api::iPhysxContext* const data
-        );
+            Api::iGameObject* const gameObject
+        ) override;
 
         virtual bool Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit);
 
@@ -45,7 +45,7 @@ namespace XEngine {
         // Í¨¹ý PxCCDContactModifyCallback ¼Ì³Ð
         virtual void onCCDContactModify(PxContactModifyPair* const pairs, PxU32 count) override;
 
-        void Release(PhysxBase* pb);
+        void Release(PhysxComponent* pb);
     public:
         static PxFilterFlags PhysxSimulationFilterShader(
             PxFilterObjectAttributes attributes0, PxFilterData filterData0,
@@ -61,8 +61,8 @@ namespace XEngine {
 
     private:
         std::set<PhysicsLayerRelation> _PhysicsLayerRelations;
-        std::set<PhysxBase*> _PhysxBasePool;
-        std::set<PhysxBase*> _ReleasePool;
+        std::set<PhysxComponent*> _PhysxBasePool;
+        std::set<PhysxComponent*> _ReleasePool;
     };
 }
 

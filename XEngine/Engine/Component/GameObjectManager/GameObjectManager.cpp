@@ -1,5 +1,6 @@
 #include "GameObjectManager.h"
 #include "GameObject.h"
+#include "Engine.h"
 
 namespace XEngine {
     std::set<GameObject*> g_GameObjectSet;
@@ -23,36 +24,43 @@ namespace XEngine {
 
     }
 
-    void GameObjectManager::EarlyUpdate(Api::iEngine* const engine) {
-
-    }
-
-    void GameObjectManager::Update(Api::iEngine* const engine) {
-        int64 tick = SafeSystem::Time::GetMilliSecond();
-        for (auto i = g_GameObjectSet.begin(); i != g_GameObjectSet.end(); i++) {
-            (*i)->OnUpdate();
-        }
-
-        for (auto i = g_GameObjectCreated.begin(); i != g_GameObjectCreated.end(); i++) {
-            g_GameObjectSet.insert(*i);
-        }
-        g_GameObjectCreated.clear();
-
+    static bool s_IsRecovering = false;
+    __forceinline void Recover() {
+        s_IsRecovering = true;
         for (auto i = g_GameObjectReleased.begin(); i != g_GameObjectReleased.end(); i++) {
             (*i)->OnDestroy();
             g_GameObjectSet.erase(*i);
+            xdel(*i);
         }
         g_GameObjectReleased.clear();
-        XLOG(engine, "GameObjectManager::Update use %lld ms", SafeSystem::Time::GetMilliSecond() - tick);
+        s_IsRecovering = false;
+    }
+
+    void GameObjectManager::EarlyUpdate(Api::iEngine* const engine) {
+        for (auto i = g_GameObjectCreated.begin(); i != g_GameObjectCreated.end(); i++) {
+            g_GameObjectSet.insert(*i);
+            (*i)->OnCreate();
+        }
+        g_GameObjectCreated.clear();
+        Recover();
+    }
+
+    void GameObjectManager::Update(Api::iEngine* const engine) {
+        for (auto i = g_GameObjectSet.begin(); i != g_GameObjectSet.end(); i++) {
+            (*i)->OnUpdate();
+        }
+        Recover();
     }
 
     void GameObjectManager::FixedUpdate(Api::iEngine* const engine) {
         for (auto i = g_GameObjectSet.begin(); i != g_GameObjectSet.end(); i++) {
             (*i)->OnFixedUpdate();
         }
+        Recover();
     }
 
     void GameObjectManager::LaterUpdate(Api::iEngine* const engine) {
+
     }
 
     Api::iGameObject* GameObjectManager::CreateGameObject(const char* file, const int line) {
@@ -65,6 +73,11 @@ namespace XEngine {
     }
 
     void GameObjectManager::DestroyGameObject(Api::iGameObject* gameObject) {
-        g_GameObjectReleased.insert(dynamic_cast<GameObject*>(gameObject));
+        if (!s_IsRecovering) {
+            g_GameObjectReleased.insert(dynamic_cast<GameObject*>(gameObject));
+        }
+        else {
+            XERROR(g_Engine, "do not destroy an object in OnDestroy");
+        }
     }
 }

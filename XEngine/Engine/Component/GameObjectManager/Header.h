@@ -7,12 +7,14 @@
 #include "SafeMemory.h"
 #include "SafeString.h"
 #include "SafeSystem.h"
+#include "Engine.h"
 
 namespace XEngine {
     class GameObject;
-	extern std::set<GameObject*> g_GameObjectSet;
-	extern std::list<GameObject*> g_GameObjectCreated;
-	extern std::set<GameObject*> g_GameObjectReleased;
+
+    extern std::set<GameObject*> g_GameObjectSet;
+    extern std::list<GameObject*> g_GameObjectCreated;
+    extern std::set<GameObject*> g_GameObjectReleased;
 
     class iComponent;
 }

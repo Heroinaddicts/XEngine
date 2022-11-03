@@ -11,88 +11,6 @@ TestPhysics* s_Self = nullptr;
 
 static int s_PhysxObjectCount = 0;
 
-class PhysicsTest : public Api::iPhysxContext {
-public:
-    PhysicsTest() : Api::iPhysxContext(nullptr) {}
-
-    // 通过 iPhysxContext 继承
-    virtual void OnPhysxCreated(bool success) override {
-        if (success) {
-            //SetLayer(eLayer::);
-            //SafeTools::Rand(100) > 50 ? SetTrigger(true) : SetTrigger(false);
-            SetCCD(true);
-            s_PhysxObjectCount++;
-        }
-        else {
-            xdel this;
-        }
-    }
-
-    virtual void OnPhysxAwake() override {
-    }
-
-    virtual void OnPhysxRelease() override {
-        s_PhysxObjectCount--;
-        xdel this;
-    }
-
-    virtual void OnTriggerEnter(iCollider* const other) override {
-        //TRACE(g_engine, "PhysicsTest::OnTriggerEnter %lld", this);
-    }
-
-    virtual void OnTriggerExit(iCollider* const other) override {
-        //TRACE(g_engine, "PhysicsTest::OnTriggerExit %lld", this);
-    }
-
-    virtual void OnCollisionEnter(iCollision* const other) override {
-        //TRACE(g_engine, "PhysicsTest::OnCollisionEnter %lld", this);
-    }
-
-    virtual void OnCollisionExit(iCollision* const other) override {
-        //TRACE(g_engine, "PhysicsTest::OnCollisionExit %lld", this);
-    }
-};
-
-class PhysicsMeshStatic : public Api::iPhysxContext {
-public:
-    PhysicsMeshStatic() : Api::iPhysxContext(nullptr) {}
-
-    // 通过 iPhysxContext 继承
-    virtual void OnPhysxCreated(bool success) override {
-        if (success) {
-            SetLayer(eLayer::Default);
-            SetTrigger(false);
-            SetCCD(true);
-        }
-        else {
-            xdel this;
-        }
-    }
-
-    virtual void OnPhysxAwake() override {
-    }
-
-    virtual void OnPhysxRelease() override {
-        xdel this;
-    }
-
-    virtual void OnTriggerEnter(iCollider* const other) override {
-        //TRACE(g_engine, "PhysicsMeshStatic::OnTriggerEnter %lld", this);
-    }
-
-    virtual void OnTriggerExit(iCollider* const other) override {
-        //TRACE(g_engine, "PhysicsMeshStatic::OnTriggerExit %lld", this);
-    }
-
-    virtual void OnCollisionEnter(iCollision* const other) override {
-        //TRACE(g_engine, "PhysicsMeshStatic::OnCollisionEnter %lld", this);
-    }
-
-    virtual void OnCollisionExit(iCollision* const other) override {
-        //TRACE(g_engine, "PhysicsMeshStatic::OnCollisionExit %lld", this);
-    }
-};
-
 bool TestPhysics::Initialize(iEngine* const engine) {
     g_engine = engine;
     s_Self = this;
@@ -134,7 +52,7 @@ bool TestPhysics::Launch(iEngine* const engine) {
 
         std::string file = SafeSystem::File::GetApplicationPath() + "/Env/Config/Objs/LostCity/" + sceneObj->Attribute("SceneObj");
         const X3DObj* obj = g_objloader->Get3DObj(file);
-        scene->CreateTriangleMesh(XEngine::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), Vector3(scalex, scaley, scalez), obj, xnew PhysicsMeshStatic());
+        //scene->CreateTriangleMesh(XEngine::eRigType::Static, XEngine::Vector3(x, y, z), Quaternion(qx, qy, qz, qw), Vector3(scalex, scaley, scalez), obj, xnew PhysicsMeshStatic());
         sceneObj = sceneObj->NextSiblingElement("SceneObj");
     }
 
@@ -158,37 +76,7 @@ void TestPhysics::OnStart(const int id, void* const context, const int64 timesta
 }
 
 void TestPhysics::OnTimer(const int id, void* const context, const int64 timestamp) {
-    if (id >= 4 && id < 7) {
-        if (s_PhysxObjectCount >= 100) {
-            return;
-        }
 
-        iPhysxScene* scene = static_cast<iPhysxScene*>(context);
-
-        int index = SafeTools::Rand(300);
-        Quaternion qt;
-        PhysicsTest* test = xnew PhysicsTest();
-        if (index < 150) {
-            scene->CreateBox(eRigType::Dynamic, Vector3(SafeTools::Rand(100) + 200, 30, SafeTools::Rand(100) + 200), qt, Vector3(2, 2, 1), test);
-            START_TIMER(g_engine, this, 2, (SafeTools::Rand(5) + 5) * 1000, 1, 1000, test);
-        }
-        else {
-            scene->CreateCapsule(eRigType::Dynamic, Vector3(SafeTools::Rand(100) + 200, 30, SafeTools::Rand(100) + 200), qt, 1, 2, test);
-            START_TIMER(g_engine, this, 2, (SafeTools::Rand(5) + 5) * 1000, 1, 1000, test);
-        }
-    }
-    else if (2 == id) {
-        PhysicsTest* test = static_cast<PhysicsTest*>(context);
-        test->ReleasePhysics();
-    }
-    else if (1 == id) {
-        iPhysxScene* scene = static_cast<iPhysxScene*>(context);
-        scene->FetchResults(true);
-        scene->Simulate(1 / 60.0f);
-    }
-    else if (7 == id) {
-        TRACE(g_engine, "Physx Object Count %d", s_PhysxObjectCount);
-    }
 }
 
 void TestPhysics::OnEnd(const int id, void* const context, bool nonviolent, const int64 timestamp) {

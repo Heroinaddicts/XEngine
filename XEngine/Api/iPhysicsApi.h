@@ -89,13 +89,14 @@ namespace XEngine {
         UserDefine26 = 1 << 31
     };
 
-
-
     namespace Api {
-        class iPhysxBase {
+        class iGameObject;
+
+        class iPhysxComponent {
         public:
-            virtual ~iPhysxBase() {}
-            iPhysxBase(iPhysxContext* const context) : _Context(context) {}
+            virtual ~iPhysxComponent() {}
+
+            virtual iGameObject* GetGameObject() const = 0;
 
             virtual void SetActive(const bool b) = 0;
             virtual bool IsActive() const = 0;
@@ -119,115 +120,8 @@ namespace XEngine {
             virtual void SetDrag(const float drag) = 0;
             virtual void SetAngularDrag(const float angularDrag) = 0;
 
-            virtual void SetInterpolate(const eInterpolate type) = 0; //物理运动插值模式 建议服务器使用None
+            virtual void SetInterpolate(const eInterpolate type) = 0;
             virtual void SetCollisionDetection(const eCollisionDetection type) = 0;
-
-            //virtual void UpdateMaterial()  更新物理材质
-
-            virtual void SetPosition(const Vector3& position) = 0;
-            virtual void SetRotation(const Vector3& rotation) = 0;
-
-            virtual bool Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit, int layer) = 0;
-
-            virtual void Release() = 0;
-
-            iPhysxContext* const _Context;
-        };
-
-
-        class iCollider {
-        public:
-            virtual ~iCollider() {}
-
-            virtual iPhysxContext* const GetPhysxContext() const = 0;
-        };
-
-        class iCollision {
-        public:
-            virtual ~iCollision() {}
-
-            virtual iPhysxContext* const GetPhysxContext() const = 0;
-            virtual const Vector3& ClosestPoint() const = 0;
-            virtual const Vector3& ClosestPointOnBounds() = 0;
-        };
-
-        class iPhysxContext {
-        public:
-            virtual ~iPhysxContext() {}
-
-            virtual void OnPhysxCreated(bool success) = 0;
-            virtual void OnPhysxAwake() = 0;
-            virtual void OnPhysxRelease() = 0;
-
-            virtual void SetPhysxActive(const bool b) { _PhysxBase ? _PhysxBase->SetActive(b) : void(0); }
-            virtual bool IsPhysxActive() const { return _PhysxBase ? _PhysxBase->IsActive() : false; }
-
-            virtual void SetKinematic(const bool b) { _PhysxBase ? _PhysxBase->SetKinematic(b) : void(0); }
-            virtual bool IsKinematic() const { return _PhysxBase ? _PhysxBase->IsKinematic() : false; }
-
-            virtual void SetCCD(const bool b) { _PhysxBase ? _PhysxBase->SetCCD(b) : void(0); };
-            virtual bool IsCCD() const { return _PhysxBase ? _PhysxBase->IsCCD() : false; }
-
-            virtual void SetTrigger(const bool b) { _PhysxBase ? _PhysxBase->SetTrigger(b) : void(0); }
-            virtual bool IsTrigger() const { return _PhysxBase ? _PhysxBase->IsTrigger() : false; }
-
-            virtual void SetUseGravity(const bool b) { _PhysxBase ? _PhysxBase->SetUseGravity(b) : void(0); }
-            virtual bool IsUseGravity() const { return _PhysxBase ? _PhysxBase->IsUseGravity() : false; }
-
-            virtual void SetLayer(const eLayer layer) { _PhysxBase ? _PhysxBase->SetLayer(layer) : void(0); }
-            virtual eLayer GetLayer() const { return _PhysxBase ? _PhysxBase->GetLayer() : eLayer::Default; }
-
-            virtual void SetMass(const float mass) { _PhysxBase ? _PhysxBase->SetMass(mass) : void(0); }
-            virtual void SetDrag(const float drag) { _PhysxBase ? _PhysxBase->SetDrag(drag) : void(0); }
-            virtual void SetAngularDrag(const float angularDrag) { _PhysxBase ? _PhysxBase->SetAngularDrag(angularDrag) : void(0); }
-
-            virtual void SetInterpolate(const eInterpolate type) { _PhysxBase ? _PhysxBase->SetInterpolate(type) : void(0); }
-            virtual void SetCollisionDetection(const eCollisionDetection type) { _PhysxBase ? _PhysxBase->SetCollisionDetection(type) : void(0); }
-
-            virtual void OnTriggerEnter(iCollider* const other) {}
-            virtual void OnTriggerExit(iCollider* const other) {}
-
-            virtual void OnCollisionEnter(iCollision* const other) = 0;
-            virtual void OnCollisionExit(iCollision* const other) = 0;
-
-            iPhysxContext(void* const data) : _Data(data), _PhysxBase(nullptr) {}
-
-            template<typename T>
-            T* GetData() { return dynamic_cast<T*>(_Data); }
-
-            void* const _Data;
-            iPhysxBase* const _PhysxBase;
-
-            virtual Vector3 Position() {
-                return _Position;
-            }
-
-            virtual Vector3 Rotation() {
-                return _Rotation;
-            }
-
-            virtual void SetPosition(const Vector3& pos) {
-                _Position = pos;
-                _PhysxBase ? _PhysxBase->SetPosition(pos) : void(0);
-            }
-
-            virtual void SetRotation(const Vector3& r) {
-                _Rotation = r;
-                _PhysxBase ? _PhysxBase->SetRotation(r) : void(0);
-            }
-
-            virtual void ReleasePhysics() {
-                _PhysxBase ? _PhysxBase->Release() : void(0);
-            }
-
-            virtual void UpdatePositionAndRotation(const Vector3& pos, const Vector3& r) {
-                _Position = pos;
-                _Rotation = r;
-            }
-
-        private:
-            Vector3 _Position;
-            Vector3 _Rotation;
         };
 
 
@@ -237,17 +131,17 @@ namespace XEngine {
 
             virtual void RelationPhysicsLayer(const eLayer layerA, const eLayer layerB) = 0;
 
-            virtual void CreatePlane(const float nx, const float ny, const float nz, const float distance, Api::iPhysxContext* const context = nullptr) = 0;
-            virtual void CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, Api::iPhysxContext* const context = nullptr) = 0;
-            virtual void CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, Api::iPhysxContext* const context = nullptr) = 0;
-            virtual void CreateConvexMesh(const eRigType type, const Quaternion& qt, Api::iPhysxContext* const context = nullptr) = 0;
-            virtual void CreateTriangleMesh(
+            virtual iPhysxComponent* CreatePlane(const float nx, const float ny, const float nz, const float distance, iGameObject* const gameObject) = 0;
+            virtual iPhysxComponent* CreateBox(const eRigType type, const Vector3& pos, const Quaternion& qt, const Vector3& size, iGameObject* const gameObject) = 0;
+            virtual iPhysxComponent* CreateCapsule(const eRigType type, const Vector3& pos, const Quaternion& qt, const float radius, const float height, iGameObject* const gameObject) = 0;
+            virtual iPhysxComponent* CreateConvexMesh(const eRigType type, const Quaternion& qt, iGameObject* const gameObject) = 0;
+            virtual iPhysxComponent* CreateTriangleMesh(
                 const eRigType type,
                 const Vector3& pos,
                 const Quaternion& qt,
                 const Vector3& scale,
                 const X3DObj* obj,
-                iPhysxContext* const data = nullptr
+                iGameObject* const gameObject
             ) = 0;
 
             virtual bool Raycast(const Ray& ray, const float distance, int layerMask, const eQueryTriggerInteraction queryTriggerInteraction, RaycastHit& hit) = 0;

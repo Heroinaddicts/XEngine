@@ -5,6 +5,8 @@
 #include "MultiSys.h"
 #include <string>
 
+#define SAFE_SET_CONST_VALUE(pConst, p) SafeMemory::Memcpy((void*)&(pConst), sizeof(pConst), &p, sizeof(p));
+
 namespace XEngine {
     class Api::iEngine;
     class iEngineComponent {

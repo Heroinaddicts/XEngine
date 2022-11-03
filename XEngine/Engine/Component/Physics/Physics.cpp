@@ -91,7 +91,7 @@ namespace XEngine {
             return scene;
         }
 
-        XERROR(Engine::GetInstance(), "create physx scene error");
+        XERROR(g_Engine, "create physx scene error");
         return nullptr;
     }
 
@@ -103,7 +103,7 @@ namespace XEngine {
             xdel scene;
         }
         else {
-            XERROR(Engine::GetInstance(), "error iPhysxScene address %lld", scene);
+            XERROR(g_Engine, "error iPhysxScene address %lld", scene);
         }
     }
 }

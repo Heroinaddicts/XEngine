@@ -3,13 +3,11 @@
 #include "SafeString.h"
 
 namespace XEngine {
-    Api::iEngine* g_Engine = nullptr;
     iNavigation* Navigation::GetInstance() {
         static Navigation s_Navigation;
         return &s_Navigation;
     }
     bool Navigation::Initialize(Api::iEngine* const engine) {
-        g_Engine = engine;
         return true;
     }
 
