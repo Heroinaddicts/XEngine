@@ -20,13 +20,12 @@ const char* interface_h = "#ifndef __i{name}_h__\n\
 #define __i{name}_h__\n\
 \n\
 #include \"iModule.h\"\n\
+using namespace XEngine;\n\
 \n\
-namespace XEngine {\n\
-    class i{name} : public Api::iModule {\n\
-    public:\n\
-        virtual ~i{name}() {}\n\
-    };\n\
-}\n\
+class i{name} : public Api::iModule {\n\
+public:\n\
+    virtual ~i{name}() {}\n\
+};\n\
 \n\
 #endif //__i{name}_h__\n\
 ";

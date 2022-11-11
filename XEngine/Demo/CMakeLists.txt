@@ -1,6 +1,7 @@
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/Common"
     "${CMAKE_CURRENT_SOURCE_DIR}/Interface"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Proto"
 )
 
 #aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/Interface" Interface) 
@@ -11,6 +12,7 @@ include_directories(
 
 file(GLOB Interface "Interface/*.*")
 file(GLOB Common "Common/*.*")
+file(GLOB Proto "Proto/*.*")
 
 #Tools
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Tools/RemoteAgent)
@@ -26,3 +28,4 @@ ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Tests/HelloWorld)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Components/ObjLoader)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Tests/TestNewCmakeLists)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Tests/GameObjectTest)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/ServerArchitecture/Master)
