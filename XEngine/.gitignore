@@ -26,7 +26,7 @@
 *.app
 
 # build dir
-build/*
+Build/*
 
 Engine/Library/Windows/Debug/FbxSDK/libfbxsdk-mt.lib
 Engine/Library/Windows/Debug/FbxSDK/libfbxsdk-md.lib
