@@ -1,27 +1,27 @@
-#include "tcper.h"
+#include "Tcper.h"
 
-namespace tcore {
-    tlib::tpool<tcper> g_tcper_pool;
+namespace XEngine {
+    XPool<Tcper> g_TcperPool;
     
-    tcper * tcper::create(api::iTcpSession * session, const std::string & host, const int port, int ssize, int rsize) {
-        (ssize <= max_pipe_size) ? : (ssize = max_pipe_size);
-        (rsize <= max_pipe_size) ? : (rsize = max_pipe_size);
+    Tcper * Tcper::Create(Api::iTcpSession * session, const std::string & host, const int port, int ssize, int rsize) {
+        // (ssize > MAX_PIPE_SIZE) ? (ssize = MAX_PIPE_SIZE) : void(0);
+        // (rsize > MAX_PIPE_SIZE) ? (rsize = MAX_PIPE_SIZE) : void(0);
 
         const int hostlen = host.size() + 1;
         char * temp = (char *)alloca(hostlen);
-        tools::memery::safeMemcpy(temp, hostlen, host.c_str(), hostlen);
+        SafeMemory::Memcpy(temp, hostlen, host.c_str(), hostlen);
 
         static const bool b = true;
-        tools::memery::safeMemcpy((void *)&session->_initiative, sizeof(bool), (void*)&b, sizeof(bool));
+        SafeMemory::Memcpy((void *)&session->_Initiative, sizeof(bool), (void*)&b, sizeof(bool));
 
         std::string ip;
-        if (!getIpByHost(host.c_str(), ip)) {
-            session->onConnectFailed(g_core);
+        if (!GetIpByHost(host.c_str(), ip)) {
+            session->OnConnectFailed();
             return nullptr;
         }
         
-        session->_address._ip = ip;
-        session->_address._port = port;
+        // session->_Address._ip = ip;
+        // session->_Address._port = port;
         
         struct timeval tv;
         struct sockaddr_in addr;
@@ -29,49 +29,49 @@ namespace tcore {
         addr.sin_family = AF_INET;
         addr.sin_port = htons(port);
 
-        int sock = invalid_fd;
-        if (invalid_fd == (sock = socket(AF_INET, SOCK_STREAM, 0))
-            || socket_error == setnonblocking(sock)
+        int sock = INVALID_FD;
+        if (INVALID_FD == (sock = socket(AF_INET, SOCK_STREAM, 0))
+            || ERROR_SOCKET == SetNonBlocking(sock)
             || inet_pton(AF_INET, ip.c_str(), &addr.sin_addr) <= 0) {
-            //error(g_core, "socket error %s, sock %lld, %s:%d", strerror(errno), sock, ip.c_str(), port);
-            close_socket(sock);
-            session->onConnectFailed(g_core);
+            //error("socket error %s, sock %lld, %s:%d", strerror(errno), sock, ip.c_str(), port);
+            CLOSE_SOCKET(sock);
+            session->OnConnectFailed();
             return nullptr;
         }
 
         int ret = connect(sock, (struct sockaddr *) &addr, sizeof(addr));
-        tcper * p = create_from_pool(g_tcper_pool, session, ip, port, ssize, rsize);
-        p->_socket = sock;
-        if (success == ret) {
+        Tcper * p = XPOOL_CREATE(g_TcperPool, session, ip, port, ssize, rsize);
+        p->_Socket = sock;
+        if (SUCCESS == ret) {
             struct epoll_event ev;
-            ev.data.ptr = (void *)&p->_associat;
+            ev.data.ptr = (void *)&p->_Associat;
             ev.events = EPOLLIN;
-            if (socket_error == epoll_ctl(g_epoller_fd, EPOLL_CTL_ADD, sock, &ev)) {
-                //error(g_core, "epoll_ctl error %s", strerror(errno));
-                session->onConnectFailed(g_core);
-                close_socket(sock);
-                recover_to_pool(g_tcper_pool, p);
+            if (ERROR_SOCKET == epoll_ctl(g_EpollerFd, EPOLL_CTL_ADD, sock, &ev)) {
+                //error("epoll_ctl error %s", strerror(errno));
+                session->OnConnectFailed();
+                CLOSE_SOCKET(sock);
+                XPOOL_RELEASE(g_TcperPool, p);
                 return nullptr;
             }
 
-            p->_connected = true;
-            tools::memery::safeMemcpy((void *)&session->_pipe, sizeof(void *), &p, sizeof(p));
-            session->onConnected(g_core);  
+            p->_Connected = true;
+            SafeMemory::Memcpy((void *)&session->_Pipe, sizeof(void *), &p, sizeof(p));
+            session->OnConnected();  
         } else if (ret < 0 && errno != EINPROGRESS) {
-            close_socket(sock);
-            session->onConnectFailed(g_core);
-            recover_to_pool(g_tcper_pool, p);
+            CLOSE_SOCKET(sock);
+            session->OnConnectFailed();
+            XPOOL_RELEASE(g_TcperPool, p);
             return nullptr;
         } else {
-            associat * at = create_from_pool(g_associat_pool, eCompletion::doConnect, p);
+            Associat * at = XPOOL_CREATE(g_AssociatPool, eCompletion::doConnect, p);
             struct epoll_event ev;
             ev.data.ptr = (void *)at;
             ev.events = EPOLLOUT;
-            if (socket_error == epoll_ctl(g_epoller_fd, EPOLL_CTL_ADD, sock, &ev)) {
-                //error(g_core, "epoll_ctl error %s", strerror(errno));
-                session->onConnectFailed(g_core);
-                close_socket(sock);
-                recover_to_pool(g_tcper_pool, p);
+            if (ERROR_SOCKET == epoll_ctl(g_EpollerFd, EPOLL_CTL_ADD, sock, &ev)) {
+                //error("epoll_ctl error %s", strerror(errno));
+                session->OnConnectFailed();
+                CLOSE_SOCKET(sock);
+                XPOOL_RELEASE(g_TcperPool, p);
                 return nullptr;
             }
         }
@@ -79,87 +79,87 @@ namespace tcore {
         return p;
     }
     
-    tcper::tcper(api::iTcpSession * session, const std::string & ip, const int port, const int ssize, const int rsize) 
-    : _session(session), _remote(ip, port), _connected(false), _caching(false), _send_buff(ssize), _recv_buff(rsize), _associat(eCompletion::doIO, this), _socket(invalid_fd)
+    Tcper::Tcper(Api::iTcpSession * session, const std::string & ip, const int port, const int ssize, const int rsize) 
+    : _Session(session), _Connected(false), _Caching(false), _SendBuff(ssize), _RecvBuff(rsize), _Associat(eCompletion::doIO, this), _Socket(INVALID_FD)
     {
 
     }
     
-    void tcper::onCompleter(associat * at, const eCompletion type, const struct epoll_event & ev) {
+    void Tcper::OnCompleter(Associat * at, const eCompletion type, const struct epoll_event & ev) {
         switch(type) {
             case eCompletion::doConnect: {
-                //associat * at = (associat *)ev.data.ptr;
-                recover_to_pool(g_associat_pool, at);
+                //Associat * at = (Associat *)ev.data.ptr;
+                XPOOL_RELEASE(g_AssociatPool, at);
                 
-                if (socket_error == settcpnodelay(_socket)) {
-                    close_socket(_socket);
-                    _session->onConnectFailed(g_core);
-                    recover_to_pool(g_tcper_pool, this);
+                if (ERROR_SOCKET == SetTcpNoDelay(_Socket)) {
+                    CLOSE_SOCKET(_Socket);
+                    _Session->OnConnectFailed();
+                    XPOOL_RELEASE(g_TcperPool, this);
                     return;
                 }
 
-                epoll_ctl(g_epoller_fd, EPOLL_CTL_DEL, _socket, nullptr);
+                epoll_ctl(g_EpollerFd, EPOLL_CTL_DEL, _Socket, nullptr);
                 if (ev.events & (EPOLLERR | EPOLLHUP | EPOLLRDHUP)) {
-                    close_socket(_socket);
-                    _session->onConnectFailed(g_core);
-                    recover_to_pool(g_tcper_pool, this);
+                    CLOSE_SOCKET(_Socket);
+                    _Session->OnConnectFailed();
+                    XPOOL_RELEASE(g_TcperPool, this);
                     return;
                 }
 
                 if (ev.events & EPOLLOUT) {
                     struct epoll_event event;
-                    event.data.ptr = (void *) &_associat;
+                    event.data.ptr = (void *) &_Associat;
                     event.events = EPOLLIN;
-                    if (socket_error == epoll_ctl(g_epoller_fd, EPOLL_CTL_ADD, _socket, &event)) {
-                        //error(g_core, "epoll ctl add error %s", strerror(errno));
-                        close_socket(_socket);
-                        _session->onConnectFailed(g_core);
-                        recover_to_pool(g_tcper_pool, this);
+                    if (ERROR_SOCKET == epoll_ctl(g_EpollerFd, EPOLL_CTL_ADD, _Socket, &event)) {
+                        //error("epoll ctl add error %s", strerror(errno));
+                        CLOSE_SOCKET(_Socket);
+                        _Session->OnConnectFailed();
+                        XPOOL_RELEASE(g_TcperPool, this);
                         return;
                     }
                     
                     iPipe * p = this;
-                    tools::memery::safeMemcpy((void *)&_session->_pipe, sizeof(void *), &p, sizeof(void *));
-                    _connected = true;
-                    _session->onConnected(g_core);
+                    SafeMemory::Memcpy((void *)&_Session->_Pipe, sizeof(void *), &p, sizeof(void *));
+                    _Connected = true;
+                    _Session->OnConnected();
                 } else {                        
-                    close_socket(_socket);
-                    _session->onConnectFailed(g_core);
-                    recover_to_pool(g_tcper_pool, this);
+                    CLOSE_SOCKET(_Socket);
+                    _Session->OnConnectFailed();
+                    XPOOL_RELEASE(g_TcperPool, this);
                 }
                 break;
             }
             case eCompletion::doIO: {
                 if (ev.events & (EPOLLERR | EPOLLHUP | EPOLLRDHUP)) {                        
-                    //error(g_core, "eCompletion::doIO error %s", strerror(errno));
-                    close_socket(_socket);
-                    _connected = false;
-                    tools::memery::safeMemset((void *)&_session->_pipe, sizeof(void *), 0, sizeof(void *));
-                    _session->onDisconnect(g_core);
-                    recover_to_pool(g_tcper_pool, this);
+                    //error("eCompletion::doIO error %s", strerror(errno));
+                    CLOSE_SOCKET(_Socket);
+                    _Connected = false;
+                    SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
+                    _Session->OnDisconnect();
+                    XPOOL_RELEASE(g_TcperPool, this);
                 } else {
                     if (ev.events & EPOLLIN) {
-                        static char temp[recv_temp_size];
-                        tassert(_connected, "wtf");
-                        if (_connected) {
-                            const int64 tick = tools::time::getMicrosecond();
+                        static char temp[RECV_TEMP_SIZE];
+                        XASSERT(_Connected, "wtf");
+                        if (_Connected) {
+                            const int64 tick = SafeSystem::Time::GetMicroSecond();
                             do {
-                                int len = recv(_socket, temp, sizeof(temp), 0);
-                                settcpquickack(_socket);
+                                int len = recv(_Socket, temp, sizeof(temp), 0);
+                                SetTcpQuickAck(_Socket);
                                 if (len < 0 && EAGAIN == errno) {
                                     return;
                                 } else if (len > 0) {
-                                    //debug(g_core, "pipe recv data size %d", len);
-                                    if (_recv_buff.in(temp, len)) {
-                                        while (_recv_buff.getLength() > 0 && !_caching) {
-                                            int use = _session->onRecv(g_core, (const char *)_recv_buff.getData(), _recv_buff.getLength());
-                                            if (!_connected) {
-                                                epoll_ctl(g_epoller_fd, EPOLL_CTL_DEL, _socket, nullptr);
-                                                close_socket(_socket);
-                                                if (_session) {
-                                                    tools::memery::safeMemset((void *)&_session->_pipe, sizeof(void *), 0, sizeof(void *));
-                                                    _session->onDisconnect(g_core);
-                                                    recover_to_pool(g_tcper_pool, this);
+                                    //debug("pipe recv data size %d", len);
+                                    if (_RecvBuff.In(temp, len)) {
+                                        while (_RecvBuff.Length() > 0 && !_Caching) {
+                                            int use = _Session->OnReceive((const char *)_RecvBuff.GetData(), _RecvBuff.Length());
+                                            if (!_Connected) {
+                                                epoll_ctl(g_EpollerFd, EPOLL_CTL_DEL, _Socket, nullptr);
+                                                CLOSE_SOCKET(_Socket);
+                                                if (_Session) {
+                                                    SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
+                                                    _Session->OnDisconnect();
+                                                    XPOOL_RELEASE(g_TcperPool, this);
                                                 }
                                                 return;
                                             }
@@ -167,50 +167,50 @@ namespace tcore {
                                             if (use <= 0) {
                                                 return;
                                             }
-                                            _recv_buff.out(use);
+                                            _RecvBuff.Out(use);
                                         }
                                     } else {
-                                        close();
+                                        Close();
                                         return;
                                     }
                                 } else {
-                                    close();
+                                    Close();
                                     return;
                                 } 
-                            } while (_connected && tools::time::getMicrosecond() - tick <= 100);
+                            } while (_Connected && SafeSystem::Time::GetMicroSecond() - tick <= 1000);
                         }
                     }
 
                     if (ev.events & EPOLLOUT) {
-                        tassert(_connected, "wtf");
-                        int64 temp_tick = tools::time::getMillisecond();
-                        //debug(g_core, "send tick comp : %lld", temp_tick - _last_send_tick);
-                        _last_send_tick = temp_tick;
+                        XASSERT(_Connected, "wtf");
+                        int64 temp_tick = SafeSystem::Time::GetMilliSecond();
+                        //debug("send tick comp : %lld", temp_tick - _last_send_tick);
+                        _LastSendTick = temp_tick;
 
-                        int len = ::send(_socket, _send_buff.getData(), _send_buff.getLength(), 0);
-                        settcpnodelay(_socket);
+                        int len = ::send(_Socket, _SendBuff.GetData(), _SendBuff.Length(), 0);
+                        SetTcpNoDelay(_Socket);
                         if (len > 0) {
-                            _send_buff.out(len);
-                            if (_send_buff.getLength() == 0) {
+                            _SendBuff.Out(len);
+                            if (_SendBuff.Length() == 0) {
                                 struct epoll_event ev;
-                                ev.data.ptr = (void *) &_associat;
+                                ev.data.ptr = (void *) &_Associat;
                                 ev.events = EPOLLIN;
-                                if (socket_error == epoll_ctl(g_epoller_fd, EPOLL_CTL_MOD, _socket, &ev)) {                                               
-                                    epoll_ctl(g_epoller_fd, EPOLL_CTL_DEL, _socket, nullptr);
-                                    close_socket(_socket);
-                                    tools::memery::safeMemset((void *)&_session->_pipe, sizeof(void *), 0, sizeof(void *));
-                                    _session->onDisconnect(g_core);
-                                    tools::memery::safeMemset((void *)&_session, sizeof(void *), 0, sizeof(void *));
-                                    recover_to_pool(g_tcper_pool, this);
+                                if (ERROR_SOCKET == epoll_ctl(g_EpollerFd, EPOLL_CTL_MOD, _Socket, &ev)) {                                               
+                                    epoll_ctl(g_EpollerFd, EPOLL_CTL_DEL, _Socket, nullptr);
+                                    CLOSE_SOCKET(_Socket);
+                                    SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
+                                    _Session->OnDisconnect();
+                                    SafeMemory::Memset((void *)&_Session, sizeof(void *), 0, sizeof(void *));
+                                    XPOOL_RELEASE(g_TcperPool, this);
                                     return;
                                 }
                             }
                         } else if (len <= 0 && EAGAIN != errno) {
-                            epoll_ctl(g_epoller_fd, EPOLL_CTL_DEL, _socket, nullptr);
-                            close_socket(_socket);
-                            tools::memery::safeMemset((void *)&_session->_pipe, sizeof(void *), 0, sizeof(void *));
-                            _session->onDisconnect(g_core);
-                            recover_to_pool(g_tcper_pool, this);
+                            epoll_ctl(g_EpollerFd, EPOLL_CTL_DEL, _Socket, nullptr);
+                            CLOSE_SOCKET(_Socket);
+                            SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
+                            _Session->OnDisconnect();
+                            XPOOL_RELEASE(g_TcperPool, this);
                         }
                     }
                 }
@@ -220,42 +220,34 @@ namespace tcore {
         }
     }
     
-    void tcper::close() {
-        if (_socket != invalid_fd) {
-            _connected = false;
-            epoll_ctl(g_epoller_fd, EPOLL_CTL_DEL, _socket, nullptr);
-            close_socket(_socket);
-            if (_session) {
-                tools::memery::safeMemset((void *)&_session->_pipe, sizeof(void *), 0, sizeof(void *));
-                _session->onDisconnect(g_core);
-                tools::memery::safeMemset((void *)&_session, sizeof(void *), 0, sizeof(void *));
+    void Tcper::Close() {
+        if (_Socket != INVALID_FD) {
+            _Connected = false;
+            epoll_ctl(g_EpollerFd, EPOLL_CTL_DEL, _Socket, nullptr);
+            CLOSE_SOCKET(_Socket);
+            if (_Session) {
+                SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
+                _Session->OnDisconnect();
+                SafeMemory::Memset((void *)&_Session, sizeof(void *), 0, sizeof(void *));
             }
-            recover_to_pool(g_tcper_pool, this);
+            XPOOL_RELEASE(g_TcperPool, this);
         }
     }
     
-    void tcper::cache() {
-        
-    }
-    
-    void tcper::load() {
-        
-    }
-    
-    void tcper::send(const void * data, const int size, bool immediately) {
-        if (!_connected) {
+    void Tcper::Send(const void * data, const int size, bool immediately) {
+        if (!_Connected) {
             return;
         }
 
-        if (_send_buff.in(data, size)) {
+        if (_SendBuff.In(data, size)) {
             if (immediately) {
                 struct epoll_event ev;
-                ev.data.ptr = (void *) &_associat;
+                ev.data.ptr = (void *) &_Associat;
                 ev.events = EPOLLIN | EPOLLOUT;
-                epoll_ctl(g_epoller_fd, EPOLL_CTL_MOD, _socket, &ev);
+                epoll_ctl(g_EpollerFd, EPOLL_CTL_MOD, _Socket, &ev);
             }
         } else {
-            close();
+            Close();
         }
     }
 }

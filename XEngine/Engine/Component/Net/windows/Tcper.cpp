@@ -51,7 +51,7 @@ namespace XEngine {
     }
 
     void Tcper::OnCompleted(OVERLAPPEDEX* ex, const eCompletion type, const int code, const int size) {
-        XASSERT(type == eCompletion::Recved || type == eCompletion::Sended || type == eCompletion::Connected, "tcper on completer type error");
+        XASSERT(type == eCompletion::Recved || type == eCompletion::Sended || type == eCompletion::Connected, "Tcper on completer type error");
         switch (type) {
         case eCompletion::Connected: {
             XPOOL_RELEASE(g_OverlappedexPool, ex);

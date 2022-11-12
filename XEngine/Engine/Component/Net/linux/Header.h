@@ -1,15 +1,15 @@
-#ifndef __header_h__
-#define __header_h__
+#pragma once
 
-#include "api.h"
-#include "instance.h"
-#include "tools.h"
-#include "tpool.h"
-#include "core.h"
-#include "cbuffer.h"
+#include "iEngineComponent.h"
+#include "iNet.h"
+#include "Engine.h"
+
+#include "SafeMemory.h"
+#include "SafeSystem.h"
+#include "XPool.h"
+#include "XBuffer.h"
 
 #include <queue>
-
 #include <fcntl.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -19,23 +19,19 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 #include <netdb.h>
-#include "core.h"
 
+#define ERROR_SOCKET -1
+#define INVALID_FD -1
+#define SUCCESS 0
+#define EPOLLER_MAX_EVENT_COUNT 64
+#define EPOLLER_DESC_COUNT 10240
+#define MAX_PIPE_SIZE (20 * 1024 * 1024)
+#define RECV_TEMP_SIZE 512
 
-#define socket_error -1
-#define invalid_fd -1
-#define success 0
-#define epoller_ev_max_count 64
-#define epoller_desc_count 10240
-#define max_pipe_size (20 * 1024 * 1024)
-#define recv_temp_size 4096
+namespace XEngine {
+    using namespace XEngine::Api;
 
-namespace tcore {
-    using namespace api;
-    
-    extern core * g_core;
-    extern int g_epoller_fd;
-    
+    extern int g_EpollerFd;
     
     enum eCompletion {
         doAccept,
@@ -44,40 +40,44 @@ namespace tcore {
     };
     
     class iCompleter;
-    
-    struct associat {
-        const eCompletion _ev;
-        iCompleter * const _completer;
+    struct Associat {
+        const eCompletion _Ev;
+        iCompleter * const _Completer;
 
-        associat(const eCompletion ev, iCompleter * const p) : _ev(ev), _completer(p) {}
+        Associat(const eCompletion ev, iCompleter * const p) : _Ev(ev), _Completer(p) {}
     };
-    extern tlib::tpool<associat> g_associat_pool;
 
-    class udper;
-    extern tlib::tpool<udper> g_udper_pool;
+    class iCompleter {
+    public:
+        virtual ~iCompleter() {}
+
+        virtual void OnCompleter(Associat * at, const eCompletion type, const struct epoll_event & ev) = 0;
+    };
+
+    extern XPool<Associat> g_AssociatPool;
     
-    class tcper;
-    extern tlib::tpool<tcper> g_tcper_pool;
+    class Tcper;
+    extern XPool<Tcper> g_TcperPool;
     
-    class accepter;
-    extern tlib::tpool<accepter> g_accepter_pool;
+    class Accepter;
+    extern XPool<Accepter> g_AccepterPool;
     
-#   define close_socket(sock) {\
+#   define CLOSE_SOCKET(sock) {\
         ::close(sock); \
-        sock = invalid_fd; \
+        sock = INVALID_FD; \
     }
     
-    class oPackage {
+    class NetPackage {
     public:
-        void * const _data;
-        const int _len;
-        const std::string _ip;
-        const int _port;
+        void * const _Data;
+        const int _Len;
+        const std::string _Ip;
+        const int _Port;
 
-        oPackage(const void * data, const int len, const std::string & ip, const int port) : _data(tnew char[len]), _len(len), _ip(ip),_port(port) {
-            tools::memery::safeMemcpy(_data, _len, data, len);
+        NetPackage(const void * data, const int len, const std::string & ip, const int port) : _Data(xnew char[len]), _Len(len), _Ip(ip),_Port(port) {
+            SafeMemory::Memcpy(_Data, _Len, data, len);
         }
-        oPackage(const oPackage & package) : _data(package._data), _len(package._len), _ip(package._ip), _port(package._port) {}
+        NetPackage(const NetPackage & package) : _Data(package._Data), _Len(package._Len), _Ip(package._Ip), _Port(package._Port) {}
     };
 }
 
@@ -85,48 +85,46 @@ namespace tcore {
 extern "C" {
 #endif //__cplusplus__
 
-    inline int setnonblocking(int sockfd) {
+    __forceinline int SetNonBlocking(int sockfd) {
         return fcntl(sockfd, F_SETFL, fcntl(sockfd, F_GETFD, 0) | O_NONBLOCK);
     }
 
-    inline int settcpnodelay(const int fd) {
+    __forceinline int SetTcpNoDelay(const int fd) {
         int val = 1;
         return setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (const char *) &val, sizeof (val));
     }
 
-    inline int settcpquickack(const int fd) {
+    __forceinline int SetTcpQuickAck(const int fd) {
 	    int val = 1;
         return setsockopt(fd, IPPROTO_TCP, TCP_QUICKACK, (const char *)&val, sizeof(val));
     }
 
-    inline int setreuse(const int fd) {
+    __forceinline int SetReuse(const int fd) {
         int val = 1;
         return setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (const char *) &val, sizeof (val));
     }
 
-    inline int setsocksendbuff(int sock, int size) {
+    __forceinline int SetSockSendBuff(int sock, int size) {
         return setsockopt(sock, SOL_SOCKET, SO_SNDBUF, (const char *) &size, sizeof (size));
     }
 
-    inline int setsockrecvbuff(int sock, int size) {
+    __forceinline int SetSockRecvBuff(int sock, int size) {
         return setsockopt(sock, SOL_SOCKET, SO_RCVBUF, (const char *) &size, sizeof (size));
     }
 
-    inline int setmaxopenfile(const int size) {
+    __forceinline bool SetMaxOpenFile(const int size) {
         struct rlimit rt;
         rt.rlim_max = rt.rlim_cur = size;
-        if (setrlimit(RLIMIT_NOFILE, &rt) == -1) return -1;
-        return 0;
+        return setrlimit(RLIMIT_NOFILE, &rt) != -1;
     }
 
-    inline int setstacksize(const int size) {
+    __forceinline bool SetStackSize(const int size) {
         struct rlimit rt;
         rt.rlim_max = rt.rlim_cur = size * 1024;
-        if (setrlimit(RLIMIT_STACK, &rt) == -1) return -1;
-        return 0;
+        return setrlimit(RLIMIT_STACK, &rt) != -1;
     }
 
-    inline bool getIpByHost(const char * host, OUT std::string & ip) {
+    __forceinline bool GetIpByHost(const char * host, OUT std::string & ip) {
         struct hostent * hp;
         if ((hp = gethostbyname(host)) == NULL) {
             return false;
@@ -140,4 +138,3 @@ extern "C" {
 }
 #endif //__cplusplus
 
-#endif //__header_h__

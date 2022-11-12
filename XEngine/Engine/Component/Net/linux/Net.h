@@ -3,8 +3,6 @@
 
 #include "Header.h"
 
-#include <set>
-
 namespace XEngine {
     class Net : public iNet {
     public:

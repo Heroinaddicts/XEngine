@@ -1,40 +1,39 @@
-#ifndef __tcper_h__
-#define __tcper_h__
+#ifndef __Tcper_h__
+#define __Tcper_h__
 
-#include "interface.h"
+#include "Header.h"
 
-namespace tcore {
-    class tcper : public iCompleter, public api::iTcpPipe {
+namespace XEngine {
+    class Tcper : public iCompleter, public Api::iTcpPipe {
     public:
-        virtual ~tcper() {}
+        virtual ~Tcper() {}
         
-        static tcper * create(api::iTcpSession * session, const int sock, const std::string & ip, const int port, int ssize, int rsize);
-        static tcper * create(api::iTcpSession * session, const std::string & ip, const int port, int ssize, int rsize);
+        static Tcper * Create(Api::iTcpSession * session, const int sock, const std::string & ip, const int port, int ssize, int rsize);
+        static Tcper * Create(Api::iTcpSession * session, const std::string & ip, const int port, int ssize, int rsize);
         
-        virtual void onCompleter(associat * at, const eCompletion type, const struct epoll_event & ev);
+        virtual void OnCompleter(Associat * at, const eCompletion type, const struct epoll_event & ev);
+        virtual void Send(const void * data, const int size, bool immediately);
         
-        virtual void close();
-        virtual void cache();
-        virtual void load();
-        virtual void send(const void * data, const int size, bool immediately);
+        __forceinline void Pause() {}
+        __forceinline void Resume() {}
+        virtual void Close();
         
     private:
-        friend accepter;
-        friend tlib::tpool<tcper>;
-        tcper(api::iTcpSession * session, const std::string & ip, const int port, const int ssize, const int rsize);
+        friend Accepter;
+        friend XPool<Tcper>;
+        Tcper(Api::iTcpSession * session, const std::string & ip, const int port, const int ssize, const int rsize);
     private:
-        bool _connected;
-        bool _caching;
-        int _socket;
-        const associat _associat;
-        const api::oAddress _remote;
-        api::iTcpSession * const _session;
+        bool _Connected;
+        bool _Caching;
+        int _Socket;
+        const Associat _Associat;
+        Api::iTcpSession * const _Session;
 
-        tlib::cbuffer _send_buff;
-        tlib::cbuffer _recv_buff;
+        XBuffer _SendBuff;
+        XBuffer _RecvBuff;
 
-        int64 _last_send_tick;
+        int64 _LastSendTick;
     };
 }
 
-#endif //__tcper_h__
+#endif //__Tcper_h__

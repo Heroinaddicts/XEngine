@@ -1,31 +1,30 @@
-#ifndef __accepter_h__
-#define __accepter_h__
+#ifndef __Accepter_h__
+#define __Accepter_h__
 
-#include "interface.h"
+#include "Header.h"
 
-namespace tcore {
-    class accepter : public iCompleter, public api::iAccepter {
+namespace XEngine {
+    class Accepter : public iCompleter, public Api::iAccepter {
     public:
-        virtual ~accepter() {}
+        virtual ~Accepter() {}
         
-        static accepter * create(iTcpServer * server, const char * ip, const int port, int s_size, int r_size);
+        static Accepter * Create(iTcpServer * server, const char * ip, const int port, int s_size, int r_size);
         
-        virtual void onCompleter(associat * at, const eCompletion type, const struct epoll_event & ev);
-        virtual void release();
-        
-    private:
-        friend tlib::tpool<accepter>;
-        accepter(iTcpServer * server, const char * ip, const int port, int s_size, int r_size);
+        virtual void OnCompleter(Associat * at, const eCompletion type, const struct epoll_event & ev);
+        virtual void Release();
         
     private:
-        iTcpServer * const _server;
-        const int _ssize;
-        const int _rsize;
-        api::oAddress _address;
-        int _socket;
-        sockaddr_in _addr;
-        associat _at;
+        friend XPool<Accepter>;
+        Accepter(iTcpServer * server, const char * ip, const int port, int s_size, int r_size);
+        
+    private:
+        iTcpServer * const _Server;
+        const int _SendSize;
+        const int _RecvSize;
+        int _Socket;
+        sockaddr_in _Addr;
+        Associat _Associat;
     };
 }
 
-#endif //__accepter_h__
+#endif //__Accepter_h__
