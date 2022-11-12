@@ -9,8 +9,8 @@ using namespace tcore;
 
 #pragma pack(push, 1)
 struct oProtocol {
-    uint32 size;
-    uint16 id;
+    unsigned_int32 size;
+    unsigned_int16 id;
 };
 #pragma pack(pop)
 
@@ -20,30 +20,30 @@ public:
     virtual ~iSession() {}
     iSession() : _parser(f_parser_protobuf) {}
 
-    virtual int onRecv(api::iCore * core, const char * context, const int size) {
+    virtual int onRecv(api::iCore* core, const char* context, const int size) {
         if (size < sizeof(oProtocol)) {
             return 0;
         }
 
-        const oProtocol * header = (const oProtocol *)context;
+        const oProtocol* header = (const oProtocol*)context;
         if (header->size > size) {
             return 0;
         }
 
-        const char * data = ((const char *)context) + sizeof(oProtocol);
+        const char* data = ((const char*)context) + sizeof(oProtocol);
 
         onMessage(core, header->id, data, header->size - sizeof(oProtocol));
         return header->size;
     }
 
     template<typename pb>
-    void tregister(const uint16 id, void(*caller)(const pb &, api::iCore *, session *, const int64 context), const char * debug) {
+    void tregister(const uint16 id, void(*caller)(const pb&, api::iCore*, session*, const int64 context), const char* debug) {
         _parser.treg(id, caller, debug);
     }
 
-    virtual void sendproto(const uint16 id, const ::google::protobuf::Message & body) {
+    virtual void sendproto(const uint16 id, const ::google::protobuf::Message& body) {
         const uint32 size = body.ByteSize();
-        char * temp = (char *)alloca(size);
+        char* temp = (char*)alloca(size);
         if (!body.SerializeToArray(temp, size)) {
             tassert(false, "body format error");
             return;
@@ -56,7 +56,7 @@ public:
         send(temp, size);
     }
 
-    virtual void sendmessage(const uint16 id, const void * data, const uint32 len) {
+    virtual void sendmessage(const uint16 id, const void* data, const uint32 len) {
         oProtocol protocol;
         protocol.size = len + sizeof(protocol);
         protocol.id = id;
@@ -65,7 +65,7 @@ public:
     }
 
 protected:
-    static bool f_parser_protobuf(const void * data, const int len, ::google::protobuf::Message & package) {
+    static bool f_parser_protobuf(const void* data, const int len, ::google::protobuf::Message& package) {
         if (len > 0 && package.ParseFromArray(data, len)) {
             return true;
         }
@@ -74,12 +74,12 @@ protected:
         return false;
     }
 
-    virtual void onMessage(api::iCore * core, const uint16 id, const char * data, const int len, const int64 context = int64(0)) {
-        _parser.trigger(id, data, len, core, (session *)this, context);
+    virtual void onMessage(api::iCore* core, const uint16 id, const char* data, const int len, const int64 context = int64(0)) {
+        _parser.trigger(id, data, len, core, (session*)this, context);
     }
 
 private:
-    tlib::tparser<uint16, ::google::protobuf::Message, api::iCore *, session *, const int64> _parser;
+    tlib::tparser<uint16, ::google::protobuf::Message, api::iCore*, session*, const int64> _parser;
 };
 
 #define register_proto(s, id, fun) s->tregister(id, fun, #fun)
