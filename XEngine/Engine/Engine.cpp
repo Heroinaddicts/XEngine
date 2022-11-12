@@ -117,37 +117,7 @@ bool AnalysisLaunchParameters(const int argc, const char** args, const char** en
     return true;
 }
 
-class A {
-public:
-    virtual ~A() {}
-    A() {
-
-    }
-};
-
-class B : public A {
-public:
-    virtual ~B() {}
-};
-
-void Test() {
-    int i = 100;
-    const type_info& t1 = typeid(i);
-
-    //type_info::type_info info;
-    printf(t1.name());
-    printf("=====");
-    printf(t1.raw_name());
-
-    A* b = new B();
-
-    const type_info& tb = typeid(*b);
-    printf("test %s\n", tb.name());
-}
-
 int main(int argc, const char** args, const char** env) {
-    Test();
-
     if (!AnalysisLaunchParameters(argc, args, env)) {
         XASSERT(false, "AnalysisLaunchParameters error");
         return 0;
