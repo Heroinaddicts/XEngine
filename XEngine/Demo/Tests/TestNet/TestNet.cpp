@@ -53,7 +53,7 @@ void TestNet::OnStart(const int id, void* const context, const int64 timestamp) 
 void TestNet::OnTimer(const int id, void* const context, const int64 timestamp) {
     switch (id) {
     case TimeConfig::eTimeID::NewClient: {
-        if (g_ClientCount > 1500) {
+        if (g_ClientCount > 1000) {
             return;
         }
         g_Engine->GetNetApi()->LaunchTcpSession(xnew TestClient, s_RemoteHost, s_RemotePort, PIPE_LEN, PIPE_LEN);
