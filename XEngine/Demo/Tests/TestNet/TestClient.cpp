@@ -36,9 +36,9 @@ void TestClient::OnTimer(const int id, void* const context, const int64 timestam
     switch (id) {
     case TimeConfig::eTimeID::TraceBandwidth: {
         float second = (SafeSystem::Time::GetMilliSecond() - _StartTick) / 1000.0f;
-        TRACE(g_Engine, "Recv size %d, bandwidth %2f KB/S, Send size %d, badwidth %2f KB/S",
-            _RecvSize, (_RecvSize / 1024.0f) / second,
-            _SendSize, (_SendSize / 1024.0f) / second);
+        TRACE(g_Engine, "Recv size %.2f KB, bandwidth %.2f KB/S, Send size %.2f KB, badwidth %.2f KB/S",
+            _RecvSize / 1024.0f, (_RecvSize / 1024.0f) / second,
+            _SendSize / 1024.0f, (_SendSize / 1024.0f) / second);
         break;
     }
     case TimeConfig::eTimeID::RandomSendData: {

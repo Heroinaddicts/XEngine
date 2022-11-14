@@ -100,7 +100,7 @@ namespace XEngine {
     void Logic::Update(Api::iEngine* const engine) {
         int64 temp = SafeSystem::Time::GetMilliSecond() - tick;
         if (temp > 5) {
-            XLOG(engine, "%lld", temp);
+            //XLOG(engine, "%lld", temp);
         }
         tick = SafeSystem::Time::GetMilliSecond();
     }
