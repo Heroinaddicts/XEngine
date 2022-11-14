@@ -29,7 +29,8 @@ namespace XEngine {
         ThreadArgs* p = (ThreadArgs*)args;
         XASSERT(p, "a null thread owner point");
         p->_St->Run(p->_Context);
-        return p;
+        xdel p;
+        return nullptr;
     }
 #endif //Linux
 
@@ -45,7 +46,7 @@ namespace XEngine {
             }
 #else
             pthread_t ptid = 0;
-            int ret = pthread_create(&ptid, nullptr, ThreadProc, (void*)&p);
+            int ret = pthread_create(&ptid, nullptr, ThreadProc, (void*)p);
             if (ret != 0) {
                 return false;
             }

@@ -6,6 +6,7 @@
 namespace XEngine {
     int g_EpollerFd = INVALID_FD;
     XPool<Associat> g_AssociatPool;
+    std::set<Tcper*> g_TcperNeedSend;
 
     iNet* Net::GetInstance() {
         static Net static_net;
@@ -28,9 +29,6 @@ namespace XEngine {
     }
 
     void Net::EarlyUpdate(Api::iEngine* const engine) {
-    }
-
-    void Net::Update(Api::iEngine* const engine) {
         static struct epoll_event evs[EPOLLER_MAX_EVENT_COUNT];
         int64 tick = SafeSystem::Time::GetMilliSecond();
         do {
@@ -51,12 +49,19 @@ namespace XEngine {
         } while (SafeSystem::Time::GetMilliSecond() - tick < 1000);
     }
 
+    void Net::Update(Api::iEngine* const engine) {
+    }
+
     void Net::FixedUpdate(Api::iEngine* const engine) {
 
     }
 
     void Net::LaterUpdate(Api::iEngine* const engine) {
+        for(auto i=g_TcperNeedSend.begin(); i!=g_TcperNeedSend.end(); i++) {
+            (*i)->DoSend();
+        }
 
+        g_TcperNeedSend.clear();
     }
 
     bool Net::LaunchTcpSession(Api::iTcpSession* session, const char* host, const int port, int max_ss, int max_rs) {

@@ -1,5 +1,6 @@
 #include "SafeSystem.h"
 #include "SafeString.h"
+#include "SafeMemory.h"
 
 #include <stdio.h>
 
@@ -14,6 +15,12 @@
 
 #ifdef Linux
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <sys/syscall.h>
+#include <dirent.h>
+#include <libgen.h>
+#include <pthread.h>
 #endif //Linux
 
 namespace XEngine {
@@ -35,12 +42,20 @@ namespace XEngine {
 #ifdef WIN32
                 return ::GetCurrentProcessId();
 #endif //WIN32
+
+#ifdef Linux
+                return ::getpid();
+#endif //Linux
             }
 
             unsigned_int64 GetCurrentThreadID() {
 #ifdef WIN32
                 return ::GetCurrentThreadId();
 #endif //WIN32
+
+#ifdef Linux
+                return syscall(SYS_gettid);
+#endif //Linux
             }
         }
 
@@ -60,6 +75,25 @@ namespace XEngine {
                     SafeString::Replace(*static_path, "\\", "/");
                 }
 #endif //WIN32
+#ifdef Linux
+#define SYSTEM_PATH_LEN 2048
+                if (nullptr == static_path) {
+                    char buff[SYSTEM_PATH_LEN];
+                    char link[SYSTEM_PATH_LEN];
+                    SafeMemory::Memset(buff, sizeof(buff), 0, sizeof(buff));
+                    SafeMemory::Memset(link, sizeof(link), 0, sizeof(link));
+
+                    sprintf_s(link, sizeof(link), "/proc/self/exe");
+                    int count = readlink(link, buff, sizeof(buff));
+                    if (count >= sizeof(buff)) {
+                        XASSERT(false, "system path error");
+                        return nullptr;
+                    }
+
+                    const char * p = dirname(buff);
+                    static_path = xnew std::string(p);
+                }
+#endif //Linux
                 return *static_path;
             }
 

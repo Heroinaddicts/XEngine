@@ -15,7 +15,7 @@ namespace XEngine {
             xdel[] _Data;
         }
 
-        inline bool In(const void* data, const unsigned int size) {
+        inline bool In(const void* data, const int size) {
             if (size == 0) {
                 return true;
             }
@@ -38,7 +38,6 @@ namespace XEngine {
                 _In -= _Out;
                 _Out = 0;
                 xdel old_data;
-
             }
 
             if (_Size - _In < size) {
@@ -56,18 +55,23 @@ namespace XEngine {
             XASSERT(_In < _Size&& _Out < _Size, "wtf");
             SafeMemory::Memcpy(_Data + _In, _Size - Length(), data, size);
             _In += size;
-            XASSERT(_In <= _Size, "wtf");
-
+            XASSERT(_In <= _Size && _In >= _Out, "wtf");
             return true;
         }
 
-        inline bool Out(const unsigned int size) {
+        inline bool Out(const int size) {
+            XASSERT(size > 0, "wtf");
+            if (size <= 0) {
+                return false;
+            }
             XASSERT(_Out + size <= _In && _In <= _Size, "wtf");
             if (_Out + size > _In) {
+                XASSERT(_In <= _Size && _In >= _Out, "wtf");
                 return false;
             }
 
             _Out += size;
+            XASSERT(_In <= _Size && _In >= _Out, "wtf");
             return true;
         }
 

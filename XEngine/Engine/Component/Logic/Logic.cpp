@@ -48,7 +48,7 @@ namespace XEngine {
 
                 __GetModules fun = (__GetModules)::GetProcAddress(hinst, GET_MODULES_FUNC_NAME);
 #else
-                std::string path = _ModulePath + "/" + names[i] + ".so";
+                std::string path = _ModulePath + "/lib" + names[i] + ".so";
                 void* handle = dlopen(path.c_str(), RTLD_LAZY);
                 if (!handle) {
                     XERROR(engine, "load %s error %s\n", path.c_str(), errno);

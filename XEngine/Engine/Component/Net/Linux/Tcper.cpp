@@ -3,6 +3,10 @@
 namespace XEngine {
     XPool<Tcper> g_TcperPool;
     
+    Tcper::~Tcper() {
+        //g_TcperNeedSend.erase(this);
+    }
+
     Tcper * Tcper::Create(Api::iTcpSession * session, const std::string & host, const int port, int ssize, int rsize) {
         // (ssize > MAX_PIPE_SIZE) ? (ssize = MAX_PIPE_SIZE) : void(0);
         // (rsize > MAX_PIPE_SIZE) ? (rsize = MAX_PIPE_SIZE) : void(0);
@@ -136,6 +140,7 @@ namespace XEngine {
                     _Connected = false;
                     SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
                     _Session->OnDisconnect();
+                    g_TcperNeedSend.erase(this);
                     XPOOL_RELEASE(g_TcperPool, this);
                 } else {
                     if (ev.events & EPOLLIN) {
@@ -159,6 +164,7 @@ namespace XEngine {
                                                 if (_Session) {
                                                     SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
                                                     _Session->OnDisconnect();
+                                                    g_TcperNeedSend.erase(this);
                                                     XPOOL_RELEASE(g_TcperPool, this);
                                                 }
                                                 return;
@@ -182,36 +188,7 @@ namespace XEngine {
                     }
 
                     if (ev.events & EPOLLOUT) {
-                        XASSERT(_Connected, "wtf");
-                        int64 temp_tick = SafeSystem::Time::GetMilliSecond();
-                        //debug("send tick comp : %lld", temp_tick - _last_send_tick);
-                        _LastSendTick = temp_tick;
-
-                        int len = ::send(_Socket, _SendBuff.GetData(), _SendBuff.Length(), 0);
-                        SetTcpNoDelay(_Socket);
-                        if (len > 0) {
-                            _SendBuff.Out(len);
-                            if (_SendBuff.Length() == 0) {
-                                struct epoll_event ev;
-                                ev.data.ptr = (void *) &_Associat;
-                                ev.events = EPOLLIN;
-                                if (ERROR_SOCKET == epoll_ctl(g_EpollerFd, EPOLL_CTL_MOD, _Socket, &ev)) {                                               
-                                    epoll_ctl(g_EpollerFd, EPOLL_CTL_DEL, _Socket, nullptr);
-                                    CLOSE_SOCKET(_Socket);
-                                    SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
-                                    _Session->OnDisconnect();
-                                    SafeMemory::Memset((void *)&_Session, sizeof(void *), 0, sizeof(void *));
-                                    XPOOL_RELEASE(g_TcperPool, this);
-                                    return;
-                                }
-                            }
-                        } else if (len <= 0 && EAGAIN != errno) {
-                            epoll_ctl(g_EpollerFd, EPOLL_CTL_DEL, _Socket, nullptr);
-                            CLOSE_SOCKET(_Socket);
-                            SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
-                            _Session->OnDisconnect();
-                            XPOOL_RELEASE(g_TcperPool, this);
-                        }
+                        g_TcperNeedSend.insert(this);
                     }
                 }
                 
@@ -228,8 +205,10 @@ namespace XEngine {
             if (_Session) {
                 SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
                 _Session->OnDisconnect();
+                g_TcperNeedSend.erase(this);
                 SafeMemory::Memset((void *)&_Session, sizeof(void *), 0, sizeof(void *));
             }
+            
             XPOOL_RELEASE(g_TcperPool, this);
         }
     }
@@ -240,14 +219,38 @@ namespace XEngine {
         }
 
         if (_SendBuff.In(data, size)) {
-            if (immediately) {
-                struct epoll_event ev;
-                ev.data.ptr = (void *) &_Associat;
-                ev.events = EPOLLIN | EPOLLOUT;
-                epoll_ctl(g_EpollerFd, EPOLL_CTL_MOD, _Socket, &ev);
-            }
+            g_TcperNeedSend.insert(this);
         } else {
             Close();
+        }
+    }
+
+    void Tcper::DoSend() {
+        XASSERT(_Connected, "wtf");
+        int len = ::send(_Socket, _SendBuff.GetData(), _SendBuff.Length(), 0);
+        SetTcpNoDelay(_Socket);
+        if (len > 0) {
+            _SendBuff.Out(len);
+            if (_SendBuff.Length() == 0) {
+                struct epoll_event ev;
+                ev.data.ptr = (void *) &_Associat;
+                ev.events = EPOLLIN;
+                if (ERROR_SOCKET == epoll_ctl(g_EpollerFd, EPOLL_CTL_MOD, _Socket, &ev)) {                                               
+                    epoll_ctl(g_EpollerFd, EPOLL_CTL_DEL, _Socket, nullptr);
+                    CLOSE_SOCKET(_Socket);
+                    SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
+                    _Session->OnDisconnect();
+                    SafeMemory::Memset((void *)&_Session, sizeof(void *), 0, sizeof(void *));
+                    XPOOL_RELEASE(g_TcperPool, this);
+                    return;
+                }
+            }
+        } else if (len <= 0 && EAGAIN != errno) {
+            epoll_ctl(g_EpollerFd, EPOLL_CTL_DEL, _Socket, nullptr);
+            CLOSE_SOCKET(_Socket);
+            SafeMemory::Memset((void *)&_Session->_Pipe, sizeof(void *), 0, sizeof(void *));
+            _Session->OnDisconnect();
+            XPOOL_RELEASE(g_TcperPool, this);
         }
     }
 }

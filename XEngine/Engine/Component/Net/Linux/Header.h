@@ -20,6 +20,8 @@
 #include <unistd.h>
 #include <netdb.h>
 
+#include <set>
+
 #define ERROR_SOCKET -1
 #define INVALID_FD -1
 #define SUCCESS 0
@@ -79,6 +81,10 @@ namespace XEngine {
         }
         NetPackage(const NetPackage & package) : _Data(package._Data), _Len(package._Len), _Ip(package._Ip), _Port(package._Port) {}
     };
+
+
+    extern std::set<Tcper*> g_TcperNeedSend;
+
 }
 
 #ifdef __cplusplus

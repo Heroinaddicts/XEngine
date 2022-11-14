@@ -6,7 +6,7 @@
 namespace XEngine {
     class Tcper : public iCompleter, public Api::iTcpPipe {
     public:
-        virtual ~Tcper() {}
+        virtual ~Tcper();
         
         static Tcper * Create(Api::iTcpSession * session, const int sock, const std::string & ip, const int port, int ssize, int rsize);
         static Tcper * Create(Api::iTcpSession * session, const std::string & ip, const int port, int ssize, int rsize);
@@ -18,6 +18,8 @@ namespace XEngine {
         __forceinline void Resume() {}
         virtual void Close();
         
+        void DoSend();
+
     private:
         friend Accepter;
         friend XPool<Tcper>;

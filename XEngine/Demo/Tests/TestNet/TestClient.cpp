@@ -24,11 +24,9 @@ void TestClient::OnDisconnect() {
     g_Engine->GetTimerApi()->KillTimer(this, TimeConfig::eTimeID::TraceBandwidth, this);
     g_Engine->GetTimerApi()->KillTimer(this, TimeConfig::eTimeID::RandomSendData, this);
     g_Engine->GetTimerApi()->KillTimer(this, TimeConfig::eTimeID::RandomClose, this);
-    xdel this;
 }
 
 void TestClient::OnConnectFailed() {
-    xdel this;
 }
 
 void TestClient::OnStart(const int id, void* const context, const int64 timestamp) {
