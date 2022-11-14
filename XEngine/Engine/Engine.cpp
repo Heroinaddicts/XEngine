@@ -28,7 +28,7 @@ XEngine::iPhysics* g_Physics = nullptr;
 XEngine::iGameObjectManager* g_GameObjectManager = nullptr;
 
 static int s_FixedTimeStep = 33333;
-
+static bool s_Shutdown = false;
 
 
 namespace XEngine {
@@ -83,11 +83,11 @@ namespace XEngine {
     }
 
     void Engine::Shutdown() {
-
+        s_Shutdown = true;
     }
 
     bool Engine::isShutdown() {
-        return false;
+        return s_Shutdown;
     }
 
     Api::iModule* Engine::FindModule(const std::string& name) {
@@ -199,7 +199,6 @@ int main(int argc, const char** args, const char** env) {
         g_Physics->Release(XEngine::g_Engine);
         g_Net->Release(XEngine::g_Engine);
     }
-
 
     return 0;
 }

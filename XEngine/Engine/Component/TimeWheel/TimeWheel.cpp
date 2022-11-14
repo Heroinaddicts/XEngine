@@ -52,7 +52,6 @@ namespace XEngine {
         }
         xdel _Running;
         xdel _Suspended;
-        xdel this;
     }
 
     void TimeWheel::EarlyUpdate(Api::iEngine* const engine) {

@@ -62,7 +62,6 @@ namespace XEngine {
                 const int port = ntohs(sa.sin_port);
 
                 Api::iTcpSession* session = _Server->OnMallocConnection(ip.c_str(), port);
-                XASSERT(session, "malloc session nullptr");
                 if (session) {
                     Tcper* pipe = Tcper::Create(session, ip, port, _SendSize, _RecvSize, _Ex._Socket, false);
                     if (pipe) {

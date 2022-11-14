@@ -1,5 +1,6 @@
 #include "TestNet.h"
 #include "TestClient.h"
+#include "Shutdown.h"
 
 iEngine* g_Engine = nullptr;
 TestNet* g_TestNet = nullptr;
@@ -22,6 +23,8 @@ bool TestNet::Initialize(iEngine* const engine) {
     engine->GetNetApi()->LaunchTcpServer(this, "0.0.0.0", listenPort, PIPE_LEN, PIPE_LEN);
 
     START_TIMER(engine, this, TimeConfig::eTimeID::NewClient, 100, Api::Unlimited, 100, this);
+
+    engine->GetNetApi()->LaunchTcpServer(xnew Shutdown, "0.0.0.0", 8888, PIPE_LEN, PIPE_LEN);
     return true;
 }
 
