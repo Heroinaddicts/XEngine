@@ -1,9 +1,8 @@
 #include "TestClient.h"
 
 int TestClient::OnReceive(const char* content, const int size) {
-    this->Send(content, size);
+    //this->Send(content, size);
     _RecvSize += size;
-    _SendSize += size;
     return size;
 }
 
@@ -45,6 +44,7 @@ void TestClient::OnTimer(const int id, void* const context, const int64 timestam
         int len = SafeTools::Rand(512) + 64;
         const char* temp = (const char*)alloca(len);
         this->Send(temp, len);
+        _SendSize += len;
         break;
     }
     case TimeConfig::eTimeID::RandomClose: {
