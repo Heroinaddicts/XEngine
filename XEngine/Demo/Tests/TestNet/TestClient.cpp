@@ -20,6 +20,7 @@ void TestClient::OnConnected() {
 
 void TestClient::OnDisconnect() {
     g_ClientCount--;
+    TRACE(g_Engine, "TestClient::OnDisconnect %d", g_ClientCount);
     g_Engine->GetTimerApi()->KillTimer(this, TimeConfig::eTimeID::TraceBandwidth, this);
     g_Engine->GetTimerApi()->KillTimer(this, TimeConfig::eTimeID::RandomSendData, this);
     g_Engine->GetTimerApi()->KillTimer(this, TimeConfig::eTimeID::RandomClose, this);
