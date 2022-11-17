@@ -44,10 +44,15 @@ namespace XEngine {
 }
 
 #define TRACE(engine, format, ...) {\
-    char log[512] = {0};\
-    sprintf_s(log, sizeof(log), "TRACE LOG : %s:%d >>>> "#format, __FILE__, __LINE__, ##__VA_ARGS__);\
+    char log[1024] = {0};\
+    sprintf_s(log, sizeof(log), "Trace : %s:%d >>>> "#format, __FILE__, __LINE__, ##__VA_ARGS__);\
     engine->LogAsync(log);\
 }
 
+#define ERROR(engine, format, ...) {\
+    char log[1024] = {0}; \
+    sprintf_s(log, sizeof(log), "Error : %s:%d >>>> "#format, __FILE__, __LINE__, ##__VA_ARGS__);\
+    engine->LogSync(log);\
+}
 
 #endif //__iEngine_h__

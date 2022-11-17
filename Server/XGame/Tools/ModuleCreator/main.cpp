@@ -112,7 +112,7 @@ int main(int argc, const char** args, const char** env) {
     cmake_file << cmake_file_content;
 
     XFile cmakelists;
-    if (!cmakelists.Open(path + "/CMakeLists.txt")) {
+    if (!cmakelists.Open(path + "/" + s_ParameterMap["group"] + "/CMakeLists.txt")) {
         XASSERT(false, "wtf");
         return false;
     }

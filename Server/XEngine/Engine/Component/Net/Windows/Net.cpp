@@ -99,8 +99,7 @@ namespace XEngine {
         if (INVALID_SOCKET == (socket = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, nullptr, 0, WSA_FLAG_OVERLAPPED))
             || SOCKET_ERROR == setsockopt(socket, SOL_SOCKET, SO_SNDBUF, (char*)&len, sizeof(int))
             || SOCKET_ERROR == setsockopt(socket, SOL_SOCKET, SO_RCVBUF, (char*)&len, sizeof(int))
-            || setsockopt(socket, SOL_SOCKET, SO_LINGER,
-                (char*)&linger, sizeof(linger))
+            || setsockopt(socket, SOL_SOCKET, SO_LINGER, (char*)&linger, sizeof(linger))
             || SOCKET_ERROR == ioctlsocket(socket, FIONBIO, &ul)
             || (SOCKET_ERROR == ::bind(socket, (struct sockaddr*)&addr, sizeof(struct sockaddr_in)))
             || CreateIoCompletionPort((HANDLE)socket, (HANDLE)g_CompletePort, (u_long)socket, 0) != g_CompletePort) {

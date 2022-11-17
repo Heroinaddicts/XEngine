@@ -9,7 +9,7 @@ const char* header_h = "#ifndef __Header_h__\n\
 using namespace XEngine;\n\
 using namespace XEngine::Api;\n\
 \n\
-extern iEngine* g_engine;\n\
+extern iEngine* g_Engine;\n\
 class {name};\n\
 extern {name}* g_{name};\n\
 \n\
@@ -48,12 +48,12 @@ public:\n\
 
 const char* template_cpp = "#include \"{name}.h\"\n\
 \n\
-iEngine * g_engine = nullptr;\n\
+iEngine * g_Engine = nullptr;\n\
 {name}* g_{name} = nullptr;\n\
 \n\
 bool {name}::Initialize(iEngine* const engine) {\n\
     g_{name} = this;\n\
-    g_engine = engine;\n\
+    g_Engine = engine;\n\
     return true;\n\
 }\n\
 \n\
