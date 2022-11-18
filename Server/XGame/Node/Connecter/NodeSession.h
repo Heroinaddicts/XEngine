@@ -37,12 +37,17 @@ public:
         Send(&body, sizeof(body));
     }
 
-    __forceinline void SendMessage(const NodeProto::eID& id, const void* body, const unsigned_int16 len) {
+    __forceinline void SendMessage(const NodeProto::eID& id, const void* body = nullptr, const unsigned_int16 len = 0) {
         NodeProto::MessageHeader header;
         header._Len = sizeof(NodeProto::MessageHeader) + len;
         header._MsgId = id;
-        Send(&header, sizeof(header), false);
-        Send(body, len);
+		if (len != 0) {
+			Send(&header, sizeof(header), false);
+			Send(body, len);
+        }
+		else {
+			Send(&header, sizeof(header));
+        }
     }
 
     __forceinline void GiveUp() {
@@ -65,6 +70,8 @@ private:
     std::string _Name;
     std::string _RemoteIp;
     int _RemotePort;
+
+    int64 _LastHeartBeatTick;
 
     bool _IsGiveUP;
 };

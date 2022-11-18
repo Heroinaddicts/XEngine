@@ -5,4 +5,5 @@ taskkill /im XEngine.exe
 pause
 echo "launche string...."
 
-start "Tester" XEngine --components=ObjLoader;TestPhysics --pvd_host=127.0.0.1 --pvd_port=5425
+start "Gate" XEngine --modules=Connecter --name=Gate --node_id=10001 --remote_nodes=127.0.0.1:4499
+start "Lobby" XEngine --modules=Connecter --name=Lobby --node_id=20001 --node_ip=127.0.0.1 --node_port=4499

@@ -16,13 +16,23 @@ __forceinline void NodeSessionAppear(NodeSession* session) {
         temp->GiveUp();
     }
 
+    TRACE(g_Engine, "Node Appear %s %d", session->GetName(), session->GetId());
     for (auto i = g_SessionAppearEventPool.begin(); i != g_SessionAppearEventPool.end(); i++) {
         (*i)(session);
     }
 }
 
 __forceinline void NodeSessionDisappear(NodeSession* session) {
+    auto itor = g_NodeSessionMap.find(session->GetId());
+    if (itor == g_NodeSessionMap.end() || itor->second != session) {
+        return;
+    }
 
+    g_NodeSessionMap.erase(itor);
+	TRACE(g_Engine, "Node Disappear %s %d", session->GetName(), session->GetId());
+	for (auto i = g_SessionDisappearEventPool.begin(); i != g_SessionDisappearEventPool.end(); i++) {
+		(*i)(session);
+	}
 }
 
 NodeSession* NodeSession::Create(const std::string& remoteIp, const int remotePort) {
@@ -54,6 +64,10 @@ int NodeSession::OnReceive(const char* content, const int size) {
         }
         break;
     }
+    case NodeProto::eID::HeartBeat: {
+        _LastHeartBeatTick = SafeSystem::Time::GetMilliSecond();
+        break;
+    }
     default:
         XASSERT(false, "unkown message id %d", header->_MsgId);
         break;
@@ -63,14 +77,22 @@ int NodeSession::OnReceive(const char* content, const int size) {
 }
 
 void NodeSession::OnConnected() {
+    _LastHeartBeatTick = SafeSystem::Time::GetMilliSecond();
+
     NodeProto::oNodeReport report;
     report._Id = g_NodeID;
     report.SetName(g_NodeName.c_str());
 
     SendProto(NodeProto::eID::NodeReport, report);
+
+	START_TIMER(g_Engine, this, TimerConfig::eID::HeartBeat, TimerConfig::HeartBeatInterval, Api::Unlimited, TimerConfig::HeartBeatInterval, this);
+	START_TIMER(g_Engine, this, TimerConfig::eID::CheckHeartBeat, TimerConfig::CheckHeartBeatInterval, Api::Unlimited, TimerConfig::CheckHeartBeatInterval, this);
 }
 
 void NodeSession::OnDisconnect() {
+	g_Engine->GetTimerApi()->KillTimer(this, TimerConfig::eID::HeartBeat, this);
+	g_Engine->GetTimerApi()->KillTimer(this, TimerConfig::eID::CheckHeartBeat, this);
+
     if (_IsGiveUP) {
         NodeSession::Release(this);
         return;
@@ -101,8 +123,15 @@ void NodeSession::OnTimer(const int id, void* const context, const int64 timesta
         g_Engine->GetNetApi()->LaunchTcpSession(this, _RemoteIp.c_str(), _RemotePort, NODE_SESSION_PIPE_SIZE, NODE_SESSION_PIPE_SIZE);
         break;
     }
-    case TimerConfig::eID::NodeHeartBeat: {
+    case TimerConfig::eID::HeartBeat: {
+        SendMessage(NodeProto::eID::HeartBeat);
         break;
+    case TimerConfig::eID::CheckHeartBeat: {
+        if (SafeSystem::Time::GetMilliSecond() - _LastHeartBeatTick > 2 * TimerConfig::HeartBeatInterval) {
+            Close();
+        }
+        break;
+    }
     }
     }
 }

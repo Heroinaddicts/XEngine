@@ -9,6 +9,7 @@
 #include "NodeProto.h"
 
 #include "SafeString.h"
+#include "SafeSystem.h"
 
 #include <set>
 #include <map>
@@ -25,11 +26,13 @@ extern Connecter* g_Connecter;
 
 namespace TimerConfig {
     enum eID {
-        NodeHeartBeat,
+        CheckHeartBeat,
+        HeartBeat,
         Reconnect
     };
 
-    const int NodeHeartBeatInterval = 5000; //单位: 毫秒
+	const int HeartBeatInterval = 3000; //单位: 毫秒
+	const int CheckHeartBeatInterval = 100; //单位: 毫秒
     const int ReconnectInterval = 500; //单位: 毫秒
 }
 

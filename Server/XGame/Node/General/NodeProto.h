@@ -6,7 +6,8 @@
 
 namespace NodeProto {
     enum eID {
-        NodeReport = 1
+        NodeReport = 1,
+        HeartBeat = 2
     };
 #pragma pack(push, 1)
     struct MessageHeader {
@@ -20,7 +21,7 @@ namespace NodeProto {
         char _Name[oNodeReport_Name_Len];
 
         void SetName(const char* name) {
-            SafeMemory::Memcpy(_Name, sizeof(_Name), name, strlen(name));
+            SafeMemory::Memcpy(_Name, sizeof(_Name), name, strlen(name) + 1);
             _Name[oNodeReport_Name_Len - 1] = 0;
         }
     };
