@@ -25,8 +25,8 @@ __forceinline void NodeSessionDisappear(NodeSession* session) {
 
 }
 
-NodeSession* NodeSession::Create(const int id, const std::string& name, const std::string& remoteIp, const int remotePort) {
-    return xnew NodeSession(id, name, remoteIp, remotePort);
+NodeSession* NodeSession::Create(const std::string& remoteIp, const int remotePort) {
+    return xnew NodeSession(remoteIp, remotePort);
 }
 
 void NodeSession::Release(NodeSession* con) {
@@ -64,8 +64,8 @@ int NodeSession::OnReceive(const char* content, const int size) {
 
 void NodeSession::OnConnected() {
     NodeProto::oNodeReport report;
-    report._Id = _Id;
-    report.SetName(_Name.c_str());
+    report._Id = g_NodeID;
+    report.SetName(g_NodeName.c_str());
 
     SendProto(NodeProto::eID::NodeReport, report);
 }

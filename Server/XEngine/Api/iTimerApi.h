@@ -4,10 +4,13 @@
 #include "MultiSys.h"
 
 namespace XEngine {
+    class TimeBase;
     namespace Api {
         class iTimer {
         public:
             virtual ~iTimer() {}
+        protected:
+            friend class TimeBase;
 
             virtual void OnStart(const int id, void* const context, const int64 timestamp) = 0;
             virtual void OnTimer(const int id, void* const context, const int64 timestamp) = 0;

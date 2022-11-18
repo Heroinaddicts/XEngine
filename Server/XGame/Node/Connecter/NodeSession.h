@@ -8,7 +8,7 @@ class NodeSession : public iNodeSession, Api::iTimer {
 public:
     virtual ~NodeSession() {}
 
-    static NodeSession* Create(const int id = INVALID_NODE_ID, const std::string& name = "", const std::string& remoteIp = "", const int remotePort = 0);
+    static NodeSession* Create(const std::string& remoteIp = "", const int remotePort = 0);
     static void Release(NodeSession* con);
 
     virtual int OnReceive(const char* content, const int size) override;
@@ -26,13 +26,6 @@ public:
     virtual void SetName(const std::string& name) { _Name = name; }
     virtual void SetRemoteIp(const std::string& ip) { _RemoteIp = ip; }
     virtual void SetRemotePort(const int port) { _RemotePort = port; }
-
-    // 通过 iTimer 继承
-    virtual void OnStart(const int id, void* const context, const int64 timestamp) override;
-    virtual void OnTimer(const int id, void* const context, const int64 timestamp) override;
-    virtual void OnEnd(const int id, void* const context, bool nonviolent, const int64 timestamp) override;
-    virtual void OnPause(const int id, void* const context, const int64 timestamp) override;
-    virtual void OnResume(const int id, void* const context, const int64 timestamp) override;
 
     template<typename T>
     __forceinline void SendProto(const NodeProto::eID& id, const T& body) {
@@ -56,8 +49,16 @@ public:
         _IsGiveUP = true;
         Close();
     }
+protected:
+    // 通过 iTimer 继承
+    virtual void OnStart(const int id, void* const context, const int64 timestamp) override;
+    virtual void OnTimer(const int id, void* const context, const int64 timestamp) override;
+    virtual void OnEnd(const int id, void* const context, bool nonviolent, const int64 timestamp) override;
+    virtual void OnPause(const int id, void* const context, const int64 timestamp) override;
+    virtual void OnResume(const int id, void* const context, const int64 timestamp) override;
+
 private:
-    NodeSession(const int id, const std::string& name, const std::string& remoteIp, const int remotePort) : _Id(id), _Name(name), _RemoteIp(remoteIp), _RemotePort(remotePort), _IsGiveUP(false) {}
+    NodeSession(const std::string& remoteIp, const int remotePort) : _Id(INVALID_NODE_ID), _Name(""), _RemoteIp(remoteIp), _RemotePort(remotePort), _IsGiveUP(false) {}
 
 private:
     int _Id;

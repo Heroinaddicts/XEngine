@@ -9,6 +9,9 @@ std::set<iConnecter::fSessionEvent> g_SessionDisappearEventPool;
 
 std::map<int, NodeSession*> g_NodeSessionMap;
 
+std::string g_NodeName;
+int g_NodeID = INVALID_NODE_ID;
+
 bool Connecter::Initialize(iEngine* const engine) {
     g_Connecter = this;
     g_Engine = engine;
@@ -19,15 +22,15 @@ bool Connecter::Initialize(iEngine* const engine) {
         ERROR(engine, "can not find launch parameter name");
         return false;
     }
+    g_NodeName = name;
 
-    const char* nodeId_str = engine->GetLaunchParameter("node_id");
-    XASSERT(nodeId_str, "where is node_id");
-    if (nullptr == nodeId_str) {
+    const char* nodeIdString = engine->GetLaunchParameter("node_id");
+    XASSERT(nodeIdString, "where is node_id");
+    if (nullptr == nodeIdString) {
         ERROR(engine, "can not find launch parameter node_id");
         return false;
     }
-
-    int nodeId = SafeString::StringToInt(nodeId_str);
+    g_NodeID = SafeString::StringToInt(nodeIdString);
 
     const char* remoteNodes = engine->GetLaunchParameter("remote_nodes");
     if (remoteNodes) {
@@ -41,7 +44,7 @@ bool Connecter::Initialize(iEngine* const engine) {
                 std::string ip = ip_port[0];
                 int port = SafeString::StringToInt(ip_port[1]);
 
-                NodeSession* session = NodeSession::Create(nodeId, name, ip, port);
+                NodeSession* session = NodeSession::Create(ip, port);
                 engine->GetNetApi()->LaunchTcpSession(session, ip.c_str(), port, NODE_SESSION_PIPE_SIZE, NODE_SESSION_PIPE_SIZE);
             }
             else {
@@ -49,6 +52,12 @@ bool Connecter::Initialize(iEngine* const engine) {
                 return false;
             }
         }
+    }
+
+    const char* nodeIp = engine->GetLaunchParameter("node_ip");
+    const char* nodePortString = engine->GetLaunchParameter("node_port");
+    if (nodePortString && nodeIp) {
+        engine->GetNetApi()->LaunchTcpServer(this, nodeIp, SafeString::StringToInt(nodePortString), NODE_SESSION_PIPE_SIZE, NODE_SESSION_PIPE_SIZE);
     }
 
     return true;

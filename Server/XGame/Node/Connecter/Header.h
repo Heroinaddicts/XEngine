@@ -39,4 +39,6 @@ extern std::set<iConnecter::fSessionEvent> g_SessionDisappearEventPool;
 class NodeSession;
 extern std::map<int, NodeSession*> g_NodeSessionMap;
 
+extern std::string g_NodeName;
+extern int g_NodeID;
 #endif //__Header_h__
