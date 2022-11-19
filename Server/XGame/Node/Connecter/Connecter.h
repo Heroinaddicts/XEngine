@@ -15,6 +15,8 @@ public:
     virtual void RegisterSessionEvent(const eConnectionEvent& ev, fSessionEvent const fun);
     virtual void UnregisterSessionEvent(const eConnectionEvent& ev, fSessionEvent const fun);
 
+    virtual iNodeSession* QueryNodeSession(const int nodeId) const;
+
     // Í¨¹ý iTcpServer ¼Ì³Ð
     virtual iTcpSession* OnMallocConnection(const char* remote_ip, const int remote_port) override;
     virtual void OnError(iTcpSession* session) override;

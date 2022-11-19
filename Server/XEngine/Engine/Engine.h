@@ -25,7 +25,7 @@ namespace XEngine {
         virtual void LogSync(const std::string& log);
 
         virtual void Shutdown();
-
+        virtual Api::ProcessHandle LaunchXEngineProcess(const std::map<std::string, std::string>& launchParameters) const;
     public:
         bool isShutdown();
 

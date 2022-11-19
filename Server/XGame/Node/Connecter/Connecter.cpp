@@ -99,6 +99,11 @@ void Connecter::UnregisterSessionEvent(const eConnectionEvent& ev, fSessionEvent
     }
 }
 
+iNodeSession* Connecter::QueryNodeSession(const int nodeId) const {
+    auto itor = g_NodeSessionMap.find(nodeId);
+    return itor != g_NodeSessionMap.end() ? itor->second : nullptr;
+}
+
 iTcpSession* Connecter::OnMallocConnection(const char* remote_ip, const int remote_port) {
     return NodeSession::Create();
 }

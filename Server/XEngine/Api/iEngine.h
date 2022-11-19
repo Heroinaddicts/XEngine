@@ -1,7 +1,10 @@
 #ifndef __iEngine_h__
 #define __iEngine_h__
 
+#include "MultiSys.h"
+
 #include <string>
+#include <map>
 
 namespace XEngine {
     namespace Api {
@@ -13,10 +16,11 @@ namespace XEngine {
         class iPhysicsApi;
         class iGameObjectApi;
 
+        typedef unsigned_int64 ProcessHandle;
+
         class iEngine {
         public:
             virtual ~iEngine() {}
-
             virtual const char* GetLaunchParameter(const std::string& name) = 0;
 
             virtual iNetApi* GetNetApi() const = 0;
@@ -31,11 +35,13 @@ namespace XEngine {
             virtual void LogSync(const std::string& log) = 0;
 
             virtual void Shutdown() = 0;
+            virtual ProcessHandle LaunchXEngineProcess(const std::map<std::string, std::string>& launchParameters = std::map<std::string, std::string>()) const = 0; //ProcessHandle == 0, launch failed
 
             template<typename T>
             T* GetModule(const std::string& name) {
                 return dynamic_cast<T*>(FindModule(name));
             }
+
 
         protected:
             virtual iModule* FindModule(const std::string& name) = 0;

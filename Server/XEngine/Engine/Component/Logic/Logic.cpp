@@ -30,7 +30,7 @@ namespace XEngine {
 
     bool Logic::Initialize(Api::iEngine* const engine) {
         const char* module_path = engine->GetLaunchParameter("module_path");
-        module_path ? _ModulePath = module_path : _ModulePath = SafeSystem::File::GetApplicationPath();
+        module_path ? _ModulePath = module_path : _ModulePath = SafeSystem::File::GetsPathOfCurrentExecutable();
 
         const char* modules = engine->GetLaunchParameter("modules");
         if (modules) {

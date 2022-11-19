@@ -16,7 +16,7 @@ __forceinline void NodeSessionAppear(NodeSession* session) {
         temp->GiveUp();
     }
 
-    TRACE(g_Engine, "Node Appear %s %d", session->GetName(), session->GetId());
+    TRACE(g_Engine, "Node Appear %s %d", session->GetName().c_str(), session->GetId());
     for (auto i = g_SessionAppearEventPool.begin(); i != g_SessionAppearEventPool.end(); i++) {
         (*i)(session);
     }
@@ -29,10 +29,10 @@ __forceinline void NodeSessionDisappear(NodeSession* session) {
     }
 
     g_NodeSessionMap.erase(itor);
-	TRACE(g_Engine, "Node Disappear %s %d", session->GetName(), session->GetId());
-	for (auto i = g_SessionDisappearEventPool.begin(); i != g_SessionDisappearEventPool.end(); i++) {
-		(*i)(session);
-	}
+    TRACE(g_Engine, "Node Disappear %s %d", session->GetName().c_str(), session->GetId());
+    for (auto i = g_SessionDisappearEventPool.begin(); i != g_SessionDisappearEventPool.end(); i++) {
+        (*i)(session);
+    }
 }
 
 NodeSession* NodeSession::Create(const std::string& remoteIp, const int remotePort) {
@@ -53,11 +53,14 @@ int NodeSession::OnReceive(const char* content, const int size) {
         return 0;
     }
 
+    const void* body = (((const char*)content) + sizeof(NodeProto::MessageHeader));
+    const unsigned_int16 bodyLen = header->_Len - sizeof(NodeProto::MessageHeader);
+
     switch (header->_MsgId) {
     case NodeProto::eID::NodeReport: {
         XASSERT(header->_Len == sizeof(NodeProto::oNodeReport) + sizeof(NodeProto::MessageHeader), "node report message format error, len %d", header->_Len);
         if (header->_Len == sizeof(NodeProto::oNodeReport) + sizeof(NodeProto::MessageHeader)) {
-            const NodeProto::oNodeReport* report = (const NodeProto::oNodeReport*)(((const char*)content) + sizeof(NodeProto::MessageHeader));
+            const NodeProto::oNodeReport* report = (const NodeProto::oNodeReport*)body;
             this->_Id = report->_Id;
             this->_Name = report->_Name;
             NodeSessionAppear(this);
@@ -73,6 +76,13 @@ int NodeSession::OnReceive(const char* content, const int size) {
         break;
     }
 
+    auto itor = _MessageCallbacks.find(header->_MsgId);
+    if (_MessageCallbacks.end() != itor) {
+        for (auto i = itor->second.begin(); i != itor->second.end(); i++) {
+            (*i)(this, header->_MsgId, body, bodyLen);
+        }
+    }
+
     return header->_Len;
 }
 
@@ -85,13 +95,13 @@ void NodeSession::OnConnected() {
 
     SendProto(NodeProto::eID::NodeReport, report);
 
-	START_TIMER(g_Engine, this, TimerConfig::eID::HeartBeat, TimerConfig::HeartBeatInterval, Api::Unlimited, TimerConfig::HeartBeatInterval, this);
-	START_TIMER(g_Engine, this, TimerConfig::eID::CheckHeartBeat, TimerConfig::CheckHeartBeatInterval, Api::Unlimited, TimerConfig::CheckHeartBeatInterval, this);
+    START_TIMER(g_Engine, this, TimerConfig::eID::HeartBeat, TimerConfig::HeartBeatInterval, Api::Unlimited, TimerConfig::HeartBeatInterval, this);
+    START_TIMER(g_Engine, this, TimerConfig::eID::CheckHeartBeat, TimerConfig::CheckHeartBeatInterval, Api::Unlimited, TimerConfig::CheckHeartBeatInterval, this);
 }
 
 void NodeSession::OnDisconnect() {
-	g_Engine->GetTimerApi()->KillTimer(this, TimerConfig::eID::HeartBeat, this);
-	g_Engine->GetTimerApi()->KillTimer(this, TimerConfig::eID::CheckHeartBeat, this);
+    g_Engine->GetTimerApi()->KillTimer(this, TimerConfig::eID::HeartBeat, this);
+    g_Engine->GetTimerApi()->KillTimer(this, TimerConfig::eID::CheckHeartBeat, this);
 
     if (_IsGiveUP) {
         NodeSession::Release(this);
@@ -111,6 +121,28 @@ void NodeSession::OnDisconnect() {
 void NodeSession::OnConnectFailed() {
     ERROR(g_Engine, "Node session %s:%d connect failed, reconnect", _RemoteIp.c_str(), _RemotePort);
     START_TIMER(g_Engine, this, TimerConfig::eID::Reconnect, TimerConfig::ReconnectInterval, 1, TimerConfig::ReconnectInterval, this);
+}
+
+void NodeSession::RegisterMessage(const unsigned_int16 msgid, fSessionMessage fun) {
+    auto itor = _MessageCallbacks.find(msgid);
+    if (_MessageCallbacks.end() == itor) {
+        itor = _MessageCallbacks.insert(std::make_pair(msgid, std::set<fSessionMessage>())).first;
+    }
+
+    itor->second.insert(fun);
+}
+
+void NodeSession::SendMessage(const unsigned_int16 id, const void* body, const unsigned_int16 len) {
+    NodeProto::MessageHeader header;
+    header._Len = sizeof(NodeProto::MessageHeader) + len;
+    header._MsgId = id;
+    if (len != 0) {
+        Send(&header, sizeof(header), false);
+        Send(body, len);
+    }
+    else {
+        Send(&header, sizeof(header));
+    }
 }
 
 void NodeSession::OnStart(const int id, void* const context, const int64 timestamp) {

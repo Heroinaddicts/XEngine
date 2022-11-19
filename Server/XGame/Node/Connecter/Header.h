@@ -31,8 +31,8 @@ namespace TimerConfig {
         Reconnect
     };
 
-	const int HeartBeatInterval = 3000; //单位: 毫秒
-	const int CheckHeartBeatInterval = 100; //单位: 毫秒
+    const int HeartBeatInterval = 3000; //单位: 毫秒
+    const int CheckHeartBeatInterval = 100; //单位: 毫秒
     const int ReconnectInterval = 500; //单位: 毫秒
 }
 

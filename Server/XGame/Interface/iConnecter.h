@@ -11,12 +11,18 @@ using namespace XEngine;
 
 class iNodeSession : public Api::iTcpSession {
 public:
+    typedef void(*fSessionMessage)(iNodeSession* const session, const int msgid, const void* data, const int len);
+
+public:
     virtual ~iNodeSession() {}
 
     virtual int GetId() const = 0;
-    virtual const char* GetName() const = 0;
-    virtual const char* GetRemoteIP() const = 0;
+    virtual const std::string& GetName() const = 0;
+    virtual const std::string& GetRemoteIP() const = 0;
     virtual int GetRemotePort() const = 0;
+
+    virtual void RegisterMessage(const unsigned_int16 msgid, const fSessionMessage fun) = 0;
+    virtual void SendMessage(const unsigned_int16 msgid, const void* data, const unsigned_int16 len) = 0; //架构内 单挑协议 协议体长度 不可以大于 max(unsigned_int16) - 协议头长度
 };
 
 class iConnecter : public Api::iModule {
@@ -33,6 +39,8 @@ public:
 
     virtual void RegisterSessionEvent(const eConnectionEvent& ev, fSessionEvent const fun) = 0;
     virtual void UnregisterSessionEvent(const eConnectionEvent& ev, fSessionEvent const fun) = 0;
+
+    virtual iNodeSession* QueryNodeSession(const int nodeId) const = 0;
 };
 
 #endif //__iConnecter_h__

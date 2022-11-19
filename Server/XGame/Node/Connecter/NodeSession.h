@@ -4,7 +4,6 @@
 #include "Header.h"
 
 class NodeSession : public iNodeSession, Api::iTimer {
-
 public:
     virtual ~NodeSession() {}
 
@@ -18,8 +17,8 @@ public:
 
     // Í¨¹ý iNodeSession ¼Ì³Ð
     virtual int GetId() const override { return _Id; }
-    virtual const char* GetName() const override { return _Name.c_str(); }
-    virtual const char* GetRemoteIP() const override { return _RemoteIp.c_str(); }
+    virtual const std::string& GetName() const override { return _Name; }
+    virtual const std::string& GetRemoteIP() const override { return _RemoteIp; }
     virtual int GetRemotePort() const override { return _RemotePort; }
 
     virtual void SetId(int id) { _Id = id; }
@@ -27,27 +26,18 @@ public:
     virtual void SetRemoteIp(const std::string& ip) { _RemoteIp = ip; }
     virtual void SetRemotePort(const int port) { _RemotePort = port; }
 
+    virtual void RegisterMessage(const unsigned_int16 msgid, const fSessionMessage fun);
+
+    virtual void SendMessage(const unsigned_int16 id, const void* body = nullptr, const unsigned_int16 len = 0);
+
     template<typename T>
-    __forceinline void SendProto(const NodeProto::eID& id, const T& body) {
+    __forceinline void SendProto(const unsigned_int16 id, const T& body) {
         NodeProto::MessageHeader header;
         header._Len = sizeof(NodeProto::MessageHeader) + sizeof(body);
         header._MsgId = id;
 
         Send(&header, sizeof(header), false);
         Send(&body, sizeof(body));
-    }
-
-    __forceinline void SendMessage(const NodeProto::eID& id, const void* body = nullptr, const unsigned_int16 len = 0) {
-        NodeProto::MessageHeader header;
-        header._Len = sizeof(NodeProto::MessageHeader) + len;
-        header._MsgId = id;
-		if (len != 0) {
-			Send(&header, sizeof(header), false);
-			Send(body, len);
-        }
-		else {
-			Send(&header, sizeof(header));
-        }
     }
 
     __forceinline void GiveUp() {
@@ -70,10 +60,11 @@ private:
     std::string _Name;
     std::string _RemoteIp;
     int _RemotePort;
-
     int64 _LastHeartBeatTick;
-
     bool _IsGiveUP;
+
+private:
+    std::map<unsigned_int16, std::set<fSessionMessage>> _MessageCallbacks;
 };
 
 #endif //__NodeSession_h__

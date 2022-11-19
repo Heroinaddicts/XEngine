@@ -30,7 +30,6 @@ XEngine::iGameObjectManager* g_GameObjectManager = nullptr;
 static int s_FixedTimeStep = 33333;
 static bool s_Shutdown = false;
 
-
 namespace XEngine {
     Engine* Engine::GetInstance() {
         static Engine s_Instance;
@@ -84,6 +83,18 @@ namespace XEngine {
 
     void Engine::Shutdown() {
         s_Shutdown = true;
+    }
+
+    Api::ProcessHandle Engine::LaunchXEngineProcess(const std::map<std::string, std::string>& launchParameters) const {
+        std::string cmd;
+        for (auto itor = launchParameters.begin(); itor != launchParameters.end(); itor++) {
+            cmd += " --" + itor->first + "=" + itor->second;
+        }
+#ifdef WIN32
+        return SafeSystem::Process::LaunchProcess(SafeSystem::File::GetCurrentExecutablePath(), cmd);
+#endif //WIN32
+
+        return 0;
     }
 
     bool Engine::isShutdown() {

@@ -45,7 +45,7 @@ int main(int argc, const char** args, const char** env) {
     SafeString::Replace(cmake_file_content, "{date}", SafeSystem::Time::GetCurrentTimeString());
     SafeString::Replace(cmake_file_content, "{group}", s_ParameterMap["group"]);
 
-    std::string path = SafeSystem::File::GetApplicationPath();
+    std::string path = SafeSystem::File::GetsPathOfCurrentExecutable();
     auto itor = s_ParameterMap.find("path");
     if (s_ParameterMap.end() != itor) {
         path += "/" + itor->second;
@@ -117,7 +117,7 @@ int main(int argc, const char** args, const char** env) {
         return false;
     }
 
-    std::string add_subdirectory = "\nADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/{gourp}/{name})";
+    std::string add_subdirectory = "\nADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/{name})";
     SafeString::Replace(add_subdirectory, "{name}", s_ParameterMap["module_name"]);
     SafeString::Replace(add_subdirectory, "{gourp}", s_ParameterMap["group"]);
     cmakelists << add_subdirectory;

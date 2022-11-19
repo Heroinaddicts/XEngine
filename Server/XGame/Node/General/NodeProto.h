@@ -7,7 +7,11 @@
 namespace NodeProto {
     enum eID {
         NodeReport = 1,
-        HeartBeat = 2
+        HeartBeat = 2,
+
+        //以下是开发者自定义协议
+        DeveloperDefined = 101,
+
     };
 #pragma pack(push, 1)
     struct MessageHeader {

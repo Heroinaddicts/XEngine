@@ -55,10 +55,12 @@ namespace XEngine {
 
             unsigned_int64 GetCurrentProcessID();
             unsigned_int64 GetCurrentThreadID();
+            unsigned_int64 LaunchProcess(const std::string& exPath, const std::string& args = "");
         }
 
         namespace File {
-            const std::string& GetApplicationPath();
+            const std::string& GetCurrentExecutablePath();
+            const std::string& GetsPathOfCurrentExecutable();
 
             bool FileExists(const std::string& path);
             bool FolderExists(const std::string& path);

@@ -57,27 +57,59 @@ namespace XEngine {
                 return syscall(SYS_gettid);
 #endif //Linux
             }
+
+            unsigned_int64 LaunchProcess(const std::string& exPath, const std::string& args) {
+#ifdef WIN32
+                STARTUPINFO si;
+                SafeMemory::Memset(&si, sizeof(si), 0, sizeof(si));
+                si.cb = sizeof(si);
+
+                PROCESS_INFORMATION pi;
+                SafeMemory::Memset(&pi, sizeof(pi), 0, sizeof(pi));
+
+                bool ret = CreateProcess(exPath.c_str(), (char*)args.c_str(), nullptr, nullptr, false, 0, nullptr, nullptr, &si, &pi);
+
+                if (!ret) {
+                    return unsigned_int64(0);
+                }
+
+                return (unsigned_int64)pi.hProcess;
+#endif //WIN32
+            }
         }
 
         namespace File {
-            const std::string& GetApplicationPath() {
 #define PATH_STRING_MAX_LEN 1024
-                static std::string* static_path = nullptr;
+
+            const std::string& GetCurrentExecutablePath() {
+                static std::string* s_Path = nullptr;
+                if (nullptr == s_Path) {
 #ifdef WIN32
-                if (nullptr == static_path) {
+                    char temp[PATH_STRING_MAX_LEN];
+                    GetModuleFileName(nullptr, temp, sizeof(temp));
+                    s_Path = xnew std::string(temp);
+                    SafeString::Replace(*s_Path, "\\", "/");
+#endif //WIN32
+                }
+
+                return *s_Path;
+            }
+
+            const std::string& GetsPathOfCurrentExecutable() {
+                static std::string* s_Path = nullptr;
+                if (nullptr == s_Path) {
+#ifdef WIN32
                     char* temp = (char*)alloca(PATH_STRING_MAX_LEN);
                     char link[PATH_STRING_MAX_LEN];
                     ZeroMemory(link, sizeof(link));
                     memset(temp, 0, PATH_STRING_MAX_LEN);
-                    GetModuleFileName(nullptr, temp, 256);
+                    GetModuleFileName(nullptr, temp, PATH_STRING_MAX_LEN);
                     PathRemoveFileSpec(temp);
-                    static_path = new std::string(temp);
-                    SafeString::Replace(*static_path, "\\", "/");
-                }
+                    s_Path = new std::string(temp);
+                    SafeString::Replace(*s_Path, "\\", "/");
 #endif //WIN32
 #ifdef Linux
 #define SYSTEM_PATH_LEN 2048
-                if (nullptr == static_path) {
                     char buff[SYSTEM_PATH_LEN];
                     char link[SYSTEM_PATH_LEN];
                     SafeMemory::Memset(buff, sizeof(buff), 0, sizeof(buff));
@@ -90,11 +122,11 @@ namespace XEngine {
                         return nullptr;
                     }
 
-                    const char * p = dirname(buff);
-                    static_path = xnew std::string(p);
-                }
+                    const char* p = dirname(buff);
+                    s_Path = xnew std::string(p);
 #endif //Linux
-                return *static_path;
+                }
+                return *s_Path;
             }
 
             bool FileExists(const std::string& path) {
