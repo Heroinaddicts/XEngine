@@ -1479,7 +1479,7 @@
  0001:0004d1cc       ?DloadReleaseSectionWriteAccess@@YAXXZ 000000018004e1cc f i Delayimp:delayhlp.obj
  0001:0004d260       ?DloadUnlock@@YAXXZ        000000018004e260 f i Delayimp:delayhlp.obj
  0001:0004d2a0       ?IndexFromPImgThunkData@@YAIPEBU_IMAGE_THUNK_DATA64@@0@Z 000000018004e2a0 f i Delayimp:delayhlp.obj
- 0001:0004d3e8       HRESULT_FROM_WIN32         000000018004e3e8 f i Delayimp:delayhlp.obj
+ 0001:0004d3e8       HRESULT_FROMWIN32         000000018004e3e8 f i Delayimp:delayhlp.obj
  0001:0004d3f8       ReadAcquire64              000000018004e3f8 f i Delayimp:delayhlp.obj
  0001:0004d3fc       ReadPointerAcquire         000000018004e3fc f i Delayimp:delayhlp.obj
  0001:0004d400       WritePointerRelease        000000018004e400 f i Delayimp:delayhlp.obj

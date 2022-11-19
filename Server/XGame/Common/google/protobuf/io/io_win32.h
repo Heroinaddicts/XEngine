@@ -44,10 +44,10 @@
 //
 // This file is only used on Windows, it's empty on other platforms.
 
-#ifndef GOOGLE_PROTOBUF_IO_IO_WIN32_H__
-#define GOOGLE_PROTOBUF_IO_IO_WIN32_H__
+#ifndef GOOGLE_PROTOBUF_IO_IOWIN32_H__
+#define GOOGLE_PROTOBUF_IO_IOWIN32_H__
 
-#if defined(_WIN32)
+#if defined(WIN32)
 
 #include <functional>
 #include <string>
@@ -134,6 +134,6 @@ PROTOBUF_EXPORT bool wcs_to_utf8(const wchar_t* input, std::string* out);
 
 #include <google/protobuf/port_undef.inc>
 
-#endif  // defined(_WIN32)
+#endif  // defined(WIN32)
 
-#endif  // GOOGLE_PROTOBUF_IO_IO_WIN32_H__
+#endif  // GOOGLE_PROTOBUF_IO_IOWIN32_H__

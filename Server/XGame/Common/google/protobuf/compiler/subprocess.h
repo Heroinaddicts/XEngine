@@ -33,15 +33,15 @@
 #ifndef GOOGLE_PROTOBUF_COMPILER_SUBPROCESS_H__
 #define GOOGLE_PROTOBUF_COMPILER_SUBPROCESS_H__
 
-#ifdef _WIN32
+#ifdef WIN32
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN  // right...
 #endif
 #include <windows.h>
-#else  // _WIN32
+#else  // WIN32
 #include <sys/types.h>
 #include <unistd.h>
-#endif  // !_WIN32
+#endif  // !WIN32
 #include <google/protobuf/stubs/common.h>
 
 #include <string>
@@ -77,14 +77,14 @@ class PROTOC_EXPORT Subprocess {
   // *error to a description of the problem.
   bool Communicate(const Message& input, Message* output, std::string* error);
 
-#ifdef _WIN32
+#ifdef WIN32
   // Given an error code, returns a human-readable error message.  This is
   // defined here so that CommandLineInterface can share it.
   static std::string Win32ErrorMessage(DWORD error_code);
 #endif
 
  private:
-#ifdef _WIN32
+#ifdef WIN32
   DWORD process_start_error_;
   HANDLE child_handle_;
 
@@ -93,7 +93,7 @@ class PROTOC_EXPORT Subprocess {
   HANDLE child_stdin_;
   HANDLE child_stdout_;
 
-#else  // _WIN32
+#else  // WIN32
   pid_t child_pid_;
 
   // The file descriptors for our end of the child's pipes.  We close each and
@@ -101,7 +101,7 @@ class PROTOC_EXPORT Subprocess {
   int child_stdin_;
   int child_stdout_;
 
-#endif  // !_WIN32
+#endif  // !WIN32
 };
 
 }  // namespace compiler

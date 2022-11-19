@@ -96,17 +96,16 @@ namespace XEngine {
 
     }
 
-    int64 tick = SafeSystem::Time::GetMilliSecond();
     void Logic::Update(Api::iEngine* const engine) {
-        int64 temp = SafeSystem::Time::GetMilliSecond() - tick;
-        if (temp > 5) {
-            //XLOG(engine, "%lld", temp);
+        for (auto itor = _ModuleMap.begin(); itor != _ModuleMap.end(); itor++) {
+            itor->second->Update(engine);
         }
-        tick = SafeSystem::Time::GetMilliSecond();
     }
 
     void Logic::FixedUpdate(Api::iEngine* const engine) {
-
+        for (auto itor = _ModuleMap.begin(); itor != _ModuleMap.end(); itor++) {
+            itor->second->FixedUpdate(engine);
+        }
     }
 
     void Logic::LaterUpdate(Api::iEngine* const engine) {

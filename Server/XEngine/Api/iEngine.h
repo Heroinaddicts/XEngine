@@ -37,12 +37,12 @@ namespace XEngine {
             virtual void Shutdown() = 0;
             virtual ProcessHandle LaunchXEngineProcess(const std::map<std::string, std::string>& launchParameters = std::map<std::string, std::string>()) const = 0; //ProcessHandle == 0, launch failed
 
+
+
             template<typename T>
             T* GetModule(const std::string& name) {
                 return dynamic_cast<T*>(FindModule(name));
             }
-
-
         protected:
             virtual iModule* FindModule(const std::string& name) = 0;
         };

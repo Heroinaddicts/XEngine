@@ -43,7 +43,7 @@
 #include <google/protobuf/port_def.inc>
 
 #undef PROTOBUF_LITTLE_ENDIAN
-#ifdef _WIN32
+#ifdef WIN32
   // Assuming windows is always little-endian.
   // TODO(xiaofeng): The PROTOBUF_LITTLE_ENDIAN is not only used for
   // optimization but also for correctness. We should define an

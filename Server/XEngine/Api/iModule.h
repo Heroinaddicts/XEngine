@@ -16,6 +16,9 @@ namespace XEngine {
             virtual bool Launch(iEngine* const engine) = 0;
             virtual bool Destroy(iEngine* const engine) = 0;
 
+            virtual void Update(iEngine* const engine) {};
+            virtual void FixedUpdate(iEngine* const engine) {};
+
             const char* const _Name;
             iModule* const _Next;
         };

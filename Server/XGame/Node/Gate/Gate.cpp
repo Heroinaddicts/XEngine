@@ -25,6 +25,14 @@ bool Gate::Destroy(iEngine* const engine) {
     return true;
 }
 
+void Gate::Update(iEngine* const engine) {
+    TRACE(g_Engine, "Gate::Update");
+}
+
+void Gate::FixedUpdate(iEngine* const engine) {
+    TRACE(g_Engine, "Gate::FixedUpdate");
+}
+
 void Gate::OnNodeSessionAppear(iNodeSession* const session) {
     if (session->GetName() == NodeDefine::LobbyName) {
         XASSERT(s_LobbyNodeSession == nullptr, "Lobby node session already exists");

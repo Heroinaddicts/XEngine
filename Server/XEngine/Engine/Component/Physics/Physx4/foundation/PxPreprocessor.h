@@ -94,8 +94,8 @@ Operating system defines, see http://sourceforge.net/p/predef/wiki/OperatingSyst
 #define PX_UWP 1
 #elif defined(_WIN64) // note: _XBOX_ONE implies _WIN64
 #define PX_WIN64 1
-#elif defined(_WIN32) // note: _M_PPC implies _WIN32
-#define PX_WIN32 1
+#elif defined(WIN32) // note: _M_PPC implies WIN32
+#define PXWIN32 1
 #elif defined(__ANDROID__)
 #define PX_ANDROID 1
 #elif defined(__linux__) || defined (__EMSCRIPTEN__) // note: __ANDROID__ implies __linux__
@@ -165,8 +165,8 @@ define anything not defined on this platform to 0
 #ifndef PX_WIN64
 #define PX_WIN64 0
 #endif
-#ifndef PX_WIN32
-#define PX_WIN32 0
+#ifndef PXWIN32
+#define PXWIN32 0
 #endif
 #ifndef PX_ANDROID
 #define PX_ANDROID 0
@@ -242,7 +242,7 @@ family shortcuts
 // compiler
 #define PX_GCC_FAMILY (PX_CLANG || PX_GCC)
 // os
-#define PX_WINDOWS_FAMILY (PX_WIN32 || PX_WIN64 || PX_UWP)
+#define PX_WINDOWS_FAMILY (PXWIN32 || PX_WIN64 || PX_UWP)
 #define PX_MICROSOFT_FAMILY (PX_XBOXONE || PX_WINDOWS_FAMILY || PX_XBOX_SERIES_X)
 #define PX_LINUX_FAMILY (PX_LINUX || PX_ANDROID)
 #define PX_APPLE_FAMILY (PX_IOS || PX_OSX)                  // equivalent to #if __APPLE__
@@ -260,7 +260,7 @@ family shortcuts
 /**
 C++ standard library defines
 */
-#if defined(_LIBCPP_VERSION) || PX_WIN64 || PX_WIN32 || PX_PS4 || PX_XBOXONE || PX_UWP || PX_EMSCRIPTEN || PX_XBOX_SERIES_X
+#if defined(_LIBCPP_VERSION) || PX_WIN64 || PXWIN32 || PX_PS4 || PX_XBOXONE || PX_UWP || PX_EMSCRIPTEN || PX_XBOX_SERIES_X
 #define PX_LIBCPP 1
 #else
 #define PX_LIBCPP 0
