@@ -8,7 +8,6 @@ namespace NodeDefine {
     constexpr const char* LobbyName = "Lobby";
     constexpr const char* GameName = "Game";
     constexpr const char* MonitorName = "Monitor";
-    constexpr const char* BalanceName = "Balance";
     constexpr const char* CacheName = "Cache";
 }
 

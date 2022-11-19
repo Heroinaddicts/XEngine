@@ -21,7 +21,20 @@ file(GLOB Interface "Interface/*.*")
 file(GLOB Common "Common/*.*")
 file(GLOB Proto "Proto/*.*")
 
+if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
+    SET(LibProtobuf
+        debug "${CMAKE_CURRENT_SOURCE_DIR}/ThirdLibrary/Debug/libprotobufd.lib"
+        optimized "${CMAKE_CURRENT_SOURCE_DIR}/ThirdLibrary/Release/libprotobuf.lib"
+    )
+endif()
+
+if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Linux")
+    SET(LibProtobuf
+    )
+endif()
+
 #Components
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Tools)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Node)
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Tests)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/Game)

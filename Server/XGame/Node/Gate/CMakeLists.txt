@@ -11,6 +11,7 @@ file(GLOB Gate "*.*")
 source_group(Api FILES ${Api})
 source_group(Common FILES ${Common})
 source_group(General FILES ${General})
+source_group(Proto FILES ${Proto})
 source_group(Interface FILES ${Interface})
 source_group(Utils\\TinyXML FILES ${TinyXML})
 source_group(Utils\\Geometry FILES ${Geometry})
@@ -21,11 +22,16 @@ add_library(Gate SHARED
     ${Api}
     ${Common}
     ${General}
+    ${Proto}
     ${Interface}
     ${TinyXML}
     ${Geometry}
     ${Utils}
     ${Gate}
+)
+
+TARGET_LINK_LIBRARIES(Gate
+    ${LibProtobuf}
 )
 
 set_property(TARGET Gate PROPERTY FOLDER "Node")
