@@ -35,6 +35,11 @@ namespace XEngine {
 #endif //Linux
 
     bool SafeThread::Start(const int thread_count, void* context) {
+        if (!_IsClose) {
+            return false;
+        }
+
+        _IsClose = false;
         ThreadArgs* p = xnew ThreadArgs;
         p->_St = this;
         p->_Context = context;

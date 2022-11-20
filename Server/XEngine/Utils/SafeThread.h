@@ -4,12 +4,24 @@
 namespace XEngine {
     class SafeThread {
     public:
+        SafeThread() : _IsClose(true) {}
         virtual ~SafeThread() {}
 
-        virtual bool Start(const int thread_count, void* context = nullptr);
+        virtual bool Start(const int thread_count = 1, void* context = nullptr);
 
     protected:
         virtual void Run(void* constext) = 0;
+
+        __forceinline bool IsClose() {
+            return _IsClose;
+        }
+
+        __forceinline void Close() {
+            _IsClose = true;
+        }
+
+    private:
+        bool _IsClose;
 
     private:
 #ifdef WIN32

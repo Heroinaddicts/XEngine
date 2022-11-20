@@ -7,6 +7,10 @@
 
 namespace XEngine {
     namespace SafeString {
+        __forceinline bool Compare(const std::string& dest, const std::string& src) {
+            return dest == src;
+        }
+
         __forceinline int Replace(std::string& target, const std::string& src, const std::string& dst) {
             int count = 0;
             std::string::size_type pos = 0;
@@ -65,10 +69,18 @@ namespace XEngine {
             return atof(str.c_str());
         }
 
+        __forceinline bool StringToBool(const std::string& str) {
+            return str == "true";
+        }
+
         __forceinline std::string Int64ToString(const int64 value) {
             char str[128] = { 0 };
             sprintf_s(str, sizeof(str), "%llu", value);
             return str;
+        }
+
+        __forceinline std::string BoolToString(const bool res) {
+            return res ? "true" : "false";
         }
     }
 }

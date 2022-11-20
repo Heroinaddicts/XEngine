@@ -29,18 +29,16 @@ namespace XEngine {
             QueueSpace() : sign(NoData) {}
         };
 
-        template<typename T>
+        template<typename T, int Size = 1024>
         class SpscQueue : public iQueue<T> {
         public:
             virtual ~SpscQueue() {}
-            SpscQueue(const int size)
+            SpscQueue()
                 : _ReadIndex(0),
                 _WriteIndex(0),
                 _ReadCount(0),
-                _WriteCount(0),
-                _Size(size),
-                _Queue(xnew QueueSpace<T>[size]) {
-                XASSERT(_Queue, "Failed to allocate memory");
+                _WriteCount(0) {
+
             }
 
             virtual bool Push(const T& o) {
@@ -52,7 +50,7 @@ namespace XEngine {
                 _Queue[_WriteIndex].data = o;
                 _Queue[_WriteIndex++].sign = HasData;
                 _WriteCount++;
-                if (_WriteIndex >= _Size) {
+                if (_WriteIndex >= Size) {
                     _WriteIndex = 0;
                 }
 
@@ -68,7 +66,7 @@ namespace XEngine {
                 _Queue[_ReadIndex++].sign = NoData;
                 _ReadCount++;
 
-                if (_ReadIndex >= _Size) {
+                if (_ReadIndex >= Size) {
                     _ReadIndex = 0;
                 }
 
@@ -81,8 +79,7 @@ namespace XEngine {
             }
 
         private:
-            const int _Size;
-            QueueSpace<T>* const _Queue;
+            QueueSpace<T> _Queue[Size];
 
             int _ReadIndex;
             int _WriteIndex;

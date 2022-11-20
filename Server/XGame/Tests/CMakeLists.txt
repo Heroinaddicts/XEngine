@@ -6,3 +6,4 @@ include_directories(
 file(GLOB General "General/*.*")
 
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/TestXEngine)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/TestRedis)

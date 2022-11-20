@@ -58,6 +58,7 @@ namespace XEngine {
             _File = file;
             _Line = line;
 #endif
+            //printf("Lock on %s:%d\n", _File.c_str(), _Line);
         }
 
         virtual void Unlock() {
