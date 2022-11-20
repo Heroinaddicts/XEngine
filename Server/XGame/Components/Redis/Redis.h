@@ -3,7 +3,7 @@
 
 #include "Header.h"
 
-#define QUEUE_SIZE 64
+#define QUEUE_SIZE 256
 class Redis : public iRedis, public SafeThread {
 public:
     virtual ~Redis() {}

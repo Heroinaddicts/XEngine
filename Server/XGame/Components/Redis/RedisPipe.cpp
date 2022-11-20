@@ -158,6 +158,7 @@ void RedisPipe::Run(void* constext) {
                 opt->_Success = (rply && (rply->type == REDIS_REPLY_STRING || rply->type == REDIS_REPLY_NIL));
                 if (opt->_Success) {
                     opt->_Data = xmalloc(rply->len);
+                    opt->_Len = rply->len;
                     SafeMemory::Memcpy(opt->_Data, rply->len, rply->str, rply->len);
                 }
                 break;

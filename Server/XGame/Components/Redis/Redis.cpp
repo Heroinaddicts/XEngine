@@ -23,6 +23,12 @@ bool Redis::Launch(iEngine* const engine) {
 }
 
 bool Redis::Destroy(iEngine* const engine) {
+    for (auto itor = g_PipeSet.begin(); itor != g_PipeSet.end(); itor++) {
+        (*itor)->Close();
+        xdel(*itor);
+    }
+
+    g_PipeSet.clear();
     return true;
 }
 
@@ -54,7 +60,10 @@ void Redis::Update(iEngine* const engine) {
 
 void Redis::ConnectRedis(iRedisSession* session, const std::string& host, const int port, const std::string& password) {
     RedisPipe* pipe = xnew RedisPipe(session, host, port, password);
-    _PipeConnectRequestQueue.Push(pipe);
+    if (false == _PipeConnectRequestQueue.Push(pipe)) {
+        session->OnConnect(false);
+        xdel pipe;
+    }
 }
 
 void Redis::Run(void* constext) {

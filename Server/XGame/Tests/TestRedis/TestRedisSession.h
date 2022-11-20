@@ -7,6 +7,8 @@ class TestRedisSession : public iRedisSession, public Api::iTimer {
 public:
     virtual ~TestRedisSession() {}
 
+    TestRedisSession() : _ID(g_RedisSessionID++), _Index(0), _GiveUP(false) {}
+
     // Í¨¹ý iRedisSession ¼Ì³Ð
     virtual void OnConnect(bool success) override;
     virtual void OnDisconnect() override;
@@ -22,6 +24,15 @@ public:
 
     virtual void OnPause(const int id, void* const context, const int64 timestamp) override;
     virtual void OnResume(const int id, void* const context, const int64 timestamp) override;
+
+    __forceinline void GiveUP() {
+        _GiveUP = true;
+        Close();
+    }
+private:
+    int _ID;
+    int _Index;
+    bool _GiveUP;
 };
 
 #endif //__TestRedisSession_h__

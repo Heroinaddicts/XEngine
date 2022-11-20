@@ -3,7 +3,7 @@
 void TestRedisSession::OnConnect(bool success) {
     if (success) {
         TRACE(g_Engine, "TestRedisSession OnConnected");
-        START_TIMER(g_Engine, this, 1, 100, Api::Unlimited, 100, 0);
+        START_TIMER(g_Engine, this, 1, 100, SafeTools::Rand(100) + 100, 100, 0);
     }
     else {
         TRACE(g_Engine, "TestRedisSession OnConnect failed, retry");
@@ -14,25 +14,42 @@ void TestRedisSession::OnConnect(bool success) {
 void TestRedisSession::OnDisconnect() {
     TRACE(g_Engine, "TestRedisSession OnDisconnect");
     g_Engine->GetTimerApi()->KillTimer(this, 1, 0);
-
+    if (_GiveUP) {
+        xdel this;
+        return;
+    }
     START_TIMER(g_Engine, this, 0, 100, 1, 100, 0);
 }
 void TestRedisSession::OnWriteResponse(bool success, const std::string& key, const int logicId, const void* data, const int len, const unsigned_int64 context) {
     std::string dataString((char*)data, len);
     if (success) {
-        TRACE(g_Engine, "TestRedisSession OnWriteResponse %s", dataString.c_str());
+        TRACE(g_Engine, "TestRedisSession OnWriteResponse %s, delay %lld", dataString.c_str(), SafeSystem::Time::GetMilliSecond() - context);
     }
     else {
-        TRACE(g_Engine, "TestRedisSession OnWriteResponse false");
+        TRACE(g_Engine, "TestRedisSession OnWriteResponse false, delay %lld", SafeSystem::Time::GetMilliSecond() - context);
     }
 }
 
 void TestRedisSession::OnReadResponse(bool success, const std::string& key, const int logicId, const void* data, const int len, const unsigned_int64 context) {
-
+    if (success) {
+        std::string dataString;
+        if (data) {
+            dataString.append((char*)data, len);
+        }
+        TRACE(g_Engine, "TestRedisSession OnReadResponse %s, delay %lld", dataString.c_str(), SafeSystem::Time::GetMilliSecond() - context);
+    }
+    else {
+        TRACE(g_Engine, "TestRedisSession OnReadResponse false, delay %lld", SafeSystem::Time::GetMilliSecond() - context);
+    }
 }
 
 void TestRedisSession::OnDeleteResponse(bool success, const std::string& key, const int logicId, const unsigned_int64 context) {
-
+    if (success) {
+        TRACE(g_Engine, "TestRedisSession OnDeleteResponse true delay %lld", SafeSystem::Time::GetMilliSecond() - context);
+    }
+    else {
+        TRACE(g_Engine, "TestRedisSession OnDeleteResponse false delay %lld", SafeSystem::Time::GetMilliSecond() - context);
+    }
 }
 
 void TestRedisSession::OnStart(const int id, void* const context, const int64 timestamp) {
@@ -41,15 +58,15 @@ void TestRedisSession::OnStart(const int id, void* const context, const int64 ti
 
 void TestRedisSession::OnTimer(const int id, void* const context, const int64 timestamp) {
     if (id == 1) {
-        for (int i = 0; i < 100; i++) {
-            std::string key = "max";
-            key += SafeString::Int64ToString(i);
+        std::string key = "max";
+        key += SafeString::Int64ToString(_ID) + "-" + SafeString::Int64ToString(_Index++);
 
-            std::string data = "hello redis, I'm doing test for you!!!!";
-            data += SafeString::Int64ToString(i);
+        std::string data = "hello redis, I'm doing test for you!!!!";
+        data += SafeString::Int64ToString(_ID) + "-" + SafeString::Int64ToString(_Index++);;
 
-            Write(key, 1, data.c_str(), data.size(), 0);
-        }
+        Write(key, 1, data.c_str(), data.size(), SafeSystem::Time::GetMilliSecond());
+        Read(key, 1, SafeSystem::Time::GetMilliSecond());
+        Delete(key, 1, SafeSystem::Time::GetMilliSecond());
     }
 
     if (id == 0) {
@@ -58,7 +75,9 @@ void TestRedisSession::OnTimer(const int id, void* const context, const int64 ti
 }
 
 void TestRedisSession::OnEnd(const int id, void* const context, bool nonviolent, const int64 timestamp) {
-
+    if (id == 1) {
+        GiveUP();
+    }
 }
 
 void TestRedisSession::OnPause(const int id, void* const context, const int64 timestamp) {
