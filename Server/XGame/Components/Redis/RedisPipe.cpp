@@ -13,7 +13,11 @@ void RedisPipe::Write(const std::string& key, const int logicId, const void* dat
         SafeMemory::Memcpy(opt->_Data, len, data, len);
         opt->_Len = len;
 
-        _RedisOperatorRequestQueue.Push(opt);
+        if (!_RedisOperatorRequestQueue.Push(opt)) {
+            ERROR(g_Engine, "_RedisOperatorRequestQueue is full");
+            RedisOperator::Release(opt);
+            _Session->OnWriteResponse(false, key, logicId, data, len, context);
+        }
     }
     else {
         ERROR(g_Engine, "RedisPipe::Write a null data");
@@ -22,12 +26,20 @@ void RedisPipe::Write(const std::string& key, const int logicId, const void* dat
 
 void RedisPipe::Read(const std::string& key, const int logicId, const unsigned_int64 context) {
     RedisOperator* opt = RedisOperator::Create(key, logicId, RedisOperator::eOperatorType::Read, context);
-    _RedisOperatorRequestQueue.Push(opt);
+    if (!_RedisOperatorRequestQueue.Push(opt)) {
+        ERROR(g_Engine, "_RedisOperatorRequestQueue is full");
+        RedisOperator::Release(opt);
+        _Session->OnReadResponse(false, key, logicId, nullptr, 0, context);
+    }
 }
 
 void RedisPipe::Delete(const std::string& key, const int logicId, const unsigned_int64 context) {
     RedisOperator* opt = RedisOperator::Create(key, logicId, RedisOperator::eOperatorType::Delete, context);
-    _RedisOperatorRequestQueue.Push(opt);
+    if (!_RedisOperatorRequestQueue.Push(opt)) {
+        ERROR(g_Engine, "_RedisOperatorRequestQueue is full");
+        RedisOperator::Release(opt);
+        _Session->OnDeleteResponse(false, key, logicId, context);
+    }
 }
 
 void RedisPipe::Close() {
@@ -50,7 +62,6 @@ void RedisPipe::Close() {
         }
     }
     _Code = eErrorCode::DISCONNECTED;
-    _IsConnected = false;
     _Session->OnDisconnect();
     SafeThread::Close();
 }
@@ -108,7 +119,6 @@ void RedisPipe::Connect() {
     if (_RedisContext) {
         if (_RedisContext->err != REDIS_OK) {
             SAFE_FREE_REDIS_CONTEXT(_RedisContext);
-            _IsConnected = false;
             _Code = eErrorCode::CONNECT_FAILD;
         }
         else {
@@ -125,11 +135,9 @@ void RedisPipe::Connect() {
             if (!b) {
                 SAFE_FREE_REDIS_CONTEXT(_RedisContext);
                 _Code = eErrorCode::AUTH_FAILD;
-                _IsConnected = false;
             }
             else {
-                _Code = eErrorCode::SUCCESS;
-                _IsConnected = true;
+                _Code = eErrorCode::CONNECTED;
             }
         }
     }
@@ -176,7 +184,10 @@ void RedisPipe::Run(void* constext) {
             if (rply) {
                 freeReplyObject(rply);
             }
-            _RedisOperatorResponseQueue.Push(opt);
+
+            while (!_RedisOperatorResponseQueue.Push(opt)) {
+                SafeSystem::Time::MillisecondSleep(1);
+            }
         }
         else {
             SafeSystem::Time::MillisecondSleep(1);

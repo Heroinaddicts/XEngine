@@ -6,7 +6,8 @@ class RedisOperator;
 class RedisPipe : public iRedisPipe, public SafeThread {
 public:
     enum class eErrorCode {
-        SUCCESS,
+        UNKNOWN,
+        CONNECTED,
         CONNECT_FAILD,
         AUTH_FAILD,
         DISCONNECTED
@@ -16,7 +17,7 @@ public:
     virtual ~RedisPipe() {}
 
     RedisPipe(iRedisSession* session, const std::string& host, const int port, const std::string& password)
-        : _Session(session), _Host(host), _Port(port), _RedisContext(nullptr), _IsConnected(false), _Password(password) {}
+        : _Session(session), _Host(host), _Port(port), _RedisContext(nullptr), _Password(password), _Code(eErrorCode::UNKNOWN) {}
 
     virtual void Write(const std::string& key, const int logicId, const void* data, const int len, const unsigned_int64 context);
     virtual void Read(const std::string& key, const int logicId, const unsigned_int64 context);
@@ -24,7 +25,7 @@ public:
 
     virtual void Close();
 
-    __forceinline bool IsConnected() { return _IsConnected; }
+    __forceinline bool IsConnected() { return _Code == eErrorCode::CONNECTED; }
     __forceinline eErrorCode GetCode() { return _Code; }
     void Update();
     void Connect();
@@ -44,7 +45,6 @@ public:
     redisContext* _RedisContext;
 
     eErrorCode _Code;
-    bool _IsConnected;
 
 private:
     SafeQueue::SpscQueue<RedisOperator*> _RedisOperatorRequestQueue;

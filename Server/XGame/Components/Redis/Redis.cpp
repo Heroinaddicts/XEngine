@@ -48,7 +48,7 @@ void Redis::Update(iEngine* const engine) {
     }
 
     for (auto itor = g_PipeSet.begin(); itor != g_PipeSet.end();) {
-        if ((*itor)->GetCode() == RedisPipe::eErrorCode::SUCCESS) {
+        if ((*itor)->GetCode() == RedisPipe::eErrorCode::CONNECTED) {
             (*itor)->Update();
             itor++;
         }

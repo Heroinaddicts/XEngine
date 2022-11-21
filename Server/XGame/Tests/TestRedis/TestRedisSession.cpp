@@ -3,7 +3,7 @@
 void TestRedisSession::OnConnect(bool success) {
     if (success) {
         TRACE(g_Engine, "TestRedisSession OnConnected");
-        START_TIMER(g_Engine, this, 1, 100, SafeTools::Rand(100) + 100, 100, 0);
+        START_TIMER(g_Engine, this, 1, 20, SafeTools::Rand(100) + 100, 20, 0);
     }
     else {
         TRACE(g_Engine, "TestRedisSession OnConnect failed, retry");
