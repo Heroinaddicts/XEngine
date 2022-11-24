@@ -57,8 +57,7 @@ int main(int argc, const char** args, const char** env) {
         return false;
     }
 
-    std::string interface_dir = path + "/Interface";
-
+    std::string interface_dir = path + "/" + s_ParameterMap["group"] + "/Interface";
     SafeSystem::File::CreateFolder(path);
     SafeSystem::File::CreateFolder(interface_dir);
     SafeSystem::File::CreateFolder(module_dir);

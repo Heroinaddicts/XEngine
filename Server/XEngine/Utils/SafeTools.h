@@ -29,12 +29,24 @@ namespace XEngine {
             SetSeed(SafeSystem::Time::GetMilliSecond());
         }
 
-        inline int Rand(int range) {
+        inline unsigned_int32 Rand(unsigned_int32 range) {
             if (0 == range) {
                 return 0;
             }
             if (s_Seed == 0) {
-                s_Seed = SafeSystem::Time::GetMilliSecond();
+                s_Seed = SafeSystem::Time::GetMicroSecond();
+            }
+
+            s_Seed = (((s_Seed = s_Seed * 214013L + 2531011L) >> 16) & 0x7fff);
+            return s_Seed % range;
+        }
+
+        inline unsigned_int64 Rand64(unsigned_int64 range) {
+            if (0 == range) {
+                return 0;
+            }
+            if (s_Seed == 0) {
+                s_Seed = SafeSystem::Time::GetMicroSecond();
             }
 
             s_Seed = (((s_Seed = s_Seed * 214013L + 2531011L) >> 16) & 0x7fff);

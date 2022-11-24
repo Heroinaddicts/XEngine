@@ -7,5 +7,6 @@ MysqlPipe::MysqlPipe(iMysqlSession* session, const std::string& host, const int 
 }
 
 void MysqlPipe::DoConnect() {
-
+    _Handle = xnew MYSQL;
+    mysql_init(_Handle);
 }
