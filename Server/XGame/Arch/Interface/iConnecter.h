@@ -9,6 +9,7 @@
 #include "iNetApi.h"
 #include <google/protobuf/message.h>
 using namespace XEngine;
+enum eRouteEvent;
 
 class iNodeSession : public Api::iTcpSession {
 public:
@@ -68,9 +69,15 @@ protected:
     virtual void Register(const unsigned_int16 msgid, const iMessageHandle* handle) = 0;
 };
 
+
+struct RouteInfo {
+    std::map<std::string, unsigned_int32> _Route;
+};
+
 class iConnecter : public Api::iModule {
 public:
     typedef void(*fSessionEvent)(iNodeSession* const session);
+    typedef void(*fRouteEvent)(iNodeSession* const session, const eRouteEvent ev, const unsigned_int64 guid);
 
     enum class eConnectionEvent {
         NodeAppear,
@@ -79,6 +86,13 @@ public:
 
 public:
     virtual ~iConnecter() {}
+
+    virtual void RouteReport(const std::string& nodeName, const eRouteEvent ev, const unsigned_int64 guid) const = 0;
+    virtual void RouteReport(const unsigned_int32 nodeId, const eRouteEvent ev, const unsigned_int64 guid) const = 0;
+
+    virtual const RouteInfo* GetRouteInfo(const unsigned_int64 guid) const = 0;
+
+    virtual void RegisterRouteEvent(fRouteEvent const fun) = 0;
 
     virtual void RegisterSessionEvent(const eConnectionEvent& ev, fSessionEvent const fun) = 0;
     virtual void UnregisterSessionEvent(const eConnectionEvent& ev, fSessionEvent const fun) = 0;

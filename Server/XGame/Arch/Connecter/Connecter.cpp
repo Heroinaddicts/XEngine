@@ -4,10 +4,13 @@
 iEngine* g_Engine = nullptr;
 Connecter* g_Connecter = nullptr;
 
+std::map<unsigned_int64, RouteInfo> g_RouteInfos;
 std::set<iConnecter::fSessionEvent> g_SessionAppearEventPool;
 std::set<iConnecter::fSessionEvent> g_SessionDisappearEventPool;
+std::set<iConnecter::fRouteEvent> g_RouteEventPool;
 
-std::map<int, NodeSession*> g_NodeSessionMap;
+std::map<int, NodeSession*> g_NodeIdSessionMap;
+std::map<std::string, std::set<NodeSession*>> g_NodeNameSessionMap;
 
 std::string g_NodeName;
 int g_NodeID = INVALID_NODE_ID;
@@ -73,6 +76,56 @@ bool Connecter::Destroy(iEngine* const engine) {
     return true;
 }
 
+void Connecter::RouteReport(const std::string& nodeName, const eRouteEvent ev, const unsigned_int64 guid) const {
+    auto itor = g_NodeNameSessionMap.find(nodeName);
+    if (itor != g_NodeNameSessionMap.end() && !itor->second.empty()) {
+        oRouteReport report;
+        report.set_event(ev);
+        report.set_guid(guid);
+
+        int len = report.ByteSize();
+        void* temp = alloca(len);
+        if (report.SerializePartialToArray(temp, len)) {
+            for (auto i = itor->second.begin(); i != itor->second.end(); i++) {
+                (*i)->SendMessage(eArchProtoID::RouteReport, temp, len);
+            }
+        }
+        else {
+            ERROR(g_Engine, "oRouteReport SerializePartialToArray falid");
+        }
+    }
+}
+
+void Connecter::RouteReport(const unsigned_int32 nodeId, const eRouteEvent ev, const unsigned_int64 guid) const {
+    auto itor = g_NodeIdSessionMap.find(nodeId);
+    if (g_NodeIdSessionMap.end() != itor) {
+        oRouteReport report;
+        report.set_event(ev);
+        report.set_guid(guid);
+
+        int len = report.ByteSize();
+        void* temp = alloca(len);
+        if (report.SerializePartialToArray(temp, len)) {
+            itor->second->SendMessage(eArchProtoID::RouteReport, temp, len);
+        }
+        else {
+            ERROR(g_Engine, "oRouteReport SerializePartialToArray falid");
+        }
+    }
+}
+
+const RouteInfo* Connecter::GetRouteInfo(const unsigned_int64 guid) const {
+    auto itor = g_RouteInfos.find(guid);
+    if (itor != g_RouteInfos.end()) {
+        return &(itor->second);
+    }
+    return nullptr;
+}
+
+void Connecter::RegisterRouteEvent(fRouteEvent const fun) {
+    g_RouteEventPool.insert(fun);
+}
+
 void Connecter::RegisterSessionEvent(const eConnectionEvent& ev, fSessionEvent const fun) {
     switch (ev) {
     case eConnectionEvent::NodeAppear: {
@@ -100,8 +153,8 @@ void Connecter::UnregisterSessionEvent(const eConnectionEvent& ev, fSessionEvent
 }
 
 iNodeSession* Connecter::QueryNodeSession(const int nodeId) const {
-    auto itor = g_NodeSessionMap.find(nodeId);
-    return itor != g_NodeSessionMap.end() ? itor->second : nullptr;
+    auto itor = g_NodeIdSessionMap.find(nodeId);
+    return itor != g_NodeIdSessionMap.end() ? itor->second : nullptr;
 }
 
 iTcpSession* Connecter::OnMallocConnection(const char* remote_ip, const int remote_port) {

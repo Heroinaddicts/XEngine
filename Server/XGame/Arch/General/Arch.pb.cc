@@ -20,6 +20,10 @@ class oNodeReportDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<oNodeReport> _instance;
 } _oNodeReport_default_instance_;
+class oRouteReportDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<oRouteReport> _instance;
+} _oRouteReport_default_instance_;
 static void InitDefaultsscc_info_oNodeReport_Arch_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -33,8 +37,21 @@ static void InitDefaultsscc_info_oNodeReport_Arch_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_oNodeReport_Arch_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_oNodeReport_Arch_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Arch_2eproto[1];
-static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_Arch_2eproto[1];
+static void InitDefaultsscc_info_oRouteReport_Arch_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::_oRouteReport_default_instance_;
+    new (ptr) ::oRouteReport();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_oRouteReport_Arch_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_oRouteReport_Arch_2eproto}, {}};
+
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_Arch_2eproto[2];
+static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_Arch_2eproto[2];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_Arch_2eproto = nullptr;
 
 const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Arch_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
@@ -45,33 +62,45 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Arch_2eproto::offsets[] PROTOB
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::oNodeReport, id_),
   PROTOBUF_FIELD_OFFSET(::oNodeReport, name_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::oRouteReport, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::oRouteReport, event_),
+  PROTOBUF_FIELD_OFFSET(::oRouteReport, guid_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::oNodeReport)},
+  { 7, -1, sizeof(::oRouteReport)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_oNodeReport_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::_oRouteReport_default_instance_),
 };
 
 const char descriptor_table_protodef_Arch_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\nArch.proto\"\'\n\013oNodeReport\022\n\n\002Id\030\001 \001(\r\022"
-  "\014\n\004Name\030\002 \001(\t*c\n\014eArchProtoID\022\013\n\007Unknown"
-  "\020\000\022\016\n\nNodeReport\020\001\022\r\n\tHeartBeat\020\002\022\024\n\020Dev"
-  "eloperDefined\020e\022\021\n\014PlayerAppear\020\311\001b\006prot"
-  "o3"
+  "\014\n\004Name\030\002 \001(\t\"9\n\014oRouteReport\022\033\n\005Event\030\001"
+  " \001(\0162\014.eRouteEvent\022\014\n\004Guid\030\002 \001(\004*a\n\014eArc"
+  "hProtoID\022\013\n\007Unknown\020\000\022\016\n\nNodeReport\020\001\022\r\n"
+  "\tHeartBeat\020\002\022\017\n\013RouteReport\020\003\022\024\n\020Develop"
+  "erDefined\020e*(\n\013eRouteEvent\022\n\n\006Appear\020\000\022\r"
+  "\n\tDisappear\020\001b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Arch_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Arch_2eproto_sccs[1] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Arch_2eproto_sccs[2] = {
   &scc_info_oNodeReport_Arch_2eproto.base,
+  &scc_info_oRouteReport_Arch_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Arch_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Arch_2eproto = {
-  false, false, descriptor_table_protodef_Arch_2eproto, "Arch.proto", 162,
-  &descriptor_table_Arch_2eproto_once, descriptor_table_Arch_2eproto_sccs, descriptor_table_Arch_2eproto_deps, 1, 0,
+  false, false, descriptor_table_protodef_Arch_2eproto, "Arch.proto", 261,
+  &descriptor_table_Arch_2eproto_once, descriptor_table_Arch_2eproto_sccs, descriptor_table_Arch_2eproto_deps, 2, 0,
   schemas, file_default_instances, TableStruct_Arch_2eproto::offsets,
-  file_level_metadata_Arch_2eproto, 1, file_level_enum_descriptors_Arch_2eproto, file_level_service_descriptors_Arch_2eproto,
+  file_level_metadata_Arch_2eproto, 2, file_level_enum_descriptors_Arch_2eproto, file_level_service_descriptors_Arch_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -85,8 +114,22 @@ bool eArchProtoID_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+    case 3:
     case 101:
-    case 201:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* eRouteEvent_descriptor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&descriptor_table_Arch_2eproto);
+  return file_level_enum_descriptors_Arch_2eproto[1];
+}
+bool eRouteEvent_IsValid(int value) {
+  switch (value) {
+    case 0:
+    case 1:
       return true;
     default:
       return false;
@@ -327,10 +370,243 @@ void oNodeReport::InternalSwap(oNodeReport* other) {
 }
 
 
+// ===================================================================
+
+class oRouteReport::_Internal {
+ public:
+};
+
+oRouteReport::oRouteReport(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:oRouteReport)
+}
+oRouteReport::oRouteReport(const oRouteReport& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::memcpy(&guid_, &from.guid_,
+    static_cast<size_t>(reinterpret_cast<char*>(&event_) -
+    reinterpret_cast<char*>(&guid_)) + sizeof(event_));
+  // @@protoc_insertion_point(copy_constructor:oRouteReport)
+}
+
+void oRouteReport::SharedCtor() {
+  ::memset(reinterpret_cast<char*>(this) + static_cast<size_t>(
+      reinterpret_cast<char*>(&guid_) - reinterpret_cast<char*>(this)),
+      0, static_cast<size_t>(reinterpret_cast<char*>(&event_) -
+      reinterpret_cast<char*>(&guid_)) + sizeof(event_));
+}
+
+oRouteReport::~oRouteReport() {
+  // @@protoc_insertion_point(destructor:oRouteReport)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void oRouteReport::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+}
+
+void oRouteReport::ArenaDtor(void* object) {
+  oRouteReport* _this = reinterpret_cast< oRouteReport* >(object);
+  (void)_this;
+}
+void oRouteReport::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void oRouteReport::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const oRouteReport& oRouteReport::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_oRouteReport_Arch_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void oRouteReport::Clear() {
+// @@protoc_insertion_point(message_clear_start:oRouteReport)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&guid_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&event_) -
+      reinterpret_cast<char*>(&guid_)) + sizeof(event_));
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* oRouteReport::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // .eRouteEvent Event = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          ::PROTOBUF_NAMESPACE_ID::uint64 val = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+          _internal_set_event(static_cast<::eRouteEvent>(val));
+        } else goto handle_unusual;
+        continue;
+      // uint64 Guid = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 16)) {
+          guid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* oRouteReport::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:oRouteReport)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // .eRouteEvent Event = 1;
+  if (this->event() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteEnumToArray(
+      1, this->_internal_event(), target);
+  }
+
+  // uint64 Guid = 2;
+  if (this->guid() != 0) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt64ToArray(2, this->_internal_guid(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:oRouteReport)
+  return target;
+}
+
+size_t oRouteReport::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:oRouteReport)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // uint64 Guid = 2;
+  if (this->guid() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::UInt64Size(
+        this->_internal_guid());
+  }
+
+  // .eRouteEvent Event = 1;
+  if (this->event() != 0) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::EnumSize(this->_internal_event());
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void oRouteReport::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:oRouteReport)
+  GOOGLE_DCHECK_NE(&from, this);
+  const oRouteReport* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<oRouteReport>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:oRouteReport)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:oRouteReport)
+    MergeFrom(*source);
+  }
+}
+
+void oRouteReport::MergeFrom(const oRouteReport& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:oRouteReport)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.guid() != 0) {
+    _internal_set_guid(from._internal_guid());
+  }
+  if (from.event() != 0) {
+    _internal_set_event(from._internal_event());
+  }
+}
+
+void oRouteReport::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:oRouteReport)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void oRouteReport::CopyFrom(const oRouteReport& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:oRouteReport)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool oRouteReport::IsInitialized() const {
+  return true;
+}
+
+void oRouteReport::InternalSwap(oRouteReport* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::memswap<
+      PROTOBUF_FIELD_OFFSET(oRouteReport, event_)
+      + sizeof(oRouteReport::event_)
+      - PROTOBUF_FIELD_OFFSET(oRouteReport, guid_)>(
+          reinterpret_cast<char*>(&guid_),
+          reinterpret_cast<char*>(&other->guid_));
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata oRouteReport::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
 // @@protoc_insertion_point(namespace_scope)
 PROTOBUF_NAMESPACE_OPEN
 template<> PROTOBUF_NOINLINE ::oNodeReport* Arena::CreateMaybeMessage< ::oNodeReport >(Arena* arena) {
   return Arena::CreateMessageInternal< ::oNodeReport >(arena);
+}
+template<> PROTOBUF_NOINLINE ::oRouteReport* Arena::CreateMaybeMessage< ::oRouteReport >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::oRouteReport >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 

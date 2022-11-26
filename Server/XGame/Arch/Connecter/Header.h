@@ -36,11 +36,16 @@ namespace TimerConfig {
     const int ReconnectInterval = 500; //µ•Œª: ∫¡√Î
 }
 
+extern std::map<unsigned_int64, RouteInfo> g_RouteInfos;
+
 extern std::set<iConnecter::fSessionEvent> g_SessionAppearEventPool;
 extern std::set<iConnecter::fSessionEvent> g_SessionDisappearEventPool;
 
+extern std::set<iConnecter::fRouteEvent> g_RouteEventPool;
+
 class NodeSession;
-extern std::map<int, NodeSession*> g_NodeSessionMap;
+extern std::map<int, NodeSession*> g_NodeIdSessionMap;
+extern std::map<std::string, std::set<NodeSession*>> g_NodeNameSessionMap;
 
 extern std::string g_NodeName;
 extern int g_NodeID;

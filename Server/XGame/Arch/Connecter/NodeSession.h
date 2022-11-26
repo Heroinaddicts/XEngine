@@ -62,7 +62,7 @@ private:
     NodeSession(const std::string& remoteIp, const int remotePort) : _Id(INVALID_NODE_ID), _Name(""), _RemoteIp(remoteIp), _RemotePort(remotePort), _IsGiveUP(false), _LastHeartBeatTick(SafeSystem::Time::GetMilliSecond()) {}
 
 private:
-    int _Id;
+    unsigned_int32 _Id;
     std::string _Name;
     std::string _RemoteIp;
     int _RemotePort;

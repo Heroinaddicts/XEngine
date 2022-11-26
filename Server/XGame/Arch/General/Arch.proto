@@ -4,15 +4,23 @@ enum eArchProtoID {
     Unknown = 0;
     NodeReport = 1;
     HeartBeat = 2;
+    RouteReport = 3;
 
     //以下是开发者自定义协议
     DeveloperDefined = 101;
-
-    //玩家出现
-    PlayerAppear = 201;
 }
 
 message oNodeReport {
     uint32 Id = 1;
     string Name = 2;
+}
+
+enum eRouteEvent {
+    Appear = 0;
+    Disappear = 1;
+}
+
+message oRouteReport {
+    eRouteEvent Event = 1;
+    uint64 Guid = 2;
 }

@@ -58,6 +58,7 @@ namespace XEngine {
 #define ERROR(engine, format, ...) {\
     char log[1024] = {0}; \
     sprintf_s(log, sizeof(log), "Error : %s:%d >>>> "#format, __FILE__, __LINE__, ##__VA_ARGS__);\
+    XASSERT(false, log); \
     engine->LogSync(log);\
 }
 

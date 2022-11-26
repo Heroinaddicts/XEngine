@@ -1,9 +1,9 @@
 #include "NodeSession.h"
 
 __forceinline void NodeSessionAppear(NodeSession* session) {
-    auto itor = g_NodeSessionMap.find(session->GetId());
-    if (itor == g_NodeSessionMap.end()) {
-        g_NodeSessionMap.insert(std::make_pair(session->GetId(), session));
+    auto itor = g_NodeIdSessionMap.find(session->GetId());
+    if (itor == g_NodeIdSessionMap.end()) {
+        g_NodeIdSessionMap.insert(std::make_pair(session->GetId(), session));
     }
     else {
         XASSERT(itor->second != session, "node report logic error");
@@ -16,6 +16,15 @@ __forceinline void NodeSessionAppear(NodeSession* session) {
         temp->GiveUp();
     }
 
+    {
+        auto itor = g_NodeNameSessionMap.find(session->GetName());
+        if (g_NodeNameSessionMap.end() == itor) {
+            itor = g_NodeNameSessionMap.insert(std::make_pair(session->GetName(), std::set<NodeSession*>())).first;
+        }
+        XASSERT(itor->second.find(session) == itor->second.end(), "wtf");
+        itor->second.insert(session);
+    }
+
     TRACE(g_Engine, "Node Appear %s %d", session->GetName().c_str(), session->GetId());
     for (auto i = g_SessionAppearEventPool.begin(); i != g_SessionAppearEventPool.end(); i++) {
         (*i)(session);
@@ -23,12 +32,21 @@ __forceinline void NodeSessionAppear(NodeSession* session) {
 }
 
 __forceinline void NodeSessionDisappear(NodeSession* session) {
-    auto itor = g_NodeSessionMap.find(session->GetId());
-    if (itor == g_NodeSessionMap.end() || itor->second != session) {
+    auto itor = g_NodeIdSessionMap.find(session->GetId());
+    if (itor == g_NodeIdSessionMap.end() || itor->second != session) {
         return;
     }
 
-    g_NodeSessionMap.erase(itor);
+    g_NodeIdSessionMap.erase(itor);
+
+    {
+        auto itor = g_NodeNameSessionMap.find(session->GetName());
+        XASSERT(itor != g_NodeNameSessionMap.end() && itor->second.find(session) != itor->second.end(), "wtf");
+        if (itor != g_NodeNameSessionMap.end()) {
+            itor->second.erase(session);
+        }
+    }
+
     TRACE(g_Engine, "Node Disappear %s %d", session->GetName().c_str(), session->GetId());
     for (auto i = g_SessionDisappearEventPool.begin(); i != g_SessionDisappearEventPool.end(); i++) {
         (*i)(session);
@@ -75,13 +93,26 @@ int NodeSession::OnReceive(const char* content, const int size) {
             NodeSessionAppear(this);
         }
         else {
-            XASSERT(false, "report ParseFromArray error");
+            XASSERT(false, "oNodeReport ParseFromArray error");
             Close();
         }
         break;
     }
     case eArchProtoID::HeartBeat: {
         _LastHeartBeatTick = SafeSystem::Time::GetMilliSecond();
+        break;
+    }
+    case eArchProtoID::RouteReport: {
+        oRouteReport report;
+        if (report.ParseFromArray(body, bodyLen)) {
+            for (auto i = g_RouteEventPool.begin(); i != g_RouteEventPool.end(); i++) {
+                (*i)(this, report.event(), report.guid());
+            }
+        }
+        else {
+            XASSERT(false, "oRouteReport ParseFromArray error");
+            Close();
+        }
         break;
     }
     default:

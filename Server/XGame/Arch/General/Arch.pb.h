@@ -47,7 +47,7 @@ struct TableStruct_Arch_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxiliaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[1]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[2]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -57,22 +57,26 @@ extern const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table
 class oNodeReport;
 class oNodeReportDefaultTypeInternal;
 extern oNodeReportDefaultTypeInternal _oNodeReport_default_instance_;
+class oRouteReport;
+class oRouteReportDefaultTypeInternal;
+extern oRouteReportDefaultTypeInternal _oRouteReport_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::oNodeReport* Arena::CreateMaybeMessage<::oNodeReport>(Arena*);
+template<> ::oRouteReport* Arena::CreateMaybeMessage<::oRouteReport>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 
 enum eArchProtoID : int {
   Unknown = 0,
   NodeReport = 1,
   HeartBeat = 2,
+  RouteReport = 3,
   DeveloperDefined = 101,
-  PlayerAppear = 201,
   eArchProtoID_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
   eArchProtoID_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
 };
 bool eArchProtoID_IsValid(int value);
 constexpr eArchProtoID eArchProtoID_MIN = Unknown;
-constexpr eArchProtoID eArchProtoID_MAX = PlayerAppear;
+constexpr eArchProtoID eArchProtoID_MAX = DeveloperDefined;
 constexpr int eArchProtoID_ARRAYSIZE = eArchProtoID_MAX + 1;
 
 const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* eArchProtoID_descriptor();
@@ -88,6 +92,31 @@ inline bool eArchProtoID_Parse(
     ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, eArchProtoID* value) {
   return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<eArchProtoID>(
     eArchProtoID_descriptor(), name, value);
+}
+enum eRouteEvent : int {
+  Appear = 0,
+  Disappear = 1,
+  eRouteEvent_INT_MIN_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::min(),
+  eRouteEvent_INT_MAX_SENTINEL_DO_NOT_USE_ = std::numeric_limits<::PROTOBUF_NAMESPACE_ID::int32>::max()
+};
+bool eRouteEvent_IsValid(int value);
+constexpr eRouteEvent eRouteEvent_MIN = Appear;
+constexpr eRouteEvent eRouteEvent_MAX = Disappear;
+constexpr int eRouteEvent_ARRAYSIZE = eRouteEvent_MAX + 1;
+
+const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* eRouteEvent_descriptor();
+template<typename T>
+inline const std::string& eRouteEvent_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, eRouteEvent>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function eRouteEvent_Name.");
+  return ::PROTOBUF_NAMESPACE_ID::internal::NameOfEnum(
+    eRouteEvent_descriptor(), enum_t_value);
+}
+inline bool eRouteEvent_Parse(
+    ::PROTOBUF_NAMESPACE_ID::ConstStringParam name, eRouteEvent* value) {
+  return ::PROTOBUF_NAMESPACE_ID::internal::ParseNamedEnum<eRouteEvent>(
+    eRouteEvent_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -243,6 +272,153 @@ class oNodeReport PROTOBUF_FINAL :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_Arch_2eproto;
 };
+// -------------------------------------------------------------------
+
+class oRouteReport PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:oRouteReport) */ {
+ public:
+  inline oRouteReport() : oRouteReport(nullptr) {}
+  virtual ~oRouteReport();
+
+  oRouteReport(const oRouteReport& from);
+  oRouteReport(oRouteReport&& from) noexcept
+    : oRouteReport() {
+    *this = ::std::move(from);
+  }
+
+  inline oRouteReport& operator=(const oRouteReport& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline oRouteReport& operator=(oRouteReport&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const oRouteReport& default_instance();
+
+  static inline const oRouteReport* internal_default_instance() {
+    return reinterpret_cast<const oRouteReport*>(
+               &_oRouteReport_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(oRouteReport& a, oRouteReport& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(oRouteReport* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(oRouteReport* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline oRouteReport* New() const final {
+    return CreateMaybeMessage<oRouteReport>(nullptr);
+  }
+
+  oRouteReport* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<oRouteReport>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const oRouteReport& from);
+  void MergeFrom(const oRouteReport& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(oRouteReport* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "oRouteReport";
+  }
+  protected:
+  explicit oRouteReport(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_Arch_2eproto);
+    return ::descriptor_table_Arch_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kGuidFieldNumber = 2,
+    kEventFieldNumber = 1,
+  };
+  // uint64 Guid = 2;
+  void clear_guid();
+  ::PROTOBUF_NAMESPACE_ID::uint64 guid() const;
+  void set_guid(::PROTOBUF_NAMESPACE_ID::uint64 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::uint64 _internal_guid() const;
+  void _internal_set_guid(::PROTOBUF_NAMESPACE_ID::uint64 value);
+  public:
+
+  // .eRouteEvent Event = 1;
+  void clear_event();
+  ::eRouteEvent event() const;
+  void set_event(::eRouteEvent value);
+  private:
+  ::eRouteEvent _internal_event() const;
+  void _internal_set_event(::eRouteEvent value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:oRouteReport)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::uint64 guid_;
+  int event_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_Arch_2eproto;
+};
 // ===================================================================
 
 
@@ -335,9 +511,55 @@ inline void oNodeReport::set_allocated_name(std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:oNodeReport.Name)
 }
 
+// -------------------------------------------------------------------
+
+// oRouteReport
+
+// .eRouteEvent Event = 1;
+inline void oRouteReport::clear_event() {
+  event_ = 0;
+}
+inline ::eRouteEvent oRouteReport::_internal_event() const {
+  return static_cast< ::eRouteEvent >(event_);
+}
+inline ::eRouteEvent oRouteReport::event() const {
+  // @@protoc_insertion_point(field_get:oRouteReport.Event)
+  return _internal_event();
+}
+inline void oRouteReport::_internal_set_event(::eRouteEvent value) {
+  
+  event_ = value;
+}
+inline void oRouteReport::set_event(::eRouteEvent value) {
+  _internal_set_event(value);
+  // @@protoc_insertion_point(field_set:oRouteReport.Event)
+}
+
+// uint64 Guid = 2;
+inline void oRouteReport::clear_guid() {
+  guid_ = PROTOBUF_ULONGLONG(0);
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 oRouteReport::_internal_guid() const {
+  return guid_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint64 oRouteReport::guid() const {
+  // @@protoc_insertion_point(field_get:oRouteReport.Guid)
+  return _internal_guid();
+}
+inline void oRouteReport::_internal_set_guid(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  
+  guid_ = value;
+}
+inline void oRouteReport::set_guid(::PROTOBUF_NAMESPACE_ID::uint64 value) {
+  _internal_set_guid(value);
+  // @@protoc_insertion_point(field_set:oRouteReport.Guid)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -348,6 +570,11 @@ template <> struct is_proto_enum< ::eArchProtoID> : ::std::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::eArchProtoID>() {
   return ::eArchProtoID_descriptor();
+}
+template <> struct is_proto_enum< ::eRouteEvent> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::eRouteEvent>() {
+  return ::eRouteEvent_descriptor();
 }
 
 PROTOBUF_NAMESPACE_CLOSE
