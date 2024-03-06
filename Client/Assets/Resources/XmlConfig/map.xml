@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<root>
-    <map id="1001.000000" name="LostCity" desc="你需要在这个危险的城市中生存下来." pic="/map/map_pic_1" number_max="100.000000" fight="500.000000" resources="demo" team="1.000000" kill="1.000000" revive="1.000000" dead_item="1.000000" />
-</root>

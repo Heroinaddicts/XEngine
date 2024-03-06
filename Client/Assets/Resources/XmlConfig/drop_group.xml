@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<root>
-    <drop_group id="1001.000000" name="普通" probability="0.200000" min="1.000000" max="2.000000" item_probability="1.000000" item_drop="2001,0.25;2002,0.25;2003,0.25;2003,0.25" weapon_probability="0.000000" weapon_drop="3001,0.2;3002,0.2;3003,0.2;3003,0.2;2001,0.2" />
-    <drop_group id="1101.000000" name="精英" probability="0.500000" min="2.000000" max="4.000000" item_probability="0.300000" item_drop="2001,0.25;2002,0.25;2003,0.25;2003,0.25" weapon_probability="0.700000" weapon_drop="3001,0.2;3002,0.2;3003,0.2;3003,0.2;2001,0.2" />
-    <drop_group id="1201.000000" name="BOSS" probability="1.000000" min="3.000000" max="5.000000" item_probability="0.300000" item_drop="2001,0.25;2002,0.25;2003,0.25;2003,0.25" weapon_probability="0.700000" weapon_drop="3001,0.2;3002,0.2;3003,0.2;3003,0.2;2001,0.2" />
-    <drop_group id="1301.000000" name="世界BOSS" probability="1.000000" min="4.000000" max="5.000000" item_probability="0.100000" item_drop="2001,0.25;2002,0.25;2003,0.25;2003,0.25" weapon_probability="0.900000" weapon_drop="3001,0.2;3002,0.2;3003,0.2;3003,0.2;2001,0.2" />
-    <drop_group id="1901.000000" name="宝箱" probability="1.000000" min="1.000000" max="1.000000" item_probability="0.500000" item_drop="2001,0.25;2002,0.25;2003,0.25;2003,0.25" weapon_probability="0.500000" weapon_drop="3001,0.2;3002,0.2;3003,0.2;3003,0.2;2001,0.2" />
-</root>
