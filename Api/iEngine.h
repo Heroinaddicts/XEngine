@@ -45,6 +45,8 @@ namespace XEngine {
     }
 }
 
+
+
 #ifdef _DEBUG
 #define DEBUG(engine, format, ...) {\
     char log[1024] = {0};\

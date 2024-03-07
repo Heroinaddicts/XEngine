@@ -42,11 +42,16 @@ typedef uint64_t UInt64;
 #define xfree free
 #define xnew new
 #define xdel delete
+
+#define ECHO(format, ...) printf(format##"\n", ##__VA_ARGS__);
+
 #else
 #define xmalloc malloc
 #define xfree free
 #define xnew new
 #define xdel delete
+
+#define ECHO(format, ...)
 #endif //defined _DEBUG
 
 void __assert__(const char* file, int line, const char* funname, const char* format, ...);

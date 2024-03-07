@@ -29,8 +29,8 @@ namespace XEngine {
                         TRACE(g_Engine, "Launch args %s=%s", name.c_str(), val.c_str());
                     }
                     else if (strlen(parms[index].c_str()) > 2) {
-						_ParameterMap[parms[index].c_str() + 2] = "";
-						TRACE(g_Engine, "Launch args %s", parms[index].c_str() + 2);
+                        _ParameterMap[parms[index].c_str() + 2] = "";
+                        TRACE(g_Engine, "Launch args %s", parms[index].c_str() + 2);
                     }
                 }
             }
