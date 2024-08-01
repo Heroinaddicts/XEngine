@@ -80,8 +80,11 @@ namespace XEngine {
             }
         }
 
-        __forceinline void Close() {
+        __forceinline void Close(const bool save = true) {
             if (_File) {
+                if (save) {
+                    Save();
+                }
                 fclose(_File);
                 _File = nullptr;
             }

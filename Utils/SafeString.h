@@ -4,29 +4,23 @@
 #include "MultiSys.h"
 #include <string>
 #include <vector>
+#include <locale>
+#include <codecvt>
 
 namespace XEngine {
     namespace SafeString {
+		__forceinline std::string WStringToUTF8(const std::wstring& wstr) {
+			// 创建转换器
+			std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+			// 执行转换
+			return conv.to_bytes(wstr);
+		}
+
         std::string GBKToUTF8(const std::string& src);
         std::string UTF8ToGBK(const std::string& src);
 
         __forceinline bool Compare(const std::string& dest, const std::string& src) {
             return dest == src;
-        }
-
-        __forceinline int Replace(std::string& target, const std::string& src, const std::string& dst) {
-            int count = 0;
-            std::string::size_type pos = 0;
-            std::string::size_type srcLen = src.size();
-            std::string::size_type desLen = dst.size();
-            pos = target.find(src, pos);
-            while ((pos != std::string::npos)) {
-                target.replace(pos, srcLen, dst);
-                pos = target.find(src, (pos + desLen));
-                count++;
-            }
-
-            return count;
         }
 
         __forceinline std::string Replace(const std::string& target, const std::string& src, const std::string& dst) {
@@ -44,7 +38,22 @@ namespace XEngine {
             }
 
             return res;
-        }
+		}
+
+		__forceinline int Replace2(std::string& target, const std::string& src, const std::string& dst) {
+			int count = 0;
+			std::string::size_type pos = 0;
+			std::string::size_type srcLen = src.size();
+			std::string::size_type desLen = dst.size();
+			pos = target.find(src, pos);
+			while ((pos != std::string::npos)) {
+				target.replace(pos, srcLen, dst);
+				pos = target.find(src, (pos + desLen));
+				count++;
+			}
+
+			return count;
+		}
 
         __forceinline int Split(const std::string& src, const std::string& commas, std::vector<std::string>& res) {
             std::string::size_type pos_1 = 0;
