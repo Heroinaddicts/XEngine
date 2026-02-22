@@ -3,6 +3,7 @@ https://github.com/Heroinaddicts/XEngine/issues/1
 
 ## 设计理念
 XEngine 的目标不是“做一堆工具类”，而是提供一套可复用、可扩展、可部署的工程化基础设施，面向 **服务端/工具链/引擎型项目** 的长期演进。
+开发者只需要关注游戏逻辑就OK。
 
 ### 1) 模块化（Modular）
 
