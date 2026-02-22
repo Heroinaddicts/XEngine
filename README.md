@@ -77,3 +77,6 @@ make
 ## 可以从demo中的服务器开始着手（CMake）
 ## Demo客户端使用的Unity6, 在Client.cs中可以修改连接本地服务器
 
+
+##联系作者
+maxugc2023@gmail.com
