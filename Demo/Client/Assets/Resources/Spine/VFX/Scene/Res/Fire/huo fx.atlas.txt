@@ -1,0 +1,155 @@
+huo fx.png
+size:1273,144
+filter:Linear,Linear
+Elements - Fire 113 Torch Windy loop noCT noRSZ0000
+bounds:921,3,54,65
+offsets:52,7,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0001
+bounds:864,2,55,66
+offsets:53,7,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0002
+bounds:79,2,59,67
+offsets:53,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0003
+bounds:676,2,64,67
+offsets:53,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0004
+bounds:977,2,68,68
+offsets:53,6,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0005
+bounds:1047,2,68,67
+offsets:53,6,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0006
+bounds:792,2,70,65
+offsets:53,6,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0007
+bounds:604,2,70,64
+offsets:54,6,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0008
+bounds:331,2,73,62
+offsets:54,6,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0009
+bounds:289,66,76,61
+offsets:54,6,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0010
+bounds:200,2,77,60
+offsets:54,6,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0011
+bounds:2,63,79,58
+offsets:53,6,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0012
+bounds:62,63,79,55
+offsets:53,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0013
+bounds:119,63,79,53
+offsets:53,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0014
+bounds:232,64,78,55
+offsets:54,6,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0015
+bounds:174,64,78,56
+offsets:53,6,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0016
+bounds:352,66,76,57
+offsets:53,6,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0017
+bounds:2,2,75,59
+offsets:53,6,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0018
+bounds:583,68,74,57
+offsets:54,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0019
+bounds:411,67,75,57
+offsets:53,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0020
+bounds:470,67,75,56
+offsets:53,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0021
+bounds:750,69,73,54
+offsets:53,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0022
+bounds:642,68,74,52
+offsets:50,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0023
+bounds:696,68,74,52
+offsets:48,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0024
+bounds:528,67,75,53
+offsets:46,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0025
+bounds:806,69,73,54
+offsets:44,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0026
+bounds:862,70,72,54
+offsets:42,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0027
+bounds:918,70,72,54
+offsets:41,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0028
+bounds:1093,72,70,55
+offsets:41,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0029
+bounds:1034,72,70,57
+offsets:41,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0030
+bounds:974,72,70,58
+offsets:41,7,150,84
+rotate:90
+Elements - Fire 113 Torch Windy loop noCT noRSZ0031
+bounds:1150,84,54,58
+offsets:42,7,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0032
+bounds:1217,25,54,57
+offsets:43,7,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0033
+bounds:1163,24,52,58
+offsets:45,7,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0034
+bounds:1206,84,51,58
+offsets:46,7,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0035
+bounds:148,2,50,59
+offsets:46,7,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0036
+bounds:279,2,50,60
+offsets:47,7,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0037
+bounds:506,4,47,61
+offsets:49,6,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0038
+bounds:406,2,47,62
+offsets:50,6,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0039
+bounds:745,5,45,61
+offsets:52,7,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0040
+bounds:1116,9,45,61
+offsets:54,6,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0041
+bounds:555,4,47,61
+offsets:54,7,150,84
+Elements - Fire 113 Torch Windy loop noCT noRSZ0042
+bounds:455,2,49,63
+offsets:53,7,150,84

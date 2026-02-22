@@ -1,0 +1,4 @@
+#include "SQLCache.h"
+
+DLL_INSTANCE;
+CREATE_MODULE(SQLCache);

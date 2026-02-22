@@ -1,0 +1,11 @@
+Snake_C.png
+size:416,276
+filter:Linear,Linear
+jiutoushebai_10
+bounds:314,37,104,70
+rotate:90
+jiutoushebai_11
+bounds:2,2,310,272
+jiutoushebai_9
+bounds:314,143,131,100
+rotate:90

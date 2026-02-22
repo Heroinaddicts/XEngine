@@ -1,0 +1,9 @@
+Bundling.png
+size:921,268
+filter:Linear,Linear
+tengman
+bounds:2,130,136,917
+rotate:90
+tengman-1
+bounds:2,2,126,613
+rotate:90

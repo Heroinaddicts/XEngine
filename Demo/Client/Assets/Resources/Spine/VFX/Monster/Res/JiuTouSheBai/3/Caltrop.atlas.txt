@@ -1,0 +1,8 @@
+Caltrop.png
+size:400,191
+filter:Linear,Linear
+jiutoushebai_0
+bounds:2,31,158,305
+rotate:90
+jiutoushebai_1
+bounds:309,2,89,187

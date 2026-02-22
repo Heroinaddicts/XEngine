@@ -1,0 +1,11 @@
+Snake_Down.png
+size:1833,112
+filter:Linear,Linear
+Snake_00
+bounds:1420,2,156,108
+Snake_01
+bounds:1707,39,124,71
+Snake_02
+bounds:1578,8,127,102
+Snake_03
+bounds:2,12,1416,98

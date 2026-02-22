@@ -1,0 +1,232 @@
+fileFormatVersion: 2
+guid: 7defde0c88c42a7488955f2613cae2c7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3641566055700005802
+    second: shiwang_0
+  - first:
+      213: 2404434256758841642
+    second: shiwang_1
+  - first:
+      213: 7967818242312910892
+    second: shiwang_2
+  - first:
+      213: -5397658762674854986
+    second: shiwang_3
+  - first:
+      213: -5893807220950232757
+    second: shiwang_4
+  - first:
+      213: 3484726555564463934
+    second: shiwang_5
+  - first:
+      213: -691767710409069486
+    second: shiwang_6
+  - first:
+      213: -8701681794669543479
+    second: shiwang_7
+  - first:
+      213: -8448084000830808320
+    second: shiwang_8
+  - first:
+      213: -3444584411222945665
+    second: shiwang_9
+  - first:
+      213: -1901752299453133437
+    second: shiwang_10
+  - first:
+      213: 4408563168117613182
+    second: shiwang_11
+  - first:
+      213: 3184758818061686688
+    second: shiwang_12
+  - first:
+      213: 5739928949723424298
+    second: shiwang_13
+  - first:
+      213: -8306297988701654539
+    second: shiwang_14
+  - first:
+      213: -4161963445713766820
+    second: shiwang_15
+  - first:
+      213: 3994648478593090130
+    second: shiwang_16
+  - first:
+      213: -9186091770132874512
+    second: shiwang_17
+  - first:
+      213: 8437846346751720486
+    second: shiwang_18
+  - first:
+      213: 3934116507721719050
+    second: shiwang_19
+  - first:
+      213: 6187001124971218473
+    second: shiwang_20
+  - first:
+      213: 5790456904624090362
+    second: shiwang_21
+  - first:
+      213: -7896222107893726714
+    second: shiwang_22
+  - first:
+      213: 2017941336171907669
+    second: shiwang_23
+  - first:
+      213: 881186928228533964
+    second: shiwang_24
+  - first:
+      213: -3330446209060055003
+    second: shiwang_25
+  - first:
+      213: 3470879268934581131
+    second: shiwang_26
+  - first:
+      213: 700623718336929676
+    second: shiwang_27
+  - first:
+      213: -6652677524554706274
+    second: shiwang_28
+  - first:
+      213: -2445146331106764211
+    second: shiwang_29
+  - first:
+      213: -4571130361377709067
+    second: shiwang_30
+  - first:
+      213: -2387277456920000355
+    second: shiwang_31
+  - first:
+      213: 1804792064359886404
+    second: shiwang_32
+  - first:
+      213: -6876486611690551648
+    second: shiwang_33
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+  nPOTScale: 1
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 0
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

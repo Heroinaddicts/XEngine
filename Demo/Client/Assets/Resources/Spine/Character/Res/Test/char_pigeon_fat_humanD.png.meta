@@ -1,0 +1,962 @@
+fileFormatVersion: 2
+guid: e7cdd8fbf6ce20f409396e9843d0f374
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 6317165841528623359
+    second: char_pigeon_fat_humanD_0
+  - first:
+      213: 8201068170119794701
+    second: char_pigeon_fat_humanD_1
+  - first:
+      213: -480902897661025522
+    second: char_pigeon_fat_humanD_2
+  - first:
+      213: 5808234086395566265
+    second: char_pigeon_fat_humanD_3
+  - first:
+      213: -6701488168680286965
+    second: char_pigeon_fat_humanD_4
+  - first:
+      213: 2460605065115644131
+    second: char_pigeon_fat_humanD_5
+  - first:
+      213: 1370538844628083378
+    second: char_pigeon_fat_humanD_6
+  - first:
+      213: 5174048490226772542
+    second: char_pigeon_fat_humanD_7
+  - first:
+      213: 7791648911587990148
+    second: char_pigeon_fat_humanD_8
+  - first:
+      213: -3165448527956070049
+    second: char_pigeon_fat_humanD_9
+  - first:
+      213: -4875508185075844552
+    second: char_pigeon_fat_humanD_10
+  - first:
+      213: -5274699644837942939
+    second: char_pigeon_fat_humanD_11
+  - first:
+      213: 2964661774265342537
+    second: char_pigeon_fat_humanD_12
+  - first:
+      213: -1525799647628574525
+    second: char_pigeon_fat_humanD_13
+  - first:
+      213: -930551984569941971
+    second: char_pigeon_fat_humanD_14
+  - first:
+      213: -4076588889197668150
+    second: char_pigeon_fat_humanD_15
+  - first:
+      213: 1346979332149859467
+    second: char_pigeon_fat_humanD_16
+  - first:
+      213: -6649977509749868065
+    second: char_pigeon_fat_humanD_17
+  - first:
+      213: 3388149323483866451
+    second: char_pigeon_fat_humanD_18
+  - first:
+      213: 3766063442584209613
+    second: char_pigeon_fat_humanD_19
+  - first:
+      213: 1370593338951386196
+    second: char_pigeon_fat_humanD_20
+  - first:
+      213: 107565527997449857
+    second: char_pigeon_fat_humanD_21
+  - first:
+      213: -6428224229011141356
+    second: char_pigeon_fat_humanD_22
+  - first:
+      213: 8165677264867620906
+    second: char_pigeon_fat_humanD_23
+  - first:
+      213: -2130324522216522630
+    second: char_pigeon_fat_humanD_24
+  - first:
+      213: -4683708978816132125
+    second: char_pigeon_fat_humanD_25
+  - first:
+      213: -697972477387083096
+    second: char_pigeon_fat_humanD_26
+  - first:
+      213: 966329334513924341
+    second: char_pigeon_fat_humanD_27
+  - first:
+      213: -6174639531936014556
+    second: char_pigeon_fat_humanD_28
+  - first:
+      213: 2917091960588172102
+    second: char_pigeon_fat_humanD_29
+  - first:
+      213: -4835069753335564706
+    second: char_pigeon_fat_humanD_30
+  - first:
+      213: -3596254197090637749
+    second: char_pigeon_fat_humanD_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 0
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 0
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_0
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 90
+        width: 165
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff09b83fcd41ba750800000000000000
+      internalID: 6317165841528623359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_1
+      rect:
+        serializedVersion: 2
+        x: 167
+        y: 90
+        width: 77
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d00d0c2bc0c00d170800000000000000
+      internalID: 8201068170119794701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_2
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 90
+        width: 71
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e03657dcc5d7359f0800000000000000
+      internalID: -480902897661025522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_3
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 184
+        width: 51
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b85ce3d02efa9050800000000000000
+      internalID: 5808234086395566265
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_4
+      rect:
+        serializedVersion: 2
+        x: 368
+        y: 223
+        width: 14
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b05145f34088ff2a0800000000000000
+      internalID: -6701488168680286965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_5
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 222
+        width: 23
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e0beb61543d52220800000000000000
+      internalID: 2460605065115644131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_6
+      rect:
+        serializedVersion: 2
+        x: 409
+        y: 222
+        width: 14
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b26ee851d1250310800000000000000
+      internalID: 1370538844628083378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_7
+      rect:
+        serializedVersion: 2
+        x: 425
+        y: 221
+        width: 23
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3aec9640b9edc740800000000000000
+      internalID: 5174048490226772542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_8
+      rect:
+        serializedVersion: 2
+        x: 462
+        y: 215
+        width: 69
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48ad2c5376f712c60800000000000000
+      internalID: 7791648911587990148
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_9
+      rect:
+        serializedVersion: 2
+        x: 556
+        y: 184
+        width: 61
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f513568c5511214d0800000000000000
+      internalID: -3165448527956070049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_10
+      rect:
+        serializedVersion: 2
+        x: 618
+        y: 187
+        width: 64
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83a7b012327b65cb0800000000000000
+      internalID: -4875508185075844552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_11
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 194
+        width: 59
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5692e8c9e908cc6b0800000000000000
+      internalID: -5274699644837942939
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_12
+      rect:
+        serializedVersion: 2
+        x: 751
+        y: 179
+        width: 68
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94ad34e1d28942920800000000000000
+      internalID: 2964661774265342537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_13
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 182
+        width: 62
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c0cea4fd4543dae0800000000000000
+      internalID: -1525799647628574525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_14
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 175
+        width: 61
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d208caa76e30613f0800000000000000
+      internalID: -930551984569941971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_15
+      rect:
+        serializedVersion: 2
+        x: 944
+        y: 214
+        width: 63
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac89114010c0d67c0800000000000000
+      internalID: -4076588889197668150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_16
+      rect:
+        serializedVersion: 2
+        x: 316
+        y: 89
+        width: 255
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b84d594e09e61b210800000000000000
+      internalID: 1346979332149859467
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_17
+      rect:
+        serializedVersion: 2
+        x: 372
+        y: 147
+        width: 62
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd9b50f10b886b3a0800000000000000
+      internalID: -6649977509749868065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_18
+      rect:
+        serializedVersion: 2
+        x: 434
+        y: 147
+        width: 55
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3556c38cbdf150f20800000000000000
+      internalID: 3388149323483866451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_19
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 147
+        width: 73
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dc801d06fbeb34430800000000000000
+      internalID: 3766063442584209613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_20
+      rect:
+        serializedVersion: 2
+        x: 571
+        y: 89
+        width: 67
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 454c6bb4163550310800000000000000
+      internalID: 1370593338951386196
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_21
+      rect:
+        serializedVersion: 2
+        x: 638
+        y: 89
+        width: 61
+        height: 98
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1868d5e17462e7100800000000000000
+      internalID: 107565527997449857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_22
+      rect:
+        serializedVersion: 2
+        x: 700
+        y: 90
+        width: 72
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41d4b353f1c5ac6a0800000000000000
+      internalID: -6428224229011141356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_23
+      rect:
+        serializedVersion: 2
+        x: 773
+        y: 89
+        width: 64
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a28fae27530525170800000000000000
+      internalID: 8165677264867620906
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_24
+      rect:
+        serializedVersion: 2
+        x: 838
+        y: 90
+        width: 73
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a7cfafc42219f62e0800000000000000
+      internalID: -2130324522216522630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_25
+      rect:
+        serializedVersion: 2
+        x: 913
+        y: 90
+        width: 70
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3eb5b56cf7f100fb0800000000000000
+      internalID: -4683708978816132125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_26
+      rect:
+        serializedVersion: 2
+        x: 980
+        y: 171
+        width: 43
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8a2f756dabd4056f0800000000000000
+      internalID: -697972477387083096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_27
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 148
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f8fdbfe867196d00800000000000000
+      internalID: 966329334513924341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_28
+      rect:
+        serializedVersion: 2
+        x: 998
+        y: 147
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42f9ed27f064f4aa0800000000000000
+      internalID: -6174639531936014556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_29
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 89
+        width: 24
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64b7108cea79b7820800000000000000
+      internalID: 2917091960588172102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_30
+      rect:
+        serializedVersion: 2
+        x: 236
+        y: 89
+        width: 19
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e56b2383da166ecb0800000000000000
+      internalID: -4835069753335564706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: char_pigeon_fat_humanD_31
+      rect:
+        serializedVersion: 2
+        x: 984
+        y: 89
+        width: 35
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b48a76c8cd9871ec0800000000000000
+      internalID: -3596254197090637749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      char_pigeon_fat_humanD_0: 6317165841528623359
+      char_pigeon_fat_humanD_1: 8201068170119794701
+      char_pigeon_fat_humanD_10: -4875508185075844552
+      char_pigeon_fat_humanD_11: -5274699644837942939
+      char_pigeon_fat_humanD_12: 2964661774265342537
+      char_pigeon_fat_humanD_13: -1525799647628574525
+      char_pigeon_fat_humanD_14: -930551984569941971
+      char_pigeon_fat_humanD_15: -4076588889197668150
+      char_pigeon_fat_humanD_16: 1346979332149859467
+      char_pigeon_fat_humanD_17: -6649977509749868065
+      char_pigeon_fat_humanD_18: 3388149323483866451
+      char_pigeon_fat_humanD_19: 3766063442584209613
+      char_pigeon_fat_humanD_2: -480902897661025522
+      char_pigeon_fat_humanD_20: 1370593338951386196
+      char_pigeon_fat_humanD_21: 107565527997449857
+      char_pigeon_fat_humanD_22: -6428224229011141356
+      char_pigeon_fat_humanD_23: 8165677264867620906
+      char_pigeon_fat_humanD_24: -2130324522216522630
+      char_pigeon_fat_humanD_25: -4683708978816132125
+      char_pigeon_fat_humanD_26: -697972477387083096
+      char_pigeon_fat_humanD_27: 966329334513924341
+      char_pigeon_fat_humanD_28: -6174639531936014556
+      char_pigeon_fat_humanD_29: 2917091960588172102
+      char_pigeon_fat_humanD_3: 5808234086395566265
+      char_pigeon_fat_humanD_30: -4835069753335564706
+      char_pigeon_fat_humanD_31: -3596254197090637749
+      char_pigeon_fat_humanD_4: -6701488168680286965
+      char_pigeon_fat_humanD_5: 2460605065115644131
+      char_pigeon_fat_humanD_6: 1370538844628083378
+      char_pigeon_fat_humanD_7: 5174048490226772542
+      char_pigeon_fat_humanD_8: 7791648911587990148
+      char_pigeon_fat_humanD_9: -3165448527956070049
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

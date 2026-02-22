@@ -1,0 +1,6 @@
+shuzhi.png
+size:605,593
+filter:Linear,Linear
+shuzhi
+bounds:2,2,601,589
+offsets:74,52,768,806

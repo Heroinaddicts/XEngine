@@ -1,0 +1,277 @@
+fileFormatVersion: 2
+guid: 9bcbeba98359fe94daa2bdaa0554a9c3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2278551955771644823
+    second: huo fx_0
+  - first:
+      213: 2524961660438865983
+    second: huo fx_1
+  - first:
+      213: -6235658218573013409
+    second: huo fx_2
+  - first:
+      213: 7490146753605753909
+    second: huo fx_3
+  - first:
+      213: 5856511274614231238
+    second: huo fx_4
+  - first:
+      213: -7332578097352594817
+    second: huo fx_5
+  - first:
+      213: 8141956325877808112
+    second: huo fx_6
+  - first:
+      213: 5680056832168445686
+    second: huo fx_7
+  - first:
+      213: -6915790737865054379
+    second: huo fx_8
+  - first:
+      213: 8684678862649843832
+    second: huo fx_9
+  - first:
+      213: 4455182954169713032
+    second: huo fx_10
+  - first:
+      213: -9019412618920914698
+    second: huo fx_11
+  - first:
+      213: -8013685293172268903
+    second: huo fx_12
+  - first:
+      213: 9065717092096863497
+    second: huo fx_13
+  - first:
+      213: -5947114988827907389
+    second: huo fx_14
+  - first:
+      213: 7148782871284138792
+    second: huo fx_15
+  - first:
+      213: -1389982170259107496
+    second: huo fx_16
+  - first:
+      213: -6498918673404599131
+    second: huo fx_17
+  - first:
+      213: 2132125041529462843
+    second: huo fx_18
+  - first:
+      213: 2393699378817554835
+    second: huo fx_19
+  - first:
+      213: -1271320913620656117
+    second: huo fx_20
+  - first:
+      213: -6567127466376723770
+    second: huo fx_21
+  - first:
+      213: 1099898105858704229
+    second: huo fx_22
+  - first:
+      213: -7985929406826253676
+    second: huo fx_23
+  - first:
+      213: -5338004414938781029
+    second: huo fx_24
+  - first:
+      213: -2604110213072752565
+    second: huo fx_25
+  - first:
+      213: 6652739824495851121
+    second: huo fx_26
+  - first:
+      213: 6123533958379646004
+    second: huo fx_27
+  - first:
+      213: 2277544322073765551
+    second: huo fx_28
+  - first:
+      213: 8154705955469473613
+    second: huo fx_29
+  - first:
+      213: 4068457108427372447
+    second: huo fx_30
+  - first:
+      213: -9092344895784507214
+    second: huo fx_31
+  - first:
+      213: -8480385131013286349
+    second: huo fx_32
+  - first:
+      213: -3689621427169974337
+    second: huo fx_33
+  - first:
+      213: -7621829239699395986
+    second: huo fx_34
+  - first:
+      213: -2084798603691422130
+    second: huo fx_35
+  - first:
+      213: 8585237581160177749
+    second: huo fx_36
+  - first:
+      213: -4371052701565764385
+    second: huo fx_37
+  - first:
+      213: -3735914117810726874
+    second: huo fx_38
+  - first:
+      213: -8521018636177866706
+    second: huo fx_39
+  - first:
+      213: 2546595709692035594
+    second: huo fx_40
+  - first:
+      213: -2655043371995894058
+    second: huo fx_41
+  - first:
+      213: -8414314110317105071
+    second: huo fx_42
+  - first:
+      213: 4525306923093370945
+    second: huo fx_43
+  - first:
+      213: -8072643794596666176
+    second: huo fx_44
+  - first:
+      213: 4162126184121403936
+    second: huo fx_45
+  - first:
+      213: -388576512452991534
+    second: huo fx_46
+  - first:
+      213: 7819082361990500253
+    second: huo fx_47
+  - first:
+      213: -3292907266629091720
+    second: huo fx_48
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
+  nPOTScale: 1
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 0
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,16 @@
+Snake_A.png
+size:396,336
+filter:Linear,Linear
+jiutoushebai_12
+bounds:167,21,136,127
+jiutoushebai_13
+bounds:305,37,111,89
+rotate:90
+jiutoushebai_14
+bounds:213,150,169,184
+jiutoushebai_15
+bounds:2,170,164,209
+rotate:90
+jiutoushebai_16
+bounds:2,2,166,163
+rotate:90

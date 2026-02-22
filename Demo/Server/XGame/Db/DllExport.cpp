@@ -1,0 +1,4 @@
+#include "Db.h"
+
+DLL_INSTANCE;
+CREATE_MODULE(Db);
