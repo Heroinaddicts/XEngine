@@ -1,5 +1,5 @@
 ##Demo演示视频
-https://github.com/Heroinaddicts/XEngine/blob/main/%E5%8D%95%E8%BF%9B%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95%E8%A7%86%E9%A2%91.mp4
+https://github.com/Heroinaddicts/XEngine/issues/1
 
 ## 设计理念
 XEngine 的目标不是“做一堆工具类”，而是提供一套可复用、可扩展、可部署的工程化基础设施，面向 **服务端/工具链/引擎型项目** 的长期演进。
