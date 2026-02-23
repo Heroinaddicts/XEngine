@@ -1,11 +1,7 @@
 #ifndef __iHttpApi_h__
 #define __iHttpApi_h__
 
-#include "MultiSys.h"
 #include "XBuffer.h"
-#include <string>
-#include <map>
-#include <functional>
 
 namespace XEngine {
     namespace Api {

@@ -1,7 +1,8 @@
 #ifndef __XFile_h__
 #define __XFile_h__
 
-#include <string>
+#include "MultiSys.h"
+#include "XBuffer.h"
 
 #ifdef _WIN32
 #include <io.h>
@@ -10,8 +11,6 @@
 #include <sys/types.h>
 #endif
 
-#include "MultiSys.h"
-#include "XBuffer.h"
 
 namespace XEngine {
     class XFile {

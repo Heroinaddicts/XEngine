@@ -1,11 +1,7 @@
 #ifndef __iNetApi_h__
 #define __iNetApi_h__
 
-#include "MultiSys.h"
 #include "SafeMemory.h"
-#include <string>
-#include <vector>
-#include <functional>
 
 namespace XEngine {
     namespace Api {

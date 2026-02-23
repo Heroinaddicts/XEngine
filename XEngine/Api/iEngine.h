@@ -1,26 +1,21 @@
 ﻿#ifndef __iEngine_h__
 #define __iEngine_h__
 
-#include "MultiSys.h"
 #include "SafeString.h"
-#include <string>
-#include <map>
+
+#include "iNetApi.h"
+#include "iHttpApi.h"
+#include "iTimerApi.h"
+#include "iZipApi.h"
+#include "iTaskApi.h"
+#include "iMysqlApi.h"
+#include "iRedisApi.h"
+#include "iWebSocketsApi.h"
 
 namespace XEngine {
     namespace Api {
         class iModule;
-
-        class iNetApi;
-        class iHttpApi;
-        class iTimerApi;
-        class iZipApi;
-        class iTaskApi;
-        class iMysqlApi;
-        class iRedisApi;
-        class iWebSocketsApi;
-
         typedef UInt64 ProcessHandle;
-
         class iEngine {
         public:
             virtual ~iEngine() {}

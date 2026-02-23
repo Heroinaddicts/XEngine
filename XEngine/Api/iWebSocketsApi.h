@@ -1,9 +1,7 @@
 #ifndef __iWebSocketsApi_h__
 #define __iWebSocketsApi_h__
 
-#include "MultiSys.h"
 #include "iNetApi.h"
-#include <functional>
 
 namespace XEngine {
     namespace Api {

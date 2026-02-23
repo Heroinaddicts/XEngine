@@ -15,6 +15,10 @@
 #include <stdarg.h>
 #include <typeinfo>
 #include <functional>
+#include <string>
+#include <map>
+#include <vector>
+#include <optional>
 
 #ifdef WIN32
 typedef __int8  Int8;

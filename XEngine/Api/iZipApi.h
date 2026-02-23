@@ -2,9 +2,6 @@
 #define __iZipApi_h__
 
 #include "MultiSys.h"
-#include <string>
-#include <functional>
-
 namespace XEngine {
     namespace Api {
         class iZipApi {

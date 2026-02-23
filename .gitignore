@@ -1,3 +1,6 @@
 
 .DS_Store
 /Build
+/Demo/Server/Build
+Demo/Server/Bin/Windows/Debug/XEngine.pdb
+Demo/Server/Bin/Windows/Debug/XEngine.exe

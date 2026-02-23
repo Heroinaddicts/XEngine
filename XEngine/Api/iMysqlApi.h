@@ -2,9 +2,6 @@
 #define __iMysqlApi_h__
 
 #include "MultiSys.h"
-#include <vector>
-#include <string>
-#include <functional>
 
 namespace XEngine {
     namespace Api {

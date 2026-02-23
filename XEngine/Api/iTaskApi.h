@@ -1,9 +1,7 @@
 #ifndef __iTaskApi_h__
 #define __iTaskApi_h__
 
-#include "MultiSys.h"
 #include "SafeSystem.h"
-#include <functional>
 
 namespace XEngine {
     namespace Api {

@@ -3,7 +3,6 @@
 
 #include "MultiSys.h"
 #include "iEngine.h"
-#include <string>
 
 #define UsingXEngine using namespace XEngine
 

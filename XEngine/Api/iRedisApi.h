@@ -2,10 +2,6 @@
 #define __iRedisApi_h__
 
 #include "MultiSys.h"
-#include <vector>
-#include <string>
-#include <functional>
-#include <optional>
 
 namespace XEngine {
     namespace Api {
