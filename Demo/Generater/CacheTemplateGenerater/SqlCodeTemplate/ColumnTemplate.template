@@ -1,0 +1,1 @@
+ColumnTemplate("{ColumnName}", {TableName}::{ColumnName}{ColumnType}{Primary}{Unique}, eColumnType::{ColumnType}, {IsPrimary}, {IsUnique}),

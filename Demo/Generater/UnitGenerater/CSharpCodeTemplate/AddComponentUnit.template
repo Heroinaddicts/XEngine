@@ -1,0 +1,5 @@
+                case eUnitType.{UnitName}:
+                    {
+                        unit = go.AddComponent<{UnitName}Unit>();
+                        return unit;
+                    }

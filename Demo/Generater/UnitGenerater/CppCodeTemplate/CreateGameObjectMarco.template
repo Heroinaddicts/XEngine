@@ -1,0 +1,5 @@
+#define __CreateGameObject__ \
+    GameObject* go = nullptr; \
+    switch (type) { \
+{CaseCreateGameObject}}
+

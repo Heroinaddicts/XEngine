@@ -1,0 +1,7 @@
+    namespace {TableName} {
+        enum eColumn {
+{eColumns}
+
+            __Count__ = {eColumnCount}
+        };
+    }

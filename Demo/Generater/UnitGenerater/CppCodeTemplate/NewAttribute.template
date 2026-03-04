@@ -1,0 +1,2 @@
+attributes[{Name}::{AttributeName}{AttributeType}] = Attribute::Create(go, eAttributeType::__{AttributeType}__, "{AttributeName}", {Name}::{AttributeName}{AttributeType}, {Sync}, {Share}); \
+                    

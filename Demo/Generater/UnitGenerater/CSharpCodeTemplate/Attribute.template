@@ -1,0 +1,1 @@
+                new Attribute(this, eAttributeType.{Type}, e{UnitName}Attr.{AttributeName}_{Type}, "{AttributeName}", {Sync}, {Visual}, {Save}, {Important}),

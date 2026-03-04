@@ -1,0 +1,1 @@
+            UnitFactory.GetInstance().TriggerUnitEvent(eUnitEvent.{Event}, eUnitType.{UnitName}, this, {ParentType}, file, line);

@@ -1,0 +1,10 @@
+        case eGameObjectType::{Name}: \
+        { \
+            go = GameObject::Create("{Name}", type, guid, config, {Name}::__AttributeCount__, \
+                [](GameObject* const go, Attribute** const attributes) { \
+                    {NewAttributes}}, \
+                    {Name}::Types, \
+                    {Name}::TypesCount, \
+                file, line); \
+            break; \
+        } \

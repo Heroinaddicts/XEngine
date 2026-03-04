@@ -1,0 +1,152 @@
+﻿<root>
+    <Go name="Entity">
+        <attribute name="Speed" type="float" sync="true" share="true"/>
+        <attribute name="SceneGUID" type="uint64"/>
+        <attribute name="LastPublicSceneConfigID" type="int64"/>
+        <attribute name="CopySceneGuid" type="uint64" />
+        <attribute name="Nickname" type="string" />
+
+		<attribute name="Level" type="int64" sync="true" share="true"/>
+        <attribute name="LastUpdatePositionTick" type="uint64" />
+
+		<attribute name="WhoAttkMe" type="uint64" />
+		
+        <attribute name="Atk" type="float" sync="true" share="true"/>
+        <attribute name="Hp" type="float" sync="true" share="true"/>
+        <attribute name="MaxHp" type="float" sync="true" share="true"/>
+        <attribute name="Critical" type="float" sync="true" share="true"/>
+        <attribute name="CriticalDamage" type="float" sync="true" share="true"/>
+        <attribute name="Defend" type="float" sync="true" share="true"/>
+        <attribute name="MagicDefend" type="float" sync="true" share="true"/>
+        <attribute name="Blood" type="float" sync="true" share="true"/>
+        <attribute name="MagicAttack" type="float" sync="true" share="true"/>
+        <attribute name="PhysicalPierce" type="float" sync="true" share="true"/>
+        <attribute name="PhysicalPierceRate" type="float" sync="true" share="true"/>
+        <attribute name="MagicPierce" type="float" sync="true" share="true"/>
+        <attribute name="MagicPierceRate" type="float" sync="true" share="true"/>
+        <attribute name="Afford" type="float" sync="true" share="true"/>
+        <attribute name="Dodge" type="float" sync="true" share="true"/>
+        <attribute name="Resilience" type="float" sync="true" share="true"/>
+        <attribute name="VisualField" type="float" sync="true" share="true"/>
+        <attribute name="DamageReduction" type="float" sync="true" share="true"/>
+        <attribute name="Mp" type="float" sync="true" share="true"/>
+        <attribute name="MaxMp" type="float" sync="true" share="true"/>
+        <attribute name="AtkSpeed" type="float" sync="true" share="true"/>
+        <attribute name="CantControllerRef" type="int32" sync="true" share="true"/>
+        <attribute name="SilentRef" type="int32" sync="true" share="true"/>
+        <attribute name="InvincibleRef" type="int32" sync="true" share="true"/>
+        <attribute name="RestraintRef" type="int32" sync="true" share="true"/>
+        <attribute name="ShiftRef" type="int32" sync="true" share="true" />
+        <attribute name="ExtraAddExp" type="float" />
+        <attribute name="MoveSkillConfigID" type="int64" />
+        <attribute name="SkillAngle" type="float" />
+        <attribute name="MoveSkillTargetGuid" type="uint64" />
+        <attribute name="SkillTargetPos" type="vector2" />
+        <attribute name="DamagePriority" type="int32" sync="true" share="true"/>
+        <attribute name="LastSkillConfigID" type="int64"/>
+        <attribute name="LastSkillUseTime" type="uint64"/>
+        <attribute name="CastIsTrackOnCollision" type="bool"/>
+        <attribute name="IsCantDamaged" type="bool" sync="true" share="true" />
+        <attribute name="TeamGuid" type="uint64" sync="true" share="true"/>
+        <attribute name="MoveSpeed" type="float" sync="true" share="true" />
+        <attribute name="HpRecover" type="float" sync="true" share="true" />
+        <attribute name="MpRecover" type="float" sync="true" share="true" />
+		<attribute name="IsTeamLeader" type="bool" sync="true" share="true" />
+		<attribute name="BattleStartTime" type="uint64" sync="true"/>
+    </Go>
+    <Go name="Bullet" parent="Entity">
+        <attribute name="HostGuid" type="uint64" />
+        <attribute name="TargetGuid" type="uint64" />
+        <attribute name="TargetPosX" type="float" />
+        <attribute name="TargetPosY" type="float" />
+        <attribute name="LastUpdateTime" type="uint64" />
+        <attribute name="DeltaTime" type="float" />
+        <attribute name="ControlPos" type="vector2" />
+        <attribute name="StartPos" type="vector2" />
+        <attribute name="DamageCount" type="int64" />
+        <attribute name="HitUnitGuid" type="uint64" />
+    </Go>
+    <Go name="Launcher" parent="Entity">
+        <attribute name="HostGuid" type="uint64" />
+        <attribute name="TargetGuid" type="uint64" />
+        <attribute name="TargetPosX" type="float" />
+        <attribute name="TargetPosY" type="float" />
+    </Go>
+    <Go name="Creature" parent="Entity">
+    </Go>
+
+    <Go name="RefreshRule">
+        <attribute name="SceneGuid" type="uint64" />
+        <attribute name="CurrentRefreshCount" type="int32" desc="test"/>
+        <attribute name="TotleRefreshCount" type="int32" />
+    </Go>
+
+    <Go name="Monster" parent="Creature">
+        <attribute name="RefreshRuleGuid" type="uint64" />
+        <attribute name="Target" type="uint64" />
+        <attribute name="BronPosition" type="vector2" />
+        <attribute name="IsPreviousSuccess" type="bool" />
+        <attribute name="PreviousPosition" type="vector2" />
+    </Go>
+    <Go name="Boss" parent="Monster">
+
+    </Go>
+    <Go name="Character" parent="Creature">
+        <attribute name="Account" type="uint64" sync="true" share="true"/>
+        <attribute name="Exp" type="int64" sync="true" share="false"/>
+
+        <attribute name="SlotCloths" type="uint64"/>
+        <attribute name="ClothsConfig" type="int64"/>
+
+        <attribute name="SlotPants" type="uint64"/>
+        <attribute name="PantsConfig" type="int64"/>
+
+        <attribute name="SlotBelt" type="uint64"/>
+        <attribute name="BeltConfig" type="int64"/>
+
+        <attribute name="SlotShoes" type="uint64"/>
+        <attribute name="ShoesConfig" type="int64"/>
+
+        <attribute name="SlotJewelry" type="uint64"/>
+        <attribute name="JewelryConfig" type="int64"/>
+
+        <attribute name="SlotWeapon" type="uint64"/>
+        <attribute name="WeaponConfig" type="int64"/>
+        <attribute name="MoveTargetGuid" type="uint64"/>
+    </Go>
+    <Go name="Npc">
+    </Go>
+    <Go name="Item" parent="Entity">
+        <attribute name="ResourceId" type="int64" />
+        <attribute name="ItemType" type="int32" />
+        <attribute name="Count" type="int32" />
+        <attribute name="IsFirstCreate" type="bool" />
+        <attribute name="StartPos" type="vector2" />
+        <attribute name="EndPos" type="vector2" />
+        <attribute name="StartTime" type="int64" />
+        <attribute name="CotrolPoint" type="vector2" />
+    </Go>
+    <Go name="Equip" parent="Item">
+        <attribute name="EquipType" type="int32" />
+        <attribute name="Equiped" type="bool" />
+        <attribute name="Patience" type="int32" />
+        <attribute name="StrengthLv" type="int32" />
+    </Go>
+    <Go name="Skill">
+        <attribute name="Account" type="uint64" />
+        <attribute name="CharacterID" type="uint64" />
+        <attribute name="SkillSlot" type="string" />
+        <attribute name="LastCastTick" type="uint64" />
+    </Go>
+
+    <Go name="Buff">
+        <attribute name="CasterGuid" type="uint64" />
+        <attribute name="HostGuid" type="uint64" />
+        <attribute name="ChangeValue" type="float" />
+        <attribute name="CreateTimeTick" type="uint64" />
+    </Go>
+    <Go name="LootBox">
+    </Go>
+    
+
+</root>

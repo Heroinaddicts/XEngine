@@ -1,0 +1,5 @@
+        TableTemplate("{TableName}", eTable::{TableName}, {TableName}::__Count__, {TableName}::{PrimaryName}{PrimaryType}PrimaryUnique,
+            std::vector<ColumnTemplate>({
+                {ColumnTemplates}
+            })
+        )

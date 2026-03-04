@@ -1,0 +1,47 @@
+using System;
+using XUtils;
+
+namespace GameUnit
+{
+    public class e{UnitName}Attr
+    {
+{AttributeIndexs}
+    }
+
+    class {UnitName}Unit : {ParentName}Unit
+    {
+
+        public override string ToString()
+        {
+            return $"{UnitName}Unit : {_Guid}";
+        }
+
+        public override void OnInitialize(in UInt64 guid, in Int64 configId, in string file, in int line)
+        {
+            _Guid = guid;
+            _Type = eUnitType.{UnitName};
+            _ConfigID = configId;
+            _Name = "{UnitName}";
+
+            _Attributes = new Attribute[]
+            {
+{Attributes}
+            };
+        }
+
+        public override void OnCreate(in string file, in int line)
+        {
+{TriggerUnitCreateEvents}
+        }
+
+        public override void OnRelease(in string file, in int line)
+        {
+{TriggerUnitReleaseEvents}
+        }
+
+        public override bool Is(in eUnitType type)
+        {
+            return {IsUnitTypes};
+        }
+    }
+}

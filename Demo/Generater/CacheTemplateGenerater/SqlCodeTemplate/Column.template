@@ -1,0 +1,2 @@
+        {ColumnName}{ColumnType}{Primary}{Unique} = {ColumnIndex},
+            

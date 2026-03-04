@@ -1,0 +1,1 @@
+        public const int {AttributeName}_{Type} = {Index}; //{AttributeDesc}

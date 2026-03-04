@@ -1,0 +1,74 @@
+#ifndef __SQLCacheTemplate_h__
+#define __SQLCacheTemplate_h__
+
+#include <string>
+#include <vector>
+
+namespace SQLCacheTemplate {
+#define UsingSQLCacheTemplate using namespace SQLCacheTemplate;
+
+    enum class eColumnType {
+        __Int32__ = 0,
+        __UInt32__ = 1,
+        __Int64__ = 2,
+        __UInt64__ = 3,
+        __Float__ = 4,
+        __String__ = 5,
+        __Bool__ = 6,
+
+        __Unknown__ = 7
+    };
+
+    enum class eTable {
+{eTable}
+
+        __Count__ = {eTableCount}
+    };
+
+    constexpr const char* TableNames[] = { {tableNames} };
+
+{TableNamespaces}
+
+    struct ColumnTemplate {
+        const std::string _Name;
+        const int _Index;
+        const eColumnType _Type;
+        const bool _Primary;
+        const bool _Unique;
+
+        ColumnTemplate(const std::string& name, const int index, const eColumnType type, const bool primary, const bool unique) : _Name(name), _Index(index), _Type(type), _Primary(primary), _Unique(unique) {}
+    };
+
+    struct TableTemplate {
+        const std::string _Name;
+        const eTable _Index;
+        const int _ColumnCount;
+        const int _PrimaryColumn;
+        const std::vector<ColumnTemplate> _ColumnTempates;
+
+        __forceinline const ColumnTemplate& GetKeyColumnTemplate() const {
+            return _ColumnTempates[_PrimaryColumn];
+        }
+
+        TableTemplate(
+            const std::string& name,
+            const eTable index,
+            const int columnCount,
+            const int primaryColumn,
+            const std::vector<ColumnTemplate>& columnTemplates
+        ) : _Name(name), _Index(index), _ColumnCount(columnCount), _PrimaryColumn(primaryColumn), _ColumnTempates(columnTemplates) {
+        }
+
+    };
+
+    const static TableTemplate G_TableTemplate[(int)eTable::__Count__] =
+    {
+{TableTemplates}
+    };
+
+    __forceinline const TableTemplate* GetTableTemplate(const eTable tab) {
+        return &(G_TableTemplate[(int)tab]);
+    }
+}
+
+#endif //__SQLCacheTemplate_h__

@@ -1,0 +1,46 @@
+using System;
+using UnityEngine;
+
+namespace GameUnit
+{
+    public enum eAttributeType
+    {
+        UInt16 = 0,
+        Int16 = 1,
+        UInt32 = 2,
+        Int32 = 3,
+        UInt64 = 4,
+        Int64 = 5,
+        Float = 6,
+        String = 7,
+        Bool = 8,
+        Vector2 = 9,
+        Vector3 = 10,
+        Vector4 = 11,
+
+        Unknown
+    }
+
+    public enum eUnitType
+    {
+{UnitTypeIndex}
+        __Count__ = {UnitTypeCount}
+    }
+
+    static class UnityCreator
+    {
+        public static Unit CreateUnit(in UInt64 guid, in Int64 configId, in eUnitType type, in GameObject go)
+        {
+            Unit unit = null;
+            switch (type)
+            {
+{AddComponentUnit}
+                default:
+                    throw new Exception($"GameUnit type error {type}");
+            }
+
+            return null;
+        }
+    }
+
+}

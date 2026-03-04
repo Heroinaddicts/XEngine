@@ -1,0 +1,40 @@
+#ifndef __UnitCommon_h__
+#define __UnitCommon_h__
+#include "MultiSys.h"
+
+#define UsingUnitCommon using namespace UnitCommon
+
+#define INVALID_GAMEOBJECT_ID 0
+
+class IGameObject;
+namespace UnitCommon {
+    enum eAttributeType {
+        __UInt16__ = 0,
+        __Int16__ = 1,
+        __UInt32__ = 2,
+        __Int32__ = 3,
+        __UInt64__ = 4,
+        __Int64__ = 5,
+        __Float__ = 6,
+        __String__ = 7,
+        __Bool__ = 8,
+        __Vector2__ = 9,
+        __Vector3__ = 10,
+        __Vector4__ = 11,
+
+        __Unknown__
+    };
+
+    enum class eGameObjectType{
+        {GameObjectTypeIndexs}
+        __AllType__ = {GameObjectTypeCount}
+    };
+
+    {GameObjectDefines}
+
+    {IsType}
+
+{CreateGameObjectMarco}
+}
+
+#endif //__UnitCommon_h__

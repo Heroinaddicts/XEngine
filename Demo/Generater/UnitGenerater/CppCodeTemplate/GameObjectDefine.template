@@ -1,0 +1,10 @@
+namespace {GameObjectName} {
+        enum {
+{AttributeEnums}
+            __AttributeCount__ = {AttributeCount}
+        };
+
+        constexpr const eGameObjectType Types[] = { {Types} eGameObjectType::__AllType__ };
+        constexpr const int TypesCount = {TypesCount};
+    }
+    
