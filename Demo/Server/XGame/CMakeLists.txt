@@ -19,14 +19,18 @@ file(GLOB Proto
     "${CMAKE_CURRENT_SOURCE_DIR}/Proto/*.cpp"
 )
 
-if(WIN32)
+if (WIN32)    
+    file(GLOB LibProtobuf_Debug "${CMAKE_CURRENT_SOURCE_DIR}/Library/Protobuf/Windows/Debug/*.lib")
+    file(GLOB LibProtobuf_Release "${CMAKE_CURRENT_SOURCE_DIR}/Library/Protobuf/Windows/Release/*.lib")
+
     set(LibProtobuf
-        "${CMAKE_CURRENT_SOURCE_DIR}/Library/Protobuf/Windows/*.lib"
+        $<$<CONFIG:Debug>:${LibProtobuf_Debug}>
+        $<$<CONFIG:Release>:${LibProtobuf_Release}>
+        $<$<CONFIG:RelWithDebInfo>:${LibProtobuf_Release}>
+        $<$<CONFIG:MinSizeRel>:${LibProtobuf_Release}>
     )
-elseif(UNIX)
-    set(LibProtobuf
-        ${LibProtobufLinux}
-    )
+
+elseif (UNIX)
 endif()
 
 #enable_language(CUDA)
