@@ -317,7 +317,7 @@ auto mysqlApi = engine->GetMysqlApi();
 服务器启动时支持传参数，例如:
 
 - `--name=Gate_1`
-- `--modules=Gate,Game`
+- `--modules=Gate;Game`
 - `--core_xml=xxx.xml`
 - `--module_path=...`
 
