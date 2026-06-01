@@ -5,7 +5,7 @@
 #include "XLock.h"
 
 namespace XEngine {
-    template <typename T, int ChunkCount = 1, int ChunkSize = 256>
+    template <typename T, int ChunkCount = 1, int ChunkSize = 64>
     class XPool {
         enum {
             InUse,

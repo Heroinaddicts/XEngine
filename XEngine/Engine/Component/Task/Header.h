@@ -46,10 +46,10 @@ namespace XEngine {
         }
     };
 
-    extern XPool<TaskInfo, 1, 10240> g_TaskInfoPool;
+    extern XPool<TaskInfo> g_TaskInfoPool;
 
-    extern SafeQueue::SpscQueue<TaskInfo*, 102400> g_TaskReqQueue;
-    extern SafeQueue::SpscQueue<TaskInfo*, 102400> g_TaskAswQueue;
+    extern SafeQueue::SpscQueue<TaskInfo*> g_TaskReqQueue;
+    extern SafeQueue::SpscQueue<TaskInfo*> g_TaskAswQueue;
 
     class TaskManager;
     extern TaskManager* g_TaskManager;

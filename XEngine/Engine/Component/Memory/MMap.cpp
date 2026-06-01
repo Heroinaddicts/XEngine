@@ -73,16 +73,34 @@ namespace XEngine {
         return nullptr;
     }
 
+    void MMap::Flush() const {
+        if (_Access != Api::eAccess::ReadWrite || nullptr == _Address || 0 == _MappedLength) {
+            return;
+        }
+
+#ifdef WIN32
+        FlushViewOfFile(_Address, 0);
+
+        HANDLE fileHandle = reinterpret_cast<HANDLE>(_FileHandle);
+        if (fileHandle && fileHandle != INVALID_HANDLE_VALUE) {
+            FlushFileBuffers(fileHandle);
+        }
+#endif //WIN32
+
+#ifdef Linux
+        msync(_Address, static_cast<size_t>(_MappedLength), MS_SYNC);
+#endif //Linux
+    }
+
     void MMap::Release(MMap* mmap) {
         if (nullptr == mmap) {
             return;
         }
 
+        mmap->Flush();
+
 #ifdef WIN32
         if (mmap->_Address) {
-            if (mmap->_Access == Api::eAccess::ReadWrite) {
-                FlushViewOfFile(mmap->_Address, 0);
-            }
             UnmapViewOfFile(mmap->_Address);
         }
 
@@ -99,9 +117,6 @@ namespace XEngine {
 
 #ifdef Linux
         if (mmap->_Address && mmap->_MappedLength > 0) {
-            if (mmap->_Access == Api::eAccess::ReadWrite) {
-                msync(mmap->_Address, static_cast<size_t>(mmap->_MappedLength), MS_SYNC);
-            }
             munmap(mmap->_Address, static_cast<size_t>(mmap->_MappedLength));
         }
 

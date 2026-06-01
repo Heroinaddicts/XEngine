@@ -3,8 +3,8 @@
 #include "Downloader.h"
 
 namespace XEngine {
-    SafeQueue::SpscQueue<HttpReq*, 10240, 10240> g_RequestQueue;
-    SafeQueue::SpscQueue<HttpReq*, 10240, 10240> g_ResponseQueue;
+    SafeQueue::SpscQueue<HttpReq*> g_RequestQueue;
+    SafeQueue::SpscQueue<HttpReq*> g_ResponseQueue;
 
     XPool<XBuffer> g_XBufferPool;
 

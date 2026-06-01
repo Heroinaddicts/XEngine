@@ -11,9 +11,11 @@ private:
     bool Initialize(Api::iEngine* const engine) override;
     bool Launch(Api::iEngine* const engine) override;
     bool Destroy(Api::iEngine* const engine) override;
+    void Update(Api::iEngine* const engine) override;
 
 private:
     Api::iMMap* _MMap = nullptr;
+    UInt64 _LastStatTick = 0;
 };
 
 #endif //__TestMemory_h__

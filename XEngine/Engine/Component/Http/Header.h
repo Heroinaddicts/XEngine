@@ -35,8 +35,8 @@ namespace XEngine {
         Api::fHttpResponse _Response;
     };
 
-    extern SafeQueue::SpscQueue<HttpReq*, 10240, 10240> g_RequestQueue;
-    extern SafeQueue::SpscQueue<HttpReq*, 10240, 10240> g_ResponseQueue;
+    extern SafeQueue::SpscQueue<HttpReq*> g_RequestQueue;
+    extern SafeQueue::SpscQueue<HttpReq*> g_ResponseQueue;
 
     extern XPool<XBuffer> g_XBufferPool;
 }

@@ -17,6 +17,9 @@ namespace XEngine {
             virtual const std::string& FilePath() const = 0;
             virtual const eAccess Access() const = 0;
             virtual void* Address() const = 0;
+            virtual UInt64 Length() const = 0;
+
+            virtual void Flush() const = 0;
         };
 
         class iMemoryApi {

@@ -26,8 +26,8 @@ namespace XEngine {
 
     private:
         XPool<LogContent> _LogContentPool;
-        SafeQueue::SpscQueue<LogContent*, 81920> _LogContentQueue;
-        SafeQueue::SpscQueue<LogContent*, 81920> _LogContentReleaseQueue;
+        SafeQueue::SpscQueue<LogContent*> _LogContentQueue;
+        SafeQueue::SpscQueue<LogContent*> _LogContentReleaseQueue;
 
         std::string _SyncLogFilePath;
         XFile _SyncLogFile;

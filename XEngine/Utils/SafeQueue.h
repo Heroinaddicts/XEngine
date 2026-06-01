@@ -32,7 +32,7 @@ namespace XEngine {
             QueueSpace() : _Sign(0) {}
         };
 
-        template<typename T, int Size = 512, int Capacity = 512>
+        template<typename T, int Size = 256, int Capacity = 256>
         class SpscQueue : public iQueue<T> {
         public:
             SpscQueue()

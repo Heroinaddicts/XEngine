@@ -6,10 +6,10 @@
 
 namespace XEngine {
 
-    XPool<TaskInfo, 1, 10240> g_TaskInfoPool;
+    XPool<TaskInfo> g_TaskInfoPool;
 
-    SafeQueue::SpscQueue<TaskInfo*, 102400> g_TaskReqQueue;
-    SafeQueue::SpscQueue<TaskInfo*, 102400> g_TaskAswQueue;
+    SafeQueue::SpscQueue<TaskInfo*> g_TaskReqQueue;
+    SafeQueue::SpscQueue<TaskInfo*> g_TaskAswQueue;
 
     TaskManager* g_TaskManager = nullptr;
 

@@ -24,6 +24,12 @@ namespace XEngine {
             return _Address;
         }
 
+        __forceinline UInt64 Length() const override {
+            return _MappedLength;
+        }
+
+        void Flush() const override;
+
         const std::string _Path;
         const Api::eAccess _Access;
 
