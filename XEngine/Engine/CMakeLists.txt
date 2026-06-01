@@ -8,9 +8,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/../EngineSourceGroup.cmake")
 
+if (POLICY CMP0167)
+    cmake_policy(SET CMP0167 OLD)
+endif()
+
 find_package(OpenSSL REQUIRED)
+find_package(Boost REQUIRED)
 message(STATUS "OpenSSL include dir: ${OPENSSL_INCLUDE_DIR}")
 message(STATUS "OpenSSL libraries: ${OPENSSL_LIBRARIES}")
+message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")
 
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -141,7 +147,6 @@ add_executable(XEngine
     ${Redis}
     ${Log}
     ${Net}
-    ${Boost}
     ${CUrl}
     ${Http}
 #    ${WebSockets}
@@ -156,6 +161,14 @@ add_executable(XEngine
     #${PhysX}
     ${Engine}
 )
+
+if (TARGET Boost::headers)
+    target_link_libraries(XEngine Boost::headers)
+elseif (TARGET Boost::boost)
+    target_link_libraries(XEngine Boost::boost)
+else()
+    target_include_directories(XEngine PRIVATE ${Boost_INCLUDE_DIRS})
+endif()
 
 target_link_libraries(XEngine "-Xlinker \"-(\"")
 if (WIN32)

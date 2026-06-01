@@ -19,10 +19,12 @@ namespace XEngine {
         void LaterUpdate(Api::iEngine* const engine) override;
         Api::iMMap* CreateMMap(const std::string& file, const Api::eAccess a) override;
         void CloseMMap(Api::iMMap* mmap) override;
+        void DestoryShareMemoryMap(const std::string& shareMemoryName, const std::string& mapName) override;
 
-        Api::iShareMemory* CreateShareMemory(const std::string& name, const UInt64 size) override;
-        Api::iShareMemory* LoadShareMemory(const std::string& name) override;
-        void ReleaseShareMemory(Api::iShareMemory* ism) override;
+    protected:
+        Api::iShareMemoryMap* OpenOrCreateShareMemoryMapInternal(const std::string& shareMemoryName, const UInt64 shareMemorySize, const std::string& name, const UInt64 keySize, const UInt64 valueSize) override;
+        Api::iShareMemoryMap* LoadShareMemoryMapInternal(const std::string& shareMemoryName, const std::string& name, const UInt64 keySize, const UInt64 valueSize) override;
+        void ReleaseShareMemoryMapInternal(Api::iShareMemoryMap* map) override;
     };
 }
 

@@ -1,6 +1,6 @@
 #include "Memory.h"
 #include "MMap.h"
-#include "ShareMemory.h"
+#include "ShareMemoryMap.h"
 
 namespace XEngine {
     Memory* Memory::GetInstance() {
@@ -44,15 +44,19 @@ namespace XEngine {
         MMap::Release(static_cast<MMap*>(mmap));
     }
 
-    Api::iShareMemory* Memory::CreateShareMemory(const std::string& name, const UInt64 size) {
-        return ShareMemory::Create(name, size);
+    void Memory::DestoryShareMemoryMap(const std::string& shareMemoryName, const std::string& mapName) {
+        ShareMemoryMap::Destory(shareMemoryName, mapName);
     }
 
-    Api::iShareMemory* Memory::LoadShareMemory(const std::string& name) {
-        return ShareMemory::Load(name);
+    Api::iShareMemoryMap* Memory::OpenOrCreateShareMemoryMapInternal(const std::string& shareMemoryName, const UInt64 shareMemorySize, const std::string& name, const UInt64 keySize, const UInt64 valueSize) {
+        return ShareMemoryMap::OpenOrCreate(shareMemoryName, shareMemorySize, name, keySize, valueSize);
     }
 
-    void Memory::ReleaseShareMemory(Api::iShareMemory* ism) {
-        ShareMemory::Release(static_cast<ShareMemory*>(ism));
+    Api::iShareMemoryMap* Memory::LoadShareMemoryMapInternal(const std::string& shareMemoryName, const std::string& name, const UInt64 keySize, const UInt64 valueSize) {
+        return ShareMemoryMap::Load(shareMemoryName, name, keySize, valueSize);
+    }
+
+    void Memory::ReleaseShareMemoryMapInternal(Api::iShareMemoryMap* map) {
+        ShareMemoryMap::Release(static_cast<ShareMemoryMap*>(map));
     }
 }
