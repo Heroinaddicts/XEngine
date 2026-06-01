@@ -8,6 +8,7 @@
 #include "Http/Http.h"
 #include "Mysql/Mysql.h"
 #include "Task/TaskManager.h"
+#include "Memory/Memory.h"
 
 #ifdef WIN32
 #include "Net/Windows/Net.h"
@@ -58,9 +59,11 @@ int main(int argc, const char** args, const char** env) {
     //iPhysics* const physics = Physics::GetInstance();
     iMysql* mysql = Mysql::GetInstance();
     iTaskManager* const task = TaskManager::GetInstance();
+    iMemory* const memory = Memory::GetInstance();
 
 
     { // Initialize
+        memory->Initialize(XEngine::g_Engine);
         log->Initialize(XEngine::g_Engine);
         time->Initialize(XEngine::g_Engine);
         net->Initialize(XEngine::g_Engine);
@@ -72,6 +75,7 @@ int main(int argc, const char** args, const char** env) {
     }
 
     { // Launch
+        memory->Launch(XEngine::g_Engine);
         log->Launch(XEngine::g_Engine);
         time->Launch(XEngine::g_Engine);
         net->Launch(XEngine::g_Engine);
@@ -85,6 +89,7 @@ int main(int argc, const char** args, const char** env) {
     UInt64 fixedUpdateTick = XEngine::SafeSystem::Time::GetMicroSecond();
     while (!XEngine::g_Engine->isShutdown()) {
         UInt64 use = XEngine::SafeSystem::Time::GetMicroSecond();
+        memory->EarlyUpdate(XEngine::g_Engine);
         log->EarlyUpdate(XEngine::g_Engine);
         time->EarlyUpdate(XEngine::g_Engine);
         net->EarlyUpdate(XEngine::g_Engine);
@@ -94,6 +99,7 @@ int main(int argc, const char** args, const char** env) {
         task->EarlyUpdate(XEngine::g_Engine);
         logic->EarlyUpdate(XEngine::g_Engine);
 
+        memory->Update(XEngine::g_Engine);
         log->Update(XEngine::g_Engine);
         time->Update(XEngine::g_Engine);
         net->Update(XEngine::g_Engine);
@@ -111,6 +117,8 @@ int main(int argc, const char** args, const char** env) {
         //physics->LaterUpdate(XEngine::g_Engine);
         task->LaterUpdate(XEngine::g_Engine);
         logic->LaterUpdate(XEngine::g_Engine);
+        memory->LaterUpdate(XEngine::g_Engine);
+
         if (SafeSystem::Time::GetMicroSecond() - use < 100) {
             SafeSystem::Time::MillisecondSleep(1);
         }
@@ -125,6 +133,7 @@ int main(int argc, const char** args, const char** env) {
         mysql->Release(XEngine::g_Engine);
         //physics->Release(XEngine::g_Engine);
         task->Release(XEngine::g_Engine);
+        memory->Release(XEngine::g_Engine);
     }
 
 #ifdef _WIN32

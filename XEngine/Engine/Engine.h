@@ -12,28 +12,29 @@ namespace XEngine {
 
         virtual ~Engine() {}
 
-        virtual const char* GetName() const;
-        virtual const char* GetLaunchParameter(const std::string& name) const;
+        const char* GetName() const override;
+        const char* GetLaunchParameter(const std::string& name) const override;
 
-        virtual Api::iNetApi* GetNetApi() const;
-        virtual Api::iHttpApi* GetHttpApi() const;
-        virtual Api::iTimerApi* GetTimerApi() const;
-        virtual Api::iZipApi* GetZipApi() const;
-        virtual Api::iTaskApi* GetTaskApi() const;
-        virtual Api::iMysqlApi* GetMysqlApi() const;
-        virtual Api::iRedisApi* GetRedisApi() const;
-        virtual Api::iWebSocketsApi* GetWebSocketsApi() const;
+        Api::iNetApi* GetNetApi() const override;
+        Api::iHttpApi* GetHttpApi() const override;
+        Api::iTimerApi* GetTimerApi() const override;
+        Api::iZipApi* GetZipApi() const override;
+        Api::iTaskApi* GetTaskApi() const override;
+        Api::iMysqlApi* GetMysqlApi() const override;
+        Api::iRedisApi* GetRedisApi() const override;
+        Api::iWebSocketsApi* GetWebSocketsApi() const override;
+        Api::iMemoryApi* GetMemoryApi() const override;
 
-        virtual void LogAsync(const char* header, const char* content, const bool console, const char* file, const int line);
-        virtual void LogSync(const char* header, const char* content, const bool console, const char* file, const int line);
+        void LogAsync(const char* header, const char* content, const bool console, const char* file, const int line) override;
+        void LogSync(const char* header, const char* content, const bool console, const char* file, const int line) override;
 
         __forceinline void Shutdown() { _Shutdown = true; }
-        virtual Api::ProcessHandle LaunchXEngineProcess(const std::map<std::string, std::string>& launchParameters) const;
+        Api::ProcessHandle LaunchXEngineProcess(const std::map<std::string, std::string>& launchParameters) const override;
 
         __forceinline bool isShutdown() const { return _Shutdown; }
 
     protected:
-        virtual Api::iModule* FindModule(const std::string& name) override;
+        Api::iModule* FindModule(const std::string& name) override;
 
     private:
         Engine() : _Shutdown(false) {}

@@ -25,6 +25,7 @@ include_directories(
 #    "${CMAKE_CURRENT_SOURCE_DIR}/Component/WebSockets"
 #    "${CMAKE_CURRENT_SOURCE_DIR}/Component/WebSockets/libwebsockets"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Mysql"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Component/Memory"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Redis"
     "${CMAKE_CURRENT_SOURCE_DIR}/Component/Redis/hiredis"
     "${OPENSSL_INCLUDE_DIR}"
@@ -42,6 +43,7 @@ file(GLOB Interface "Interface/*.*")
 file(GLOB Logic "Component/Logic/*.*")
 file(GLOB Log "Component/Log/*.*")
 file(GLOB Redis "Component/Redis/*.*")
+file(GLOB Memory "Component/Memory/*.*")
 file(GLOB HiRedis "Component/Redis/hiredis/*.*")
 
 if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
@@ -72,6 +74,7 @@ source_group(Component\\TimeWheel FILES ${TimeWheel})
 source_group(Component\\Mysql FILES ${Mysql})
 #source_group(Component\\Physics FILES ${Physics})
 source_group(Component\\Redis FILES ${Redis})
+source_group(Component\\Memory FILES ${Memory})
 source_group(Component\\Redis\\HiRedis FILES ${HiRedis})
 source_group(\\ FILES ${Engine})
 
@@ -148,6 +151,7 @@ add_executable(XEngine
     ${Utils}
     ${TinyXML}
     ${Mysql}
+    ${Memory}
     #${Physics}
     #${PhysX}
     ${Engine}

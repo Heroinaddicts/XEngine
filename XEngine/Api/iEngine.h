@@ -11,6 +11,7 @@
 #include "iMysqlApi.h"
 #include "iRedisApi.h"
 #include "iWebSocketsApi.h"
+#include "iMemoryApi.h"
 
 namespace XEngine {
     namespace Api {
@@ -56,6 +57,7 @@ namespace XEngine {
             virtual iMysqlApi* GetMysqlApi() const = 0;
             virtual iRedisApi* GetRedisApi() const = 0;
             virtual iWebSocketsApi* GetWebSocketsApi() const = 0;
+            virtual iMemoryApi* GetMemoryApi() const = 0;
 
             virtual void LogAsync(const char* header, const char* content, const bool console, const char* file, const int line) = 0;
             virtual void LogSync(const char* header, const char* content, const bool console, const char* file, const int line) = 0;

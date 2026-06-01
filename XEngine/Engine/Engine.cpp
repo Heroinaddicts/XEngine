@@ -11,15 +11,16 @@
 #ifdef WIN32
 #include "Net/Windows/Net.h"
 #endif //WIN32
-
 #ifdef Linux
 #include "Net/Linux/Net.h"
 #endif //Linux
 
+#include "Memory/Memory.h"
 #include "Task/TaskManager.h"
 
 #include "SafeString.h"
 #include "SafeSystem.h"
+
 #include <map>
 
 
@@ -69,6 +70,10 @@ namespace XEngine {
 
     Api::iWebSocketsApi* Engine::GetWebSocketsApi() const {
         return nullptr; //WebSockets::GetInstance();
+    }
+
+    Api::iMemoryApi* Engine::GetMemoryApi() const {
+        return Memory::GetInstance();
     }
 
     void Engine::LogAsync(const char* header, const char* content, const bool console, const char* file, const int line) {
