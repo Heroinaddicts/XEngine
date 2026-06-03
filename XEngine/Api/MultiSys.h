@@ -11,7 +11,11 @@
 #include <string.h>
 #include <stdint.h>
 #include <assert.h>
+#ifdef __APPLE__
+#include <malloc/malloc.h>
+#else
 #include <malloc.h>
+#endif
 #include <stdarg.h>
 #include <typeinfo>
 #include <functional>

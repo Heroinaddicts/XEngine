@@ -4,14 +4,14 @@
 #include <windows.h>
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
 #include <errno.h>
 #include <fcntl.h>
 #include <string.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
 
 namespace XEngine {
     MMap* MMap::Create(const std::string& path, const Api::eAccess access) {
@@ -47,7 +47,7 @@ namespace XEngine {
         return txnew MMap(path, access, address, reinterpret_cast<uintptr_t>(fileHandle), reinterpret_cast<uintptr_t>(mappingHandle), static_cast<UInt64>(fileSize.QuadPart));
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
         const int flags = access == Api::eAccess::ReadWrite ? O_RDWR : O_RDONLY;
         int fd = open(path.c_str(), flags);
         if (fd < 0) {
@@ -68,7 +68,7 @@ namespace XEngine {
         }
 
         return txnew MMap(path, access, address, static_cast<uintptr_t>(fd), 0, static_cast<UInt64>(st.st_size));
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
 
         return nullptr;
     }
@@ -87,9 +87,9 @@ namespace XEngine {
         }
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
         msync(_Address, static_cast<size_t>(_MappedLength), MS_SYNC);
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
     }
 
     void MMap::Release(MMap* mmap) {
@@ -115,7 +115,7 @@ namespace XEngine {
         }
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
         if (mmap->_Address && mmap->_MappedLength > 0) {
             munmap(mmap->_Address, static_cast<size_t>(mmap->_MappedLength));
         }
@@ -124,7 +124,7 @@ namespace XEngine {
         if (fd >= 0) {
             close(fd);
         }
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
 
         txdel mmap;
     }

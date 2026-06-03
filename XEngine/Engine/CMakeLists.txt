@@ -14,6 +14,7 @@ endif()
 
 find_package(OpenSSL REQUIRED)
 find_package(Boost REQUIRED)
+find_package(Iconv)
 message(STATUS "OpenSSL include dir: ${OPENSSL_INCLUDE_DIR}")
 message(STATUS "OpenSSL libraries: ${OPENSSL_LIBRARIES}")
 message(STATUS "Boost include dir: ${Boost_INCLUDE_DIRS}")
@@ -37,8 +38,11 @@ include_directories(
     "${OPENSSL_INCLUDE_DIR}"
 )
 
-if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
-elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
+if (CMAKE_SYSTEM_NAME MATCHES  "Windows")
+elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+    add_compile_definitions(Linux)
+elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+    add_compile_definitions(MacOS)
 endif()
 
 set(iEngineComponent
@@ -52,10 +56,12 @@ file(GLOB Redis "Component/Redis/*.*")
 file(GLOB Memory "Component/Memory/*.*")
 file(GLOB HiRedis "Component/Redis/hiredis/*.*")
 
-if (CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
+if (CMAKE_SYSTEM_NAME MATCHES  "Windows")
 file(GLOB Net "Component/Net/Windows/*.*")
-elseif (CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
+elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 file(GLOB Net "Component/Net/Linux/*.*")
+elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+set(Net "")
 endif()
 
 file(GLOB Http "Component/Http/*.*")
@@ -84,7 +90,7 @@ source_group(Component\\Memory FILES ${Memory})
 source_group(Component\\Redis\\HiRedis FILES ${HiRedis})
 source_group(\\ FILES ${Engine})
 
-if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
+if(CMAKE_SYSTEM_NAME MATCHES  "Windows")
     set(LibCURL
         debug "${CMAKE_CURRENT_SOURCE_DIR}/Library/Windows/Debug/CUrl/libcurl-d_imp.lib"
         optimized "${CMAKE_CURRENT_SOURCE_DIR}/Library/Windows/Release/CUrl/libcurl_imp.lib"
@@ -101,12 +107,23 @@ if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Windows")
 #    )
 endif()
 
-if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Linux")
+if(CMAKE_SYSTEM_NAME MATCHES  "Linux|Darwin")
 # 先尝试官方/打包器提供的 CMake 包
     find_package(CURL CONFIG QUIET)
     if(CURL_FOUND)
         # 大多数发行版/包管理器会提供 CURL::libcurl
         set(LibCURL CURL::libcurl)
+    else()
+        find_package(CURL MODULE QUIET)
+    endif()
+
+    if(CURL_FOUND)
+        if(TARGET CURL::libcurl)
+            set(LibCURL CURL::libcurl)
+        else()
+            set(LibCURL ${CURL_LIBRARIES})
+            include_directories(${CURL_INCLUDE_DIRS})
+        endif()
     else()
         # 回退到 pkg-config
         find_package(PkgConfig REQUIRED)
@@ -132,9 +149,18 @@ if(CMAKE_HOST_SYSTEM_NAME MATCHES  "Linux")
 
     
 
-    SET(LibMariadb
-        "${CMAKE_CURRENT_SOURCE_DIR}/Library/Linux/libmariadb.a"
-    )
+    if(CMAKE_SYSTEM_NAME MATCHES "Linux")
+        SET(LibMariadb
+            "${CMAKE_CURRENT_SOURCE_DIR}/Library/Linux/libmariadb.a"
+        )
+    elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
+        find_library(MARIADB_LIBRARY NAMES mariadb mariadbclient)
+        if(MARIADB_LIBRARY)
+            set(LibMariadb "${MARIADB_LIBRARY}")
+        else()
+            message(WARNING "MariaDB client library was not found; Mysql component may fail to link on macOS.")
+        endif()
+    endif()
 endif()
 
 add_executable(XEngine
@@ -170,13 +196,22 @@ else()
     target_include_directories(XEngine PRIVATE ${Boost_INCLUDE_DIRS})
 endif()
 
-target_link_libraries(XEngine "-Xlinker \"-(\"")
+if (NOT APPLE)
+    target_link_libraries(XEngine "-Xlinker \"-(\"")
+endif()
 if (WIN32)
     target_link_libraries(XEngine crypt32)
 endif()
 target_link_libraries(XEngine ${LibCURL})
 #target_link_libraries(XEngine ${LibPhysX})
-target_link_libraries(XEngine ${LibMariadb})
+if (LibMariadb)
+    target_link_libraries(XEngine ${LibMariadb})
+endif()
 #target_link_libraries(XEngine ${LibWebsockets})
 target_link_libraries(XEngine ${OPENSSL_LIBRARIES})
-target_link_libraries(XEngine "-Xlinker \"-)\"")
+if (Iconv_FOUND)
+    target_link_libraries(XEngine Iconv::Iconv)
+endif()
+if (NOT APPLE)
+    target_link_libraries(XEngine "-Xlinker \"-)\"")
+endif()

@@ -4,9 +4,9 @@
 #include <process.h>
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
 #include <pthread.h>
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
 
 namespace XEngine {
 
@@ -29,7 +29,7 @@ namespace XEngine {
     }
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
     void* SafeThread::ThreadProc(void* args) {
         ThreadArgs* p = (ThreadArgs*)args;
         XASSERT(p, "a null thread owner point");
@@ -39,7 +39,7 @@ namespace XEngine {
         txdel p;
         return nullptr;
     }
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
 
     bool SafeThread::Start(const int thread_count, void* context) {
         AUTO_LOCK(_Lock);
@@ -79,7 +79,7 @@ namespace XEngine {
     }
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
     void* ThreadRunFun(void* args) {
         ThreadArgs* p = (ThreadArgs*)args;
         XASSERT(p, "a null thread owner point");
@@ -87,7 +87,7 @@ namespace XEngine {
         txdel p;
         return nullptr;
     }
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
 
     bool SafeThread::StartThread(fThread fun, void* context) {
         ThreadArgs* p = txnew ThreadArgs;
@@ -111,4 +111,3 @@ namespace XEngine {
         return true;
     }
 }
-

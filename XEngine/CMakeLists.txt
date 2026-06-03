@@ -1,3 +1,7 @@
+cmake_minimum_required(VERSION 3.20)
+
+project(XEngineRoot LANGUAGES C CXX)
+
 #cmake file for XEngine 
 #author : max
 #created : 2022-09-28 12:45

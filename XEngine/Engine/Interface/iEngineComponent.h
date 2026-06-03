@@ -8,7 +8,10 @@
 #define SAFE_SET_CONST_VALUE(pConst, p) SafeMemory::Memcpy((void*)&(pConst), sizeof(pConst), &p, sizeof(p));
 
 namespace XEngine {
-    class Api::iEngine;
+    namespace Api {
+        class iEngine;
+    }
+
     class iEngineComponent {
     public:
         virtual ~iEngineComponent() {}

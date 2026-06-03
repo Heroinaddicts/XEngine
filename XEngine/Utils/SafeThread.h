@@ -41,9 +41,9 @@ namespace XEngine {
         static unsigned int __stdcall ThreadProc(void* lpParam);
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
         static void* ThreadProc(void* pParam);
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
     };
 }
 

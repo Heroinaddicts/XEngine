@@ -14,16 +14,23 @@
 #pragma comment(lib, "shlwapi.lib")
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <sys/syscall.h>
 #include <dirent.h>
 #include <libgen.h>
 #include <spawn.h>
 #include <pthread.h>
+#endif //defined(Linux) || defined(MacOS)
+
+#ifdef Linux
+#include <sys/syscall.h>
 #endif //Linux
+
+#ifdef MacOS
+#include <mach-o/dyld.h>
+#endif //MacOS
 
 namespace XEngine {
     namespace SafeSystem {
@@ -35,10 +42,10 @@ namespace XEngine {
                     return sysInfo.dwNumberOfProcessors;
                 #endif //WIN32
 
-                #ifdef Linux
+                #if defined(Linux) || defined(MacOS)
                     long n = sysconf(_SC_NPROCESSORS_ONLN);   // 当前在线可用的逻辑CPU数
                     return n > 0 ? static_cast<int>(n) : 1;
-                #endif //Linux
+                #endif //defined(Linux) || defined(MacOS)
             }
         }
 
@@ -54,9 +61,9 @@ namespace XEngine {
                 return ::GetCurrentProcessId();
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
                 return ::getpid();
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
             }
 
             UInt64 GetCurrentThreadID() {
@@ -67,6 +74,11 @@ namespace XEngine {
 #ifdef Linux
                 return syscall(SYS_gettid);
 #endif //Linux
+#ifdef MacOS
+                UInt64 tid = 0;
+                pthread_threadid_np(nullptr, &tid);
+                return tid;
+#endif //MacOS
             }
 
             UInt64 LaunchProcess(const std::string& exPath, const std::string& args) {
@@ -86,7 +98,7 @@ namespace XEngine {
 
                 return (UInt64)pi.hProcess;
 #endif //WIN32
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
                 char* argv[] = { (char*)args.c_str(), nullptr };
                 pid_t pid;
                 int ret = posix_spawnp(&pid, SafeSystem::File::GetCurrentExecutablePath().c_str(), nullptr, nullptr, argv, nullptr);
@@ -94,7 +106,7 @@ namespace XEngine {
                     return pid;
                 }
                 return INVAILD_ID;
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
             }
         }
 
@@ -110,6 +122,27 @@ namespace XEngine {
                     s_Path = txnew std::string(temp);
                     SafeString::Replace(*s_Path, "\\", "/");
 #endif //WIN32
+#ifdef MacOS
+                    char temp[PATH_STRING_MAX_LEN];
+                    uint32_t size = sizeof(temp);
+                    if (_NSGetExecutablePath(temp, &size) == 0) {
+                        s_Path = txnew std::string(temp);
+                    }
+                    else {
+                        s_Path = txnew std::string();
+                    }
+#endif //MacOS
+#ifdef Linux
+                    char temp[PATH_STRING_MAX_LEN];
+                    int count = readlink("/proc/self/exe", temp, sizeof(temp) - 1);
+                    if (count > 0) {
+                        temp[count] = 0;
+                        s_Path = txnew std::string(temp);
+                    }
+                    else {
+                        s_Path = txnew std::string();
+                    }
+#endif //Linux
                 }
 
                 return *s_Path;
@@ -128,23 +161,32 @@ namespace XEngine {
                     s_Path = new std::string(temp);
                     SafeString::Replace(*s_Path, "\\", "/");
 #endif //WIN32
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
 #define SYSTEM_PATH_LEN 2048
                     char buff[SYSTEM_PATH_LEN];
                     char link[SYSTEM_PATH_LEN];
                     SafeMemory::Memset(buff, sizeof(buff), 0, sizeof(buff));
                     SafeMemory::Memset(link, sizeof(link), 0, sizeof(link));
 
+#ifdef Linux
                     sprintf_s(link, sizeof(link), "/proc/self/exe");
                     int count = readlink(link, buff, sizeof(buff));
                     if (count >= sizeof(buff)) {
                         XASSERT(false, "system path error");
                         return nullptr;
                     }
+#endif //Linux
+#ifdef MacOS
+                    uint32_t size = sizeof(buff);
+                    if (_NSGetExecutablePath(buff, &size) != 0) {
+                        XASSERT(false, "system path error");
+                        return nullptr;
+                    }
+#endif //MacOS
 
                     const char* p = dirname(buff);
                     s_Path = txnew std::string(p);
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
                 }
                 return *s_Path;
             }
@@ -154,9 +196,9 @@ namespace XEngine {
                 return _access(path.c_str(), 0) == 0;
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
                 return access(path.c_str(), F_OK) == 0;
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
 
             }
 
@@ -165,13 +207,13 @@ namespace XEngine {
                 return::PathIsDirectoryA(path.c_str());
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
                 struct stat st;
                 if (stat(path.c_str(), &st) == 0) {
                     return S_ISDIR(st.st_mode);
                 }
                 return false;
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
             }
 
             bool CreateFolder(const std::string& path) {
@@ -182,7 +224,7 @@ namespace XEngine {
                 return ::CreateDirectoryA(path.c_str(), 0);
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
                 struct stat st;
                 if (stat(path.c_str(), &st) == 0) {
                     return S_ISDIR(st.st_mode);
@@ -194,7 +236,7 @@ namespace XEngine {
                     return FolderExists(path);
                 }
                 return false;
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
             }
 
             bool DelFolder(const std::string& path) {
@@ -255,7 +297,7 @@ namespace XEngine {
                 }
 #endif //WIN32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
                 DIR* dp;
                 struct dirent* dirp;
                 struct stat st;
@@ -308,10 +350,9 @@ namespace XEngine {
                         }
                     }
                 }
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
                 return count;
             }
         }
     }
 }
-

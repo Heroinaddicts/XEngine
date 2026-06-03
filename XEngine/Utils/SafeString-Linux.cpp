@@ -1,4 +1,4 @@
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
 #include "SafeString.h"
 #include <string>
 #include <vector>
@@ -110,4 +110,4 @@ namespace XEngine {
     }
 }
 
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)

@@ -11,9 +11,9 @@
 #ifdef WIN32
 #include "Net/Windows/Net.h"
 #endif //WIN32
-#ifdef Linux
+#if defined(Linux)
 #include "Net/Linux/Net.h"
-#endif //Linux
+#endif //defined(Linux)
 
 #include "Memory/Memory.h"
 #include "Task/TaskManager.h"
@@ -41,7 +41,11 @@ namespace XEngine {
     }
 
     Api::iNetApi* Engine::GetNetApi() const {
+#if defined(WIN32) || defined(Linux)
         return Net::GetInstance();
+#else
+        return nullptr;
+#endif
     }
 
     Api::iHttpApi* Engine::GetHttpApi() const {
@@ -97,4 +101,3 @@ namespace XEngine {
         return Logic::GetInstance()->FindModule(name);
     }
 }
-

@@ -53,7 +53,7 @@ namespace XEngine {
             __GetModules fun = (__GetModules)::GetProcAddress(hinst, GET_MODULES_FUNC_NAME);
 #endif //Win32
 
-#ifdef Linux
+#if defined(Linux) || defined(MacOS)
             dlerror();
             std::string path = _ModulePath + "/lib" + moduleNames[i] + ".so";
             void* handle = dlopen(path.c_str(), RTLD_LAZY);
@@ -64,7 +64,7 @@ namespace XEngine {
             }
 
             __GetModules fun = (__GetModules)dlsym(handle, GET_MODULES_FUNC_NAME);
-#endif //Linux
+#endif //defined(Linux) || defined(MacOS)
             XASSERT(fun, "Can not export dll function GetModules, dll %s", path.c_str());
             Api::iModule* module = fun();
             while (nullptr != module) {
