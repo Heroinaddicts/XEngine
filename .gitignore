@@ -66,3 +66,4 @@ Demo/Server/Bin/Windows/Debug/TilemapManager.pdb
 /XEngine/Build
 /Demo/Server/Bin/MacOS
 /Demo/Server/XGame/Library/Protobuf/Sources/protobuf-35.0
+/XEngine/Engine/Library/Linux/mariadb-connector-c-3.4.5-src
