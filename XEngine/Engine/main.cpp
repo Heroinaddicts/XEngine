@@ -18,6 +18,9 @@
 #if defined(Linux)
 #include "Net/Linux/Net.h"
 #endif //defined(Linux)
+#if defined(MacOS)
+#include "Net/MacOS/Net.h"
+#endif //defined(MacOS)
 UsingXEngine;
 
 #include "XDumper.h"
@@ -54,7 +57,7 @@ int main(int argc, const char** args, const char** env) {
 
     iLogic* const logic = Logic::GetInstance();
     iLog* const log = Log::GetInstance();
-#if defined(WIN32) || defined(Linux)
+#if defined(WIN32) || defined(Linux) || defined(MacOS)
     iNet* const net = Net::GetInstance();
 #else
     iNet* const net = nullptr;
