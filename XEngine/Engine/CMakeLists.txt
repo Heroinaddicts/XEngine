@@ -150,16 +150,19 @@ if(CMAKE_SYSTEM_NAME MATCHES  "Linux|Darwin")
     
 
     if(CMAKE_SYSTEM_NAME MATCHES "Linux")
-        SET(LibMariadb
-            "${CMAKE_CURRENT_SOURCE_DIR}/Library/Linux/libmariadb.a"
+        find_library(
+            LibMariadb
+            NAMES mariadb
+            PATHS /usr/lib64 /usr/lib /usr/local/lib64 /usr/local/lib
         )
+        message(STATUS "MariaDB Library: ${LibMariadb}")
     elseif(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-        find_library(MARIADB_LIBRARY NAMES mariadb mariadbclient)
-        if(MARIADB_LIBRARY)
-            set(LibMariadb "${MARIADB_LIBRARY}")
-        else()
-            message(WARNING "MariaDB client library was not found; Mysql component may fail to link on macOS.")
-        endif()
+        find_library(
+            LibMariadb
+            NAMES mariadb
+            PATHS /usr/lib64 /usr/lib /usr/local/lib64 /usr/local/lib
+        )
+        message(STATUS "MariaDB Library: ${LibMariadb}")
     endif()
 endif()
 
