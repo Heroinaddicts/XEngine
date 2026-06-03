@@ -9,8 +9,6 @@
 file(GLOB Common "${CMAKE_CURRENT_SOURCE_DIR}/Common/*.*")
 file(GLOB Interface "${CMAKE_CURRENT_SOURCE_DIR}/Interface/*.*")
 
-file(GLOB LibProtobufLinux "${CMAKE_CURRENT_SOURCE_DIR}/Library/Protobuf/Linux/*.a")
-
 file(GLOB Proto
     "${CMAKE_CURRENT_SOURCE_DIR}/Proto/*.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/Proto/*.hpp"
@@ -31,10 +29,19 @@ if (WIN32)
     )
 
 elseif (APPLE)
-    find_package(Protobuf REQUIRED)
-    set(LibProtobuf ${Protobuf_LIBRARIES})
+    find_library(
+        LibProtobuf
+        NAMES protobuf
+        PATHS /usr/lib64 /usr/lib /usr/local/lib64 /usr/local/lib
+    )
+    message(STATUS "Protobuf Library: ${LibProtobuf}")
 elseif (UNIX)
-    set(LibProtobuf ${LibProtobufLinux})
+    find_library(
+        LibProtobuf
+        NAMES protobuf
+        PATHS /usr/lib64 /usr/lib /usr/local/lib64 /usr/local/lib
+    )
+    message(STATUS "Protobuf Library: ${LibProtobuf}")
 endif()
 
 if (APPLE)
