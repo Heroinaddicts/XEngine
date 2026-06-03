@@ -14,6 +14,9 @@
 #if defined(Linux)
 #include "Net/Linux/Net.h"
 #endif //defined(Linux)
+#if defined(MacOS)
+#include "Net/MacOS/Net.h"
+#endif //defined(MacOS)
 
 #include "Memory/Memory.h"
 #include "Task/TaskManager.h"
@@ -41,7 +44,7 @@ namespace XEngine {
     }
 
     Api::iNetApi* Engine::GetNetApi() const {
-#if defined(WIN32) || defined(Linux)
+#if defined(WIN32) || defined(Linux) || defined(MacOS)
         return Net::GetInstance();
 #else
         return nullptr;
