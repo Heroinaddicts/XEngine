@@ -26,7 +26,10 @@ bool Gate::Initialize(Api::iEngine* const engine) {
     s_Self = this;
 
     UInt16 portForClient = engine->GetLaunchParameterUInt16("PortForClient");
-    engine->GetNetApi()->LaunchTcpServer(this, "0.0.0.0", portForClient, 16 * SafeSystem::Network::KB);
+    if (!engine->GetNetApi()->LaunchTcpServer(this, "0.0.0.0", portForClient, 16 * SafeSystem::Network::KB)) {
+        ErrorLog(g_Engine, "Launch Gate tcp server failed, port %u", portForClient);
+        return false;
+    }
 
     s_GameServerPort = engine->GetLaunchParameterUInt16("GameServerPort");
     START_TIMER(g_Engine, s_Self, eGateTimeID::ReconnectGameServer, s_ReconnectTimerDelay, 1, s_ReconnectTimerDelay, 0);

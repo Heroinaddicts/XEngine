@@ -17,8 +17,11 @@ std::vector<TabInfo*> g_Tables;
 std::map<std::string, std::string> g_CodeTemplates;
 
 int main(int argc, const char** argv) {
+#ifdef WIN32
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
+#endif //WIN32
+
     Launcher::GetInstance()->ParseLauncherArgs(argc, argv);
     if (Launcher::GetInstance()->GetLauncherArg("Pause")) {
         getchar();
@@ -101,7 +104,7 @@ int main(int argc, const char** argv) {
 
         sql = "DESCRIBE " + tableNames[i];
         if (mysql_query(con, sql.c_str()) != 0) {
-            printf("Failed to describe table %s : %s\n", tableNames[i], mysql_error(con));
+            printf("Failed to describe table %s : %s\n", tableNames[i].c_str(), mysql_error(con));
             return -1;
         }
 

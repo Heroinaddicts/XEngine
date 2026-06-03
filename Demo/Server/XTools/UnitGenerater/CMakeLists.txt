@@ -27,4 +27,6 @@ add_executable(UnitGenerater
     ${UnitGenerater}
 )
 
+target_link_libraries(UnitGenerater ${XTOOLS_PLATFORM_LIBS})
+
 set_property(TARGET UnitGenerater PROPERTY FOLDER "Tools")

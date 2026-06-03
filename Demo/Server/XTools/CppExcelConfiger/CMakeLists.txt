@@ -27,4 +27,6 @@ add_executable(CppExcelConfiger
     ${CppExcelConfiger}
 )
 
+target_link_libraries(CppExcelConfiger ${XTOOLS_PLATFORM_LIBS})
+
 set_property(TARGET CppExcelConfiger PROPERTY FOLDER "Tools")

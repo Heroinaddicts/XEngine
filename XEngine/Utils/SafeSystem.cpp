@@ -312,44 +312,53 @@ namespace XEngine {
                 * read all files in this dir
                 **/
                 while ((dirp = readdir(dp)) != nullptr) {
-                    char fullname[255];
-                    memset(fullname, 0, sizeof(fullname));
-
                     /* ignore hidden files */
-                    if (dirp->d_name[0] == '.')
+                    if (dirp->d_name[0] == '.') {
                         continue;
+                    }
 
-                    strncpy(fullname, dir.c_str(), sizeof(fullname));
-                    strncat(fullname, "/", sizeof(fullname));
-                    strncat(fullname, dirp->d_name, sizeof(fullname));
+                    const std::string entryName = dirp->d_name;
+                    const std::string fullname = dir + "/" + entryName;
                     /* get dirent status */
-                    if (stat(fullname, &st) == -1) {
+                    if (stat(fullname.c_str(), &st) == -1) {
                         perror("stat");
-                        fputs(fullname, stderr);
+                        fputs(fullname.c_str(), stderr);
+                        closedir(dp);
                         return 0;
                     }
 
                     /* if dirent is a directory, call itself */
                     if (S_ISDIR(st.st_mode)) {
                         if (recursive) {
-                            count += GetFileInDirectory(dir, extension, paths, names, recursive);
+                            if (rejectDirs.find(entryName) != rejectDirs.cend()) {
+                                continue;
+                            }
+
+                            count += GetFileInDirectory(fullname, extension, paths, names, recursive, rejectDirs, rejectExtension);
                         }
                     }
                     else {
                         /* display file name with proper tab */
                         //printf("%s/%s\n", dirname, dirp->d_name);
-                        if (strcmp(GetFilenameExt(dirp->d_name), extension.c_str()) == 0) {
-                            paths.push_back(std::string(dir.c_str()) + "/" + dirp->d_name);
-                            char name[255];
-                            strncpy(name, dirp->d_name, sizeof(name));
-                            char* dot = strrchr(name, '.');
-                            XASSERT(dot, "wtf");
-                            *dot = 0;
+                        const char* fileExtension = GetFilenameExt(entryName.c_str());
+                        if (strcmp(fileExtension, extension.c_str()) == 0
+                            || strcmp(extension.c_str(), "*") == 0) {
+                            if (rejectExtension.find(fileExtension) != rejectExtension.cend()) {
+                                continue;
+                            }
+
+                            paths.push_back(fullname);
+                            std::string name = entryName;
+                            const std::string::size_type dot = name.rfind('.');
+                            XASSERT(dot != std::string::npos, "wtf");
+                            name.resize(dot);
                             names.push_back(name);
                             count++;
                         }
                     }
                 }
+
+                closedir(dp);
 #endif //defined(Linux) || defined(MacOS)
                 return count;
             }

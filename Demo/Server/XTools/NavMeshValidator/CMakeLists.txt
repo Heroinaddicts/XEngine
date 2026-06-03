@@ -41,4 +41,6 @@ add_executable(NavMeshValidator
     ${NavMeshValidator}
 )
 
+target_link_libraries(NavMeshValidator ${XTOOLS_PLATFORM_LIBS})
+
 set_property(TARGET NavMeshValidator PROPERTY FOLDER "Tools")

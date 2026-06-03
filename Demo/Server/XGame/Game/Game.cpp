@@ -42,7 +42,11 @@ bool Game::Initialize(Api::iEngine* const engine) {
 
 bool Game::Launch(Api::iEngine* const engine) {
     UInt16 portForGate = engine->GetLaunchParameterUInt16("PortForGate");
-    engine->GetNetApi()->LaunchTcpServer(this, "0.0.0.0", portForGate, 20 * SafeSystem::Network::MB);
+    if (!engine->GetNetApi()->LaunchTcpServer(this, "0.0.0.0", portForGate, 20 * SafeSystem::Network::MB)) {
+        ErrorLog(g_Engine, "Launch Game tcp server failed, port %u", portForGate);
+        return false;
+    }
+
     FrameworkSession::RegistServerProtobuf(eFrameworkID::GateNotifyGameAccountEvent, Game::OnGateNotifyGameAccountEvent);
     FrameworkSession::RegistServerProtobuf(eFrameworkID::GateForwordClientMessageToGame, Game::OnGateForwordClientMessageToGame);
 
@@ -233,4 +237,3 @@ void Game::OnTimer(const int id, const UInt64 context, const Int64 timestamp) {
     }
     }
 }
-

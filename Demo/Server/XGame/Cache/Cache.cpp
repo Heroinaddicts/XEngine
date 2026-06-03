@@ -34,7 +34,10 @@ bool Cache::Initialize(Api::iEngine* const engine) {
 
 bool Cache::Launch(Api::iEngine* const engine) {
     UInt16 portForGame = engine->GetLaunchParameterUInt16("PortForGame");
-    engine->GetNetApi()->LaunchTcpServer(this, "0.0.0.0", portForGame, 20 * SafeSystem::Network::MB);
+    if (!engine->GetNetApi()->LaunchTcpServer(this, "0.0.0.0", portForGame, 20 * SafeSystem::Network::MB)) {
+        ErrorLog(g_Engine, "Launch Cache tcp server failed, port %u", portForGame);
+        return false;
+    }
 
     std::string mysqlhost = g_Engine->GetLaunchParameter("MysqlHost");
     const int mysqlport = g_Engine->GetLaunchParameterInt32("MysqlPort");

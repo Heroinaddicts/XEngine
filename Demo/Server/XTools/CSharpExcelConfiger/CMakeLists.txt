@@ -27,4 +27,6 @@ add_executable(CSharpExcelConfiger
     ${CSharpExcelConfiger}
 )
 
+target_link_libraries(CSharpExcelConfiger ${XTOOLS_PLATFORM_LIBS})
+
 set_property(TARGET CSharpExcelConfiger PROPERTY FOLDER "Tools")

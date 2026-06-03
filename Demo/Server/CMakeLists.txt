@@ -116,6 +116,7 @@ file(GLOB Utils "${XENGINE_DIR}/Utils/*.*")
 
 #Engine
 ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/XGame)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/XTools)
 
 add_subdirectory(
     ${XENGINE_DIR}

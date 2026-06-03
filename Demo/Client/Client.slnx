@@ -1,0 +1,13 @@
+﻿<Solution>
+  <Project Path="AutoConfig.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="spine-unity-editor.csproj" />
+  <Project Path="XEngine.csproj" />
+  <Project Path="spine-csharp.csproj" />
+  <Project Path="spine-unity.csproj" />
+  <Project Path="DOTween.Modules.csproj" />
+  <Project Path="XUtils.csproj" />
+  <Project Path="GameUnit.csproj" />
+  <Project Path="Assembly-CSharp-Editor.csproj" />
+  <Project Path="SkillVisualCreator.csproj" />
+</Solution>

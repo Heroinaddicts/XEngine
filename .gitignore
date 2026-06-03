@@ -71,3 +71,8 @@ Demo/Server/Bin/Windows/Debug/TilemapManager.pdb
 /ThirdLibrary/mariadb-connector-c-3.4.5-src
 /ThirdLibrary/redis-8.4.0
 /Demo/Server/Bin/Linux/Log
+/Demo/Client/Library
+/Demo/Client/.vscode
+/Demo/Client/Logs
+*.csproj
+/Demo/Client/Temp
