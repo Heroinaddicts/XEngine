@@ -66,9 +66,9 @@ namespace XEngine {
         }
         else {
             tcper = XPOOL_CREATE(g_TcperPool, socket, host, port, active, size);
-            if (ERROR_SOCKET == AddKqueueReadWrite(socket, (void*)&tcper->_Associat)) {
+            if (ERROR_SOCKET == AddKqueueRead(socket, (void*)&tcper->_Associat)) {
                 XPOOL_RELEASE(g_TcperPool, tcper);
-                XERROR(g_Engine, "AddKqueueReadWrite(g_KqueueFd, sock) error, %s", strerror(errno));
+                XERROR(g_Engine, "AddKqueueRead(g_KqueueFd, sock) error, %s", strerror(errno));
                 return nullptr;
             }
         }
@@ -130,7 +130,7 @@ namespace XEngine {
                 NetEvent* ev = txnew NetEvent(eNetEventType::Connect);
                 ev->_Tcper = this;
 
-                if (ERROR_SOCKET == AddKqueueReadWrite(_Sock, (void*)&_Associat)) {
+                if (ERROR_SOCKET == AddKqueueRead(_Sock, (void*)&_Associat)) {
                     _IsClosed = true;
                     getsockopt(_Sock, SOL_SOCKET, SO_ERROR, &ev->_Code, &len);
                     ev->_Code == 0 ? ev->_Code = -1 : ev->_Code = ev->_Code;
@@ -213,6 +213,9 @@ namespace XEngine {
                             return len;
                             });
                     }
+                    if (_SendBuffer.GetDataSize() == 0) {
+                        DeleteKqueueEvent(_Sock, EVFILT_WRITE);
+                    }
                 }
             }
             break;
@@ -245,8 +248,10 @@ namespace XEngine {
     }
 
     void Tcper::Send(const void* data, const int size, bool immediately) {
-        if (!_IsClosed)
+        if (!_IsClosed) {
             _SendBuffer.Write(data, size, __FILE__, __LINE__);
+            AddKqueueWrite(_Sock, (void*)&_Associat);
+        }
     }
 
     std::string Tcper::RemoteIp() const {
