@@ -29,6 +29,6 @@ add_library (NpcManager SHARED
 
 set_property(TARGET NpcManager PROPERTY FOLDER "Game")
 
-target_link_libraries(NpcManager "-Xlinker \"-(\"")
+target_link_libraries(NpcManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(NpcManager ${LibProtobuf})
-target_link_libraries(NpcManager "-Xlinker \"-)\"")
+target_link_libraries(NpcManager ${XGAME_LINK_GROUP_END})

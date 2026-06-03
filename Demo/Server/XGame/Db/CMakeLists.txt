@@ -29,6 +29,6 @@ add_library (Db SHARED
 
 set_property(TARGET Db PROPERTY FOLDER "Components")
 
-target_link_libraries(Db "-Xlinker \"-(\"")
+target_link_libraries(Db ${XGAME_LINK_GROUP_START})
 target_link_libraries(Db ${LibProtobuf})
-target_link_libraries(Db "-Xlinker \"-)\"")
+target_link_libraries(Db ${XGAME_LINK_GROUP_END})

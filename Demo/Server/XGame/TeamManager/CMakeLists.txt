@@ -29,6 +29,6 @@ add_library (TeamManager SHARED
 
 set_property(TARGET TeamManager PROPERTY FOLDER "Game")
 
-target_link_libraries(TeamManager "-Xlinker \"-(\"")
+target_link_libraries(TeamManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(TeamManager ${LibProtobuf})
-target_link_libraries(TeamManager "-Xlinker \"-)\"")
+target_link_libraries(TeamManager ${XGAME_LINK_GROUP_END})

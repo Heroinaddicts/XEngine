@@ -29,6 +29,6 @@ add_library (Relation SHARED
 
 set_property(TARGET Relation PROPERTY FOLDER "Game")
 
-target_link_libraries(Relation "-Xlinker \"-(\"")
+target_link_libraries(Relation ${XGAME_LINK_GROUP_START})
 target_link_libraries(Relation ${LibProtobuf})
-target_link_libraries(Relation "-Xlinker \"-)\"")
+target_link_libraries(Relation ${XGAME_LINK_GROUP_END})

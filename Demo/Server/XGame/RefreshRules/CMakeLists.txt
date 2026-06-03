@@ -29,6 +29,6 @@ add_library (RefreshRules SHARED
 
 set_property(TARGET RefreshRules PROPERTY FOLDER "Game")
 
-target_link_libraries(RefreshRules "-Xlinker \"-(\"")
+target_link_libraries(RefreshRules ${XGAME_LINK_GROUP_START})
 target_link_libraries(RefreshRules ${LibProtobuf})
-target_link_libraries(RefreshRules "-Xlinker \"-)\"")
+target_link_libraries(RefreshRules ${XGAME_LINK_GROUP_END})

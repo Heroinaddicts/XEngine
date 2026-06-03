@@ -29,6 +29,6 @@ add_library (CharacterManager SHARED
 
 set_property(TARGET CharacterManager PROPERTY FOLDER "Game")
 
-target_link_libraries(CharacterManager "-Xlinker \"-(\"")
+target_link_libraries(CharacterManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(CharacterManager ${LibProtobuf})
-target_link_libraries(CharacterManager "-Xlinker \"-)\"")
+target_link_libraries(CharacterManager ${XGAME_LINK_GROUP_END})

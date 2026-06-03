@@ -29,6 +29,6 @@ add_library (Fsm SHARED
 
 set_property(TARGET Fsm PROPERTY FOLDER "Components")
 
-target_link_libraries(Fsm "-Xlinker \"-(\"")
+target_link_libraries(Fsm ${XGAME_LINK_GROUP_START})
 target_link_libraries(Fsm ${LibProtobuf})
-target_link_libraries(Fsm "-Xlinker \"-)\"")
+target_link_libraries(Fsm ${XGAME_LINK_GROUP_END})

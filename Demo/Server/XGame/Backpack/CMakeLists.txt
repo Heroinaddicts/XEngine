@@ -29,6 +29,6 @@ add_library (Backpack SHARED
 
 set_property(TARGET Backpack PROPERTY FOLDER "Game")
 
-target_link_libraries(Backpack "-Xlinker \"-(\"")
+target_link_libraries(Backpack ${XGAME_LINK_GROUP_START})
 target_link_libraries(Backpack ${LibProtobuf})
-target_link_libraries(Backpack "-Xlinker \"-)\"")
+target_link_libraries(Backpack ${XGAME_LINK_GROUP_END})

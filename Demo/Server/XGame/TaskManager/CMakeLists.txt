@@ -29,6 +29,6 @@ add_library (TaskManager SHARED
 
 set_property(TARGET TaskManager PROPERTY FOLDER "Game")
 
-target_link_libraries(TaskManager "-Xlinker \"-(\"")
+target_link_libraries(TaskManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(TaskManager ${LibProtobuf})
-target_link_libraries(TaskManager "-Xlinker \"-)\"")
+target_link_libraries(TaskManager ${XGAME_LINK_GROUP_END})

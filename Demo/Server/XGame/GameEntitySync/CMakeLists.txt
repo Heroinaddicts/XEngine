@@ -29,6 +29,6 @@ add_library (GameEntitySync SHARED
 
 set_property(TARGET GameEntitySync PROPERTY FOLDER "Game")
 
-target_link_libraries(GameEntitySync "-Xlinker \"-(\"")
+target_link_libraries(GameEntitySync ${XGAME_LINK_GROUP_START})
 target_link_libraries(GameEntitySync ${LibProtobuf})
-target_link_libraries(GameEntitySync "-Xlinker \"-)\"")
+target_link_libraries(GameEntitySync ${XGAME_LINK_GROUP_END})

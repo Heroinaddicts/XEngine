@@ -29,6 +29,6 @@ add_library (SkillManager SHARED
 
 set_property(TARGET SkillManager PROPERTY FOLDER "Game")
 
-target_link_libraries(SkillManager "-Xlinker \"-(\"")
+target_link_libraries(SkillManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(SkillManager ${LibProtobuf})
-target_link_libraries(SkillManager "-Xlinker \"-)\"")
+target_link_libraries(SkillManager ${XGAME_LINK_GROUP_END})

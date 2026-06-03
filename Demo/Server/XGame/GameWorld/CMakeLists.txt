@@ -29,6 +29,6 @@ add_library (GameWorld SHARED
 
 set_property(TARGET GameWorld PROPERTY FOLDER "Game")
 
-target_link_libraries(GameWorld "-Xlinker \"-(\"")
+target_link_libraries(GameWorld ${XGAME_LINK_GROUP_START})
 target_link_libraries(GameWorld ${LibProtobuf})
-target_link_libraries(GameWorld "-Xlinker \"-)\"")
+target_link_libraries(GameWorld ${XGAME_LINK_GROUP_END})

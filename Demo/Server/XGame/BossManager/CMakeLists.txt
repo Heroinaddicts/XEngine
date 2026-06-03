@@ -29,6 +29,6 @@ add_library (BossManager SHARED
 
 set_property(TARGET BossManager PROPERTY FOLDER "Game")
 
-target_link_libraries(BossManager "-Xlinker \"-(\"")
+target_link_libraries(BossManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(BossManager ${LibProtobuf})
-target_link_libraries(BossManager "-Xlinker \"-)\"")
+target_link_libraries(BossManager ${XGAME_LINK_GROUP_END})

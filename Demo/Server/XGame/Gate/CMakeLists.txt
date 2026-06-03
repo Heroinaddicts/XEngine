@@ -29,6 +29,6 @@ add_library (Gate SHARED
 
 set_property(TARGET Gate PROPERTY FOLDER "Gate")
 
-target_link_libraries(Gate "-Xlinker \"-(\"")
+target_link_libraries(Gate ${XGAME_LINK_GROUP_START})
 target_link_libraries(Gate ${LibProtobuf})
-target_link_libraries(Gate "-Xlinker \"-)\"")
+target_link_libraries(Gate ${XGAME_LINK_GROUP_END})

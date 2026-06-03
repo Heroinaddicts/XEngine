@@ -29,6 +29,6 @@ add_library (SceneManager SHARED
 
 set_property(TARGET SceneManager PROPERTY FOLDER "Game")
 
-target_link_libraries(SceneManager "-Xlinker \"-(\"")
+target_link_libraries(SceneManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(SceneManager ${LibProtobuf})
-target_link_libraries(SceneManager "-Xlinker \"-)\"")
+target_link_libraries(SceneManager ${XGAME_LINK_GROUP_END})

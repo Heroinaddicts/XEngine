@@ -29,6 +29,6 @@ add_library (Cache SHARED
 
 set_property(TARGET Cache PROPERTY FOLDER "Cache")
 
-target_link_libraries(Cache "-Xlinker \"-(\"")
+target_link_libraries(Cache ${XGAME_LINK_GROUP_START})
 target_link_libraries(Cache ${LibProtobuf})
-target_link_libraries(Cache "-Xlinker \"-)\"")
+target_link_libraries(Cache ${XGAME_LINK_GROUP_END})

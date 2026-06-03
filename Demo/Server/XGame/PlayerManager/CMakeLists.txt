@@ -29,6 +29,6 @@ add_library (PlayerManager SHARED
 
 set_property(TARGET PlayerManager PROPERTY FOLDER "Game")
 
-target_link_libraries(PlayerManager "-Xlinker \"-(\"")
+target_link_libraries(PlayerManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(PlayerManager ${LibProtobuf})
-target_link_libraries(PlayerManager "-Xlinker \"-)\"")
+target_link_libraries(PlayerManager ${XGAME_LINK_GROUP_END})

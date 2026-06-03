@@ -29,6 +29,6 @@ add_library (MatchManager SHARED
 
 set_property(TARGET MatchManager PROPERTY FOLDER "Game")
 
-target_link_libraries(MatchManager "-Xlinker \"-(\"")
+target_link_libraries(MatchManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(MatchManager ${LibProtobuf})
-target_link_libraries(MatchManager "-Xlinker \"-)\"")
+target_link_libraries(MatchManager ${XGAME_LINK_GROUP_END})

@@ -29,6 +29,6 @@ add_library (Combat SHARED
 
 set_property(TARGET Combat PROPERTY FOLDER "Game")
 
-target_link_libraries(Combat "-Xlinker \"-(\"")
+target_link_libraries(Combat ${XGAME_LINK_GROUP_START})
 target_link_libraries(Combat ${LibProtobuf})
-target_link_libraries(Combat "-Xlinker \"-)\"")
+target_link_libraries(Combat ${XGAME_LINK_GROUP_END})

@@ -29,6 +29,6 @@ add_library (BuffManager SHARED
 
 set_property(TARGET BuffManager PROPERTY FOLDER "Game")
 
-target_link_libraries(BuffManager "-Xlinker \"-(\"")
+target_link_libraries(BuffManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(BuffManager ${LibProtobuf})
-target_link_libraries(BuffManager "-Xlinker \"-)\"")
+target_link_libraries(BuffManager ${XGAME_LINK_GROUP_END})

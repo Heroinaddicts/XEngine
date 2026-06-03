@@ -29,6 +29,6 @@ add_library (CacheClient SHARED
 
 set_property(TARGET CacheClient PROPERTY FOLDER "Components")
 
-target_link_libraries(CacheClient "-Xlinker \"-(\"")
+target_link_libraries(CacheClient ${XGAME_LINK_GROUP_START})
 target_link_libraries(CacheClient ${LibProtobuf})
-target_link_libraries(CacheClient "-Xlinker \"-)\"")
+target_link_libraries(CacheClient ${XGAME_LINK_GROUP_END})

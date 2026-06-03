@@ -29,6 +29,6 @@ add_library (MonsterManager SHARED
 
 set_property(TARGET MonsterManager PROPERTY FOLDER "Game")
 
-target_link_libraries(MonsterManager "-Xlinker \"-(\"")
+target_link_libraries(MonsterManager ${XGAME_LINK_GROUP_START})
 target_link_libraries(MonsterManager ${LibProtobuf})
-target_link_libraries(MonsterManager "-Xlinker \"-)\"")
+target_link_libraries(MonsterManager ${XGAME_LINK_GROUP_END})

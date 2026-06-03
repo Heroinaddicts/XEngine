@@ -55,7 +55,11 @@ namespace XEngine {
 
 #if defined(Linux) || defined(MacOS)
             dlerror();
+#ifdef MacOS
+            std::string path = _ModulePath + "/lib" + moduleNames[i] + ".dylib";
+#else
             std::string path = _ModulePath + "/lib" + moduleNames[i] + ".so";
+#endif
             void* handle = dlopen(path.c_str(), RTLD_LAZY);
             if (!handle) {
                 const char* err = dlerror();

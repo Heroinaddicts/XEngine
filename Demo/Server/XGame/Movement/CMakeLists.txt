@@ -29,6 +29,6 @@ add_library (Movement SHARED
 
 set_property(TARGET Movement PROPERTY FOLDER "Game")
 
-target_link_libraries(Movement "-Xlinker \"-(\"")
+target_link_libraries(Movement ${XGAME_LINK_GROUP_START})
 target_link_libraries(Movement ${LibProtobuf})
-target_link_libraries(Movement "-Xlinker \"-)\"")
+target_link_libraries(Movement ${XGAME_LINK_GROUP_END})

@@ -61,7 +61,7 @@ file(GLOB Net "Component/Net/Windows/*.*")
 elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
 file(GLOB Net "Component/Net/Linux/*.*")
 elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
-set(Net "")
+file(GLOB Net "Component/Net/MacOS/*.*")
 endif()
 
 file(GLOB Http "Component/Http/*.*")
@@ -188,12 +188,35 @@ add_executable(XEngine
     ${Engine}
 )
 
+target_include_directories(XEngine PRIVATE
+    "${OPENSSL_INCLUDE_DIR}"
+)
+
+if (CURL_INCLUDE_DIRS)
+    target_include_directories(XEngine PRIVATE ${CURL_INCLUDE_DIRS})
+endif()
+
 if (TARGET Boost::headers)
     target_link_libraries(XEngine Boost::headers)
+    target_include_directories(XEngine PRIVATE ${Boost_INCLUDE_DIRS})
 elseif (TARGET Boost::boost)
     target_link_libraries(XEngine Boost::boost)
+    target_include_directories(XEngine PRIVATE ${Boost_INCLUDE_DIRS})
 else()
     target_include_directories(XEngine PRIVATE ${Boost_INCLUDE_DIRS})
+endif()
+
+if (APPLE AND CMAKE_GENERATOR STREQUAL "Xcode")
+    set_target_properties(XEngine PROPERTIES
+        XCODE_ATTRIBUTE_SYSTEM_HEADER_SEARCH_PATHS "$(inherited)"
+        XCODE_ATTRIBUTE_CLANG_CXX_LANGUAGE_STANDARD "c++20"
+        XCODE_ATTRIBUTE_CLANG_CXX_LIBRARY "libc++"
+    )
+    target_compile_options(XEngine PRIVATE
+        "-I${OPENSSL_INCLUDE_DIR}"
+        "-I${Boost_INCLUDE_DIR}"
+        "-Wno-missing-template-arg-list-after-template-kw"
+    )
 endif()
 
 if (NOT APPLE)
@@ -210,7 +233,7 @@ endif()
 #target_link_libraries(XEngine ${LibWebsockets})
 target_link_libraries(XEngine ${OPENSSL_LIBRARIES})
 if (Iconv_FOUND)
-    target_link_libraries(XEngine Iconv::Iconv)
+    target_link_libraries(XEngine ${Iconv_LIBRARIES})
 endif()
 if (NOT APPLE)
     target_link_libraries(XEngine "-Xlinker \"-)\"")

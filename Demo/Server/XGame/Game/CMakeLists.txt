@@ -29,6 +29,6 @@ add_library (Game SHARED
 
 set_property(TARGET Game PROPERTY FOLDER "Game")
 
-target_link_libraries(Game "-Xlinker \"-(\"")
+target_link_libraries(Game ${XGAME_LINK_GROUP_START})
 target_link_libraries(Game ${LibProtobuf})
-target_link_libraries(Game "-Xlinker \"-)\"")
+target_link_libraries(Game ${XGAME_LINK_GROUP_END})

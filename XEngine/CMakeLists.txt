@@ -1,5 +1,33 @@
 cmake_minimum_required(VERSION 3.20)
 
+if(CMAKE_GENERATOR STREQUAL "Xcode" AND APPLE)
+    execute_process(
+        COMMAND xcrun --find clang
+        OUTPUT_VARIABLE XENGINE_XCODE_C_COMPILER
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+    )
+    execute_process(
+        COMMAND xcrun --find clang++
+        OUTPUT_VARIABLE XENGINE_XCODE_CXX_COMPILER
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+    )
+
+    if(XENGINE_XCODE_C_COMPILER)
+        set(CMAKE_C_COMPILER "${XENGINE_XCODE_C_COMPILER}" CACHE FILEPATH "C compiler for Xcode generator" FORCE)
+    endif()
+
+    if(XENGINE_XCODE_CXX_COMPILER)
+        set(CMAKE_CXX_COMPILER "${XENGINE_XCODE_CXX_COMPILER}" CACHE FILEPATH "CXX compiler for Xcode generator" FORCE)
+    endif()
+
+    set(CMAKE_C_COMPILER_ID "AppleClang" CACHE INTERNAL "C compiler ID for Xcode generator")
+    set(CMAKE_CXX_COMPILER_ID "AppleClang" CACHE INTERNAL "CXX compiler ID for Xcode generator")
+    set(CMAKE_C_COMPILER_FORCED TRUE CACHE INTERNAL "Skip C compiler try-compile for Xcode generator")
+    set(CMAKE_CXX_COMPILER_FORCED TRUE CACHE INTERNAL "Skip CXX compiler try-compile for Xcode generator")
+endif()
+
 project(XEngineRoot LANGUAGES C CXX)
 
 #cmake file for XEngine 
