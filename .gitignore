@@ -68,3 +68,6 @@ Demo/Server/Bin/Windows/Debug/TilemapManager.pdb
 /Demo/Server/XGame/Library/Protobuf/Sources/protobuf-35.0
 /XEngine/Engine/Library/Linux/mariadb-connector-c-3.4.5-src
 /ThirdLibrary/protobuf-3.15.8
+/ThirdLibrary/mariadb-connector-c-3.4.5-src
+/ThirdLibrary/redis-8.4.0
+/Demo/Server/Bin/Linux/Log
