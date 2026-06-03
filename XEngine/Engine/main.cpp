@@ -1,4 +1,4 @@
-﻿#pragma execution_character_set("utf-8")
+#pragma execution_character_set("utf-8")
 
 #include "Launch.h"
 #include "Engine.h"
@@ -14,7 +14,6 @@
 #ifdef WIN32
 #include "Net/Windows/Net.h"
 #endif //WIN32
-
 #if defined(Linux)
 #include "Net/Linux/Net.h"
 #endif //defined(Linux)
@@ -35,7 +34,7 @@ static AttachDumper dumper;
 #endif //WIN32
 
 int main(int argc, const char** args, const char** env) {
-#ifdef _WIN32
+#ifdef WIN32
 #pragma comment(lib, "winmm.lib")
     timeBeginPeriod(1);
     // Windows 下设置控制台程序输出代码页为 UTF8
@@ -57,11 +56,7 @@ int main(int argc, const char** args, const char** env) {
 
     iLogic* const logic = Logic::GetInstance();
     iLog* const log = Log::GetInstance();
-#if defined(WIN32) || defined(Linux) || defined(MacOS)
     iNet* const net = Net::GetInstance();
-#else
-    iNet* const net = nullptr;
-#endif
     iHttp* const http = Http::GetInstance();
     iTimeWheel* const time = XEngine::TimeWheel::GetInstance();
     //iPhysics* const physics = Physics::GetInstance();
@@ -74,7 +69,7 @@ int main(int argc, const char** args, const char** env) {
         memory->Initialize(XEngine::g_Engine);
         log->Initialize(XEngine::g_Engine);
         time->Initialize(XEngine::g_Engine);
-        if (net) net->Initialize(XEngine::g_Engine);
+        net->Initialize(XEngine::g_Engine);
         http->Initialize(XEngine::g_Engine);
         mysql->Initialize(XEngine::g_Engine);
         //physics->Initialize(XEngine::g_Engine);
@@ -86,7 +81,7 @@ int main(int argc, const char** args, const char** env) {
         memory->Launch(XEngine::g_Engine);
         log->Launch(XEngine::g_Engine);
         time->Launch(XEngine::g_Engine);
-        if (net) net->Launch(XEngine::g_Engine);
+        net->Launch(XEngine::g_Engine);
         http->Launch(XEngine::g_Engine);
         mysql->Launch(XEngine::g_Engine);
         //physics->Launch(XEngine::g_Engine);
@@ -100,7 +95,7 @@ int main(int argc, const char** args, const char** env) {
         memory->EarlyUpdate(XEngine::g_Engine);
         log->EarlyUpdate(XEngine::g_Engine);
         time->EarlyUpdate(XEngine::g_Engine);
-        if (net) net->EarlyUpdate(XEngine::g_Engine);
+        net->EarlyUpdate(XEngine::g_Engine);
         http->EarlyUpdate(XEngine::g_Engine);
         mysql->EarlyUpdate(XEngine::g_Engine);
         //physics->EarlyUpdate(XEngine::g_Engine);
@@ -110,7 +105,7 @@ int main(int argc, const char** args, const char** env) {
         memory->Update(XEngine::g_Engine);
         log->Update(XEngine::g_Engine);
         time->Update(XEngine::g_Engine);
-        if (net) net->Update(XEngine::g_Engine);
+        net->Update(XEngine::g_Engine);
         http->Update(XEngine::g_Engine);
         //physics->Update(XEngine::g_Engine);
         mysql->Update(XEngine::g_Engine);
@@ -118,7 +113,7 @@ int main(int argc, const char** args, const char** env) {
         logic->Update(XEngine::g_Engine);
 
         time->LaterUpdate(XEngine::g_Engine);
-        if (net) net->LaterUpdate(XEngine::g_Engine);
+        net->LaterUpdate(XEngine::g_Engine);
         http->LaterUpdate(XEngine::g_Engine);
         log->LaterUpdate(XEngine::g_Engine);
         mysql->LaterUpdate(XEngine::g_Engine);
@@ -135,7 +130,7 @@ int main(int argc, const char** args, const char** env) {
     { // Release
         logic->Release(XEngine::g_Engine);
         time->Release(XEngine::g_Engine);
-        if (net) net->Release(XEngine::g_Engine);
+        net->Release(XEngine::g_Engine);
         http->Release(XEngine::g_Engine);
         log->Release(XEngine::g_Engine);
         mysql->Release(XEngine::g_Engine);
