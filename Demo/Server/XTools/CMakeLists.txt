@@ -1,0 +1,17 @@
+﻿
+include_directories(
+    "${PROJECT_SOURCE_DIR}/Api"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Common"
+    "${CMAKE_CURRENT_SOURCE_DIR}/Interface"
+)
+
+
+file(GLOB Interface "${CMAKE_CURRENT_SOURCE_DIR}/Interface/*.*")
+file(GLOB Common "${CMAKE_CURRENT_SOURCE_DIR}/Common/*.*")
+
+#Components
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/CSharpExcelConfiger)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/CppExcelConfiger)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/UnitGenerater)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/MysqlTemplateGenerater)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/NavMeshValidator)

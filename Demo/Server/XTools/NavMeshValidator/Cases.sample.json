@@ -1,0 +1,38 @@
+{
+  "nearest": [
+    {
+      "name": "Nearest_Sample_01",
+      "point": [10.0, 0.0, 10.0],
+      "searchRadius": 5.0,
+      "agentRadius": 0.5,
+      "agentHeight": 2.0,
+      "expectSuccess": true,
+      "expectPoint": [10.0, 0.0, 10.0],
+      "positionTolerance": 0.5
+    }
+  ],
+  "path": [
+    {
+      "name": "Path_Sample_01",
+      "begin": [5.0, 0.0, 5.0],
+      "end": [20.0, 0.0, 20.0],
+      "agentRadius": 0.5,
+      "agentHeight": 2.0,
+      "expectSuccess": true,
+      "expectPointCountMin": 2,
+      "expectPathLengthMax": 100.0,
+      "expectEndPoint": [20.0, 0.0, 20.0],
+      "positionTolerance": 1.0
+    }
+  ],
+  "raycast": [
+    {
+      "name": "Raycast_Sample_01",
+      "begin": [5.0, 0.0, 5.0],
+      "end": [15.0, 0.0, 5.0],
+      "agentRadius": 0.5,
+      "agentHeight": 2.0,
+      "expectHit": false
+    }
+  ]
+}
