@@ -1,5 +1,7 @@
 ﻿#include "RobotMovement.h"
 
+#include <list>
+
 Api::iEngine* g_Engine = nullptr;
 IGameRobot* g_GameRobot = nullptr;
 IConfig* g_Config = nullptr;

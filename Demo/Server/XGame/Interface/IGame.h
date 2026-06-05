@@ -4,6 +4,7 @@
 #include "iModule.h"
 #include <functional>
 #include "google/protobuf/message.h"
+#include "ProtobufBuffer.h"
 UsingXEngine;
 
 class IGame : public Api::iModule {
@@ -22,10 +23,9 @@ public:
     virtual void RegistGameEvent(const eGameEvent ev, const fGameEvent callback) = 0;
 
     void SendProtobufToClient(const UInt64 account, const UInt16 messageId, const ::google::protobuf::Message& pb) const {
-        const int size = pb.ByteSize();
-        void* temp = alloca(size);
-        if (pb.SerializePartialToArray(temp, size)) {
-            SendMessageToClient(account, messageId, temp, size);
+        std::vector<char> temp;
+        if (SerializeProtobufToBuffer(pb, temp)) {
+            SendMessageToClient(account, messageId, temp.empty() ? nullptr : temp.data(), static_cast<int>(temp.size()));
         }
         else {
             XASSERT(false, "wtf");
@@ -34,10 +34,9 @@ public:
 
 
     void Broadcast(const std::vector<UInt64>& list, const UInt16 messageId, const ::google::protobuf::Message& pb) const {
-        const int size = pb.ByteSize();
-        void* temp = alloca(size);
-        if (pb.SerializePartialToArray(temp, size)) {
-            Broadcast(list, messageId, temp, size);
+        std::vector<char> temp;
+        if (SerializeProtobufToBuffer(pb, temp)) {
+            Broadcast(list, messageId, temp.empty() ? nullptr : temp.data(), static_cast<int>(temp.size()));
         }
         else {
             XASSERT(false, "wtf");

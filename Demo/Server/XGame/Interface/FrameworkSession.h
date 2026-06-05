@@ -7,6 +7,7 @@
 #include "SafeSystem.h"
 #include "XPool.h"
 #include "google/protobuf/message.h"
+#include "ProtobufBuffer.h"
 
 #include <unordered_map>
 #include <functional>
@@ -63,10 +64,9 @@ public:
     }
 
     void SendProtobuf(const UInt16 id, const ::google::protobuf::Message& body) {
-        const int size = body.ByteSize();
-        void* temp = alloca(size);
-        if (body.SerializePartialToArray(temp, size)) {
-            SendMessage(id, temp, size);
+        std::vector<char> temp;
+        if (SerializeProtobufToBuffer(body, temp)) {
+            SendMessage(id, temp.empty() ? nullptr : temp.data(), static_cast<int>(temp.size()));
         }
     }
 

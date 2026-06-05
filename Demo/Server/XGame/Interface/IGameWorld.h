@@ -9,6 +9,7 @@
 #include "Geometry/Vector2.h"
 #include "Geometry/Vector3.h"
 #include "UnitCommon.h"
+#include "ProtobufValue.h"
 UsingUnitCommon;
 UsingXEngine;
 using namespace UnitCommon;
@@ -220,7 +221,7 @@ public:
             break; \
         } \
         case eAttributeType::__String__: { \
-            v->set__string(go->GetAttribute(i)->GetString()); \
+            XGameProtobuf::SetValueString(g_Engine, v, go->GetAttribute(i)->GetString(), go->Guid(), i, go->GetAttribute(i)->_Name.c_str()); \
             break; \
         } \
         case eAttributeType::__Vector2__: { \

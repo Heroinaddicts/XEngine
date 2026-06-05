@@ -64,7 +64,36 @@ bool Attribute::SetBool(const bool value, const bool trigger, const char* file, 
 }
 
 bool Attribute::SetString(const std::string& value, const bool trigger, const char* file, const int line) {
-    SET_VALUE(String, value);
+    bool valid = false;
+    const std::string safeValue = XGameProtobuf::SanitizeUtf8(value, valid);
+    if (!valid) {
+        XEngine::__Log__(g_Engine, "Trace", false, __FILE__, __LINE__, "Invalid UTF8 attribute input guid %llu index %d name %s size %d hex %s", _Host->Guid(), _Index, _Name.c_str(), (int)value.size(), XGameProtobuf::HexPreview(value).c_str());
+    }
+
+    XASSERT(_Type == eAttributeType::__String__, "Attribute String error %s:%d", file, line);
+    if (eAttributeType::__String__ != _Type) {
+        ErrorLog(g_Engine, "Attribute %s type String error, match type is %d %s:%d", _Name.c_str(), _Type, file, line);
+        return false;
+    }
+    if (_Host->_Inited) {
+        for (int i = 0; i < (int)eGameObjectType::__AllType__; i++) {
+            if (_Host->Is((eGameObjectType)i)) {
+                auto itor = g_AttributeCallback.find((eGameObjectType)i);
+                if (g_AttributeCallback.end() != itor) {
+                    for (auto it = itor->second._StringJudge.begin(); it != itor->second._StringJudge.end(); it++) {
+                        if (!(*it)(_Host, _Index, _Sync, _Share, __String, safeValue)) {
+                            return false;
+                        }
+                    }
+                    for (auto it = itor->second._StringChanged.begin(); it != itor->second._StringChanged.end(); it++) {
+                        (*it)(_Host, _Index, _Sync, _Share, __String, safeValue);
+                    }
+                }
+            }
+        }
+    }
+    __String = safeValue;
+    return true;
 }
 
 bool Attribute::SetVector2(const Vector2& value, const bool trigger, const char* file, const int line) {

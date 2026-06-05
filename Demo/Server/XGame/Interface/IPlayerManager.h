@@ -5,6 +5,7 @@
 #include "google/protobuf/message.h"
 #include <functional>
 #include "Vector3.h"
+#include "ProtobufBuffer.h"
 UsingXEngine;
 
 #include "IGameWorld.h"
@@ -26,10 +27,9 @@ public:
     virtual  UInt64 GetDeployCharacterID() const = 0;
 
     void SendProtobuf(const UInt16 messageId, const ::google::protobuf::Message& pb) const {
-        const int size = pb.ByteSize();
-        void* temp = alloca(size);
-        if (pb.SerializePartialToArray(temp, size)) {
-            SendMessage(messageId, temp, size);
+        std::vector<char> temp;
+        if (SerializeProtobufToBuffer(pb, temp)) {
+            SendMessage(messageId, temp.empty() ? nullptr : temp.data(), static_cast<int>(temp.size()));
         }
         else {
             XASSERT(false, "wtf");
@@ -70,10 +70,9 @@ public:
         );
     }
     void SendProtobufToPlayer(const UInt64 account, const UInt16 messageId, const ::google::protobuf::Message& pb) const {
-        const int size = pb.ByteSize();
-        void* temp = alloca(size);
-        if (pb.SerializePartialToArray(temp, size)) {
-            SendMessageToPlayer(account, messageId, temp, size);
+        std::vector<char> temp;
+        if (SerializeProtobufToBuffer(pb, temp)) {
+            SendMessageToPlayer(account, messageId, temp.empty() ? nullptr : temp.data(), static_cast<int>(temp.size()));
         }
         else {
             XASSERT(false, "wtf");
@@ -81,10 +80,9 @@ public:
     }
 
     void Broadcast(std::vector<UInt64>& list, const UInt16 messageId, const ::google::protobuf::Message& pb) const {
-        const int size = pb.ByteSize();
-        void* temp = alloca(size);
-        if (pb.SerializePartialToArray(temp, size)) {
-            Broadcast(list, messageId, temp, size);
+        std::vector<char> temp;
+        if (SerializeProtobufToBuffer(pb, temp)) {
+            Broadcast(list, messageId, temp.empty() ? nullptr : temp.data(), static_cast<int>(temp.size()));
         }
         else {
             XASSERT(false, "wtf");

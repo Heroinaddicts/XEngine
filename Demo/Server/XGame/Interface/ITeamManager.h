@@ -4,6 +4,7 @@
 #include "iModule.h"
 #include <unordered_set>
 #include "google/protobuf/message.h"
+#include "ProtobufBuffer.h"
 
 UsingXEngine;
 
@@ -29,10 +30,9 @@ public:
     }
 
     __forceinline void SendProtobuf(const UInt16 messageId, const ::google::protobuf::Message& pb) const {
-        const int size = pb.ByteSize();
-        void* temp = alloca(size);
-        if (pb.SerializePartialToArray(temp, size)) {
-            SendMessage(messageId, temp, size);
+        std::vector<char> temp;
+        if (SerializeProtobufToBuffer(pb, temp)) {
+            SendMessage(messageId, temp.empty() ? nullptr : temp.data(), static_cast<int>(temp.size()));
         }
         else {
             XASSERT(false, "wtf");

@@ -31,7 +31,8 @@ add_library (RobotAi SHARED
 
 set_property(TARGET RobotAi PROPERTY FOLDER "GameRobot")
 
-target_link_libraries(RobotAi "-Xlinker \"-(\"")
+target_link_libraries(RobotAi ${XROBOT_LINK_GROUP_START})
 target_link_libraries(RobotAi ${LibProtobuf})
-target_link_libraries(RobotAi "-Xlinker \"-)\"")
+target_link_libraries(RobotAi ${XROBOT_PLATFORM_LIBS})
+target_link_libraries(RobotAi ${XROBOT_LINK_GROUP_END})
 

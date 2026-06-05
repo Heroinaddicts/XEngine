@@ -59,7 +59,7 @@ void GameEntitySync::OnUInt32AttributeChanged(IGameObject* const go, const int i
         push.set_guid(go->Guid());
         oAttribute* attr = push.mutable_attribute();
         attr->set_index(index);
-        attr->mutable_value()->set__uint(newValue);
+        XGameProtobuf::SetValueUInt32(attr->mutable_value(), newValue);
 
         if (sync && go->Is(eGameObjectType::Character)) {
             g_CharacterManager->SendProtobuf(go->Guid(), eServerID::GameObjectAttributeSync, push);
@@ -95,7 +95,7 @@ void GameEntitySync::OnInt32AttributeChanged(IGameObject* const go, const int in
         push.set_guid(go->Guid());
         oAttribute* attr = push.mutable_attribute();
         attr->set_index(index);
-        attr->mutable_value()->set__int(newValue);
+        XGameProtobuf::SetValueInt32(attr->mutable_value(), newValue);
 
         if (sync && go->Is(eGameObjectType::Character)) {
             g_CharacterManager->SendProtobuf(go->Guid(), eServerID::GameObjectAttributeSync, push);
@@ -131,7 +131,7 @@ void GameEntitySync::OnUInt64AttributeChanged(IGameObject* const go, const int i
         push.set_guid(go->Guid());
         oAttribute* attr = push.mutable_attribute();
         attr->set_index(index);
-        attr->mutable_value()->set__uint(newValue);
+        XGameProtobuf::SetValueUInt64(attr->mutable_value(), newValue);
 
         if (sync && go->Is(eGameObjectType::Character)) {
             g_CharacterManager->SendProtobuf(go->Guid(), eServerID::GameObjectAttributeSync, push);
@@ -167,7 +167,7 @@ void GameEntitySync::OnInt64AttributeChanged(IGameObject* const go, const int in
         push.set_guid(go->Guid());
         oAttribute* attr = push.mutable_attribute();
         attr->set_index(index);
-        attr->mutable_value()->set__int(newValue);
+        XGameProtobuf::SetValueInt64(attr->mutable_value(), newValue);
 
         if (sync && go->Is(eGameObjectType::Character)) {
             g_CharacterManager->SendProtobuf(go->Guid(), eServerID::GameObjectAttributeSync, push);
@@ -203,7 +203,7 @@ void GameEntitySync::OnFloatAttributeChanged(IGameObject* const go, const int in
         push.set_guid(go->Guid());
         oAttribute* attr = push.mutable_attribute();
         attr->set_index(index);
-        attr->mutable_value()->set__float(newValue);
+        XGameProtobuf::SetValueFloat(attr->mutable_value(), newValue);
 
         if (sync && go->Is(eGameObjectType::Character)) {
             g_CharacterManager->SendProtobuf(go->Guid(), eServerID::GameObjectAttributeSync, push);
@@ -239,7 +239,7 @@ void GameEntitySync::OnBoolAttributeChanged(IGameObject* const go, const int ind
         push.set_guid(go->Guid());
         oAttribute* attr = push.mutable_attribute();
         attr->set_index(index);
-        attr->mutable_value()->set__bool(newValue);
+        XGameProtobuf::SetValueBool(attr->mutable_value(), newValue);
 
         if (sync && go->Is(eGameObjectType::Character)) {
             g_CharacterManager->SendProtobuf(go->Guid(), eServerID::GameObjectAttributeSync, push);
@@ -275,7 +275,7 @@ void GameEntitySync::OnStringAttributeChanged(IGameObject* const go, const int i
         push.set_guid(go->Guid());
         oAttribute* attr = push.mutable_attribute();
         attr->set_index(index);
-        attr->mutable_value()->set__string(newValue);
+        XGameProtobuf::SetValueString(g_Engine, attr->mutable_value(), newValue, go->Guid(), index, go->GetAttribute(index)->_Name.c_str());
 
         if (sync && go->Is(eGameObjectType::Character)) {
             g_CharacterManager->SendProtobuf(go->Guid(), eServerID::GameObjectAttributeSync, push);
@@ -312,10 +312,7 @@ void GameEntitySync::OnVector2AttributeChanged(IGameObject* const go, const int 
         oAttribute* attr = push.mutable_attribute();
         attr->set_index(index);
 
-        oVector2* vector2 = new oVector2();
-        vector2->set_x(newValue.x);
-        vector2->set_y(newValue.y);
-        attr->mutable_value()->set_allocated__vector2(vector2);
+        XGameProtobuf::SetValueVector2(attr->mutable_value(), newValue);
 
         if (sync && go->Is(eGameObjectType::Character)) {
             g_CharacterManager->SendProtobuf(go->Guid(), eServerID::GameObjectAttributeSync, push);
@@ -352,10 +349,7 @@ void GameEntitySync::OnVector3AttributeChanged(IGameObject* const go, const int 
         oAttribute* attr = push.mutable_attribute();
         attr->set_index(index);
 
-        oVector2* vector2 = new oVector2();
-        vector2->set_x(newValue.x);
-        vector2->set_y(newValue.y);
-        attr->mutable_value()->set_allocated__vector2(vector2);
+        XGameProtobuf::SetValueVector3(attr->mutable_value(), newValue);
 
         if (sync && go->Is(eGameObjectType::Character)) {
             g_CharacterManager->SendProtobuf(go->Guid(), eServerID::GameObjectAttributeSync, push);

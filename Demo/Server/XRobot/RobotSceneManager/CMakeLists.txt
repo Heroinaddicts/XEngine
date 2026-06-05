@@ -31,6 +31,7 @@ add_library (RobotSceneManager SHARED
 
 set_property(TARGET RobotSceneManager PROPERTY FOLDER "GameRobot")
 
-target_link_libraries(RobotSceneManager "-Xlinker \"-(\"")
+target_link_libraries(RobotSceneManager ${XROBOT_LINK_GROUP_START})
 target_link_libraries(RobotSceneManager ${LibProtobuf})
-target_link_libraries(RobotSceneManager "-Xlinker \"-)\"")
+target_link_libraries(RobotSceneManager ${XROBOT_PLATFORM_LIBS})
+target_link_libraries(RobotSceneManager ${XROBOT_LINK_GROUP_END})

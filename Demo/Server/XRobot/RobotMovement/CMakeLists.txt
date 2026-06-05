@@ -31,7 +31,8 @@ add_library (RobotMovement SHARED
 
 set_property(TARGET RobotMovement PROPERTY FOLDER "GameRobot")
 
-target_link_libraries(RobotMovement "-Xlinker \"-(\"")
+target_link_libraries(RobotMovement ${XROBOT_LINK_GROUP_START})
 target_link_libraries(RobotMovement ${LibProtobuf})
-target_link_libraries(RobotMovement "-Xlinker \"-)\"")
+target_link_libraries(RobotMovement ${XROBOT_PLATFORM_LIBS})
+target_link_libraries(RobotMovement ${XROBOT_LINK_GROUP_END})
 

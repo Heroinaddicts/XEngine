@@ -31,6 +31,7 @@ add_library (GameRobot SHARED
 
 set_property(TARGET GameRobot PROPERTY FOLDER "GameRobot")
 
-target_link_libraries(GameRobot "-Xlinker \"-(\"")
+target_link_libraries(GameRobot ${XROBOT_LINK_GROUP_START})
 target_link_libraries(GameRobot ${LibProtobuf})
-target_link_libraries(GameRobot "-Xlinker \"-)\"")
+target_link_libraries(GameRobot ${XROBOT_PLATFORM_LIBS})
+target_link_libraries(GameRobot ${XROBOT_LINK_GROUP_END})

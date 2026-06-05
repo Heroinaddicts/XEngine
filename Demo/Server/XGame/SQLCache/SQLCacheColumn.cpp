@@ -23,7 +23,7 @@ bool SQLCacheColumn::SetInt32(const Int32 value, const char* file, const int lin
         return false;
     }
 
-    if (value == _Int32) {
+    if (value == _Int32Value) {
         _HasValue = true;
         return true;
     }
@@ -36,7 +36,7 @@ bool SQLCacheColumn::SetInt32(const Int32 value, const char* file, const int lin
             }
         }
     }
-    _Int32 = value;
+    _Int32Value = value;
     TraceLog(g_Engine, "Table %s SetColumn %s Value %s", _TableTemplate->_Name.c_str(), _Template->_Name.c_str(), GetValueString().c_str());
     _HasValue = true;
     return true;
@@ -49,7 +49,7 @@ bool SQLCacheColumn::SetUInt32(const UInt32 value, const char* file, const int l
         return false;
     }
 
-    if (value == _UInt32) {
+    if (value == _UInt32Value) {
         _HasValue = true;
         return true;
     }
@@ -62,7 +62,7 @@ bool SQLCacheColumn::SetUInt32(const UInt32 value, const char* file, const int l
             }
         }
     }
-    _UInt32 = value;
+    _UInt32Value = value;
     TraceLog(g_Engine, "Table %s SetColumn %s Value %s", _TableTemplate->_Name.c_str(), _Template->_Name.c_str(), GetValueString().c_str());
     _HasValue = true;
     return true;
@@ -75,7 +75,7 @@ bool SQLCacheColumn::SetInt64(const Int64 value, const char* file, const int lin
         return false;
     }
 
-    if (value == _Int64) {
+    if (value == _Int64Value) {
         _HasValue = true;
         return true;
     }
@@ -88,7 +88,7 @@ bool SQLCacheColumn::SetInt64(const Int64 value, const char* file, const int lin
             }
         }
     }
-    _Int64 = value;
+    _Int64Value = value;
     TraceLog(g_Engine, "Table %s SetColumn %s Value %s", _TableTemplate->_Name.c_str(), _Template->_Name.c_str(), GetValueString().c_str());
     _HasValue = true;
     return true;
@@ -101,7 +101,7 @@ bool SQLCacheColumn::SetUInt64(const UInt64 value, const char* file, const int l
         return false;
     }
 
-    if (value == _UInt64) {
+    if (value == _UInt64Value) {
         _HasValue = true;
         return true;
     }
@@ -114,7 +114,7 @@ bool SQLCacheColumn::SetUInt64(const UInt64 value, const char* file, const int l
             }
         }
     }
-    _UInt64 = value;
+    _UInt64Value = value;
     TraceLog(g_Engine, "Table %s SetColumn %s Value %s", _TableTemplate->_Name.c_str(), _Template->_Name.c_str(), GetValueString().c_str());
     _HasValue = true;
     return true;
@@ -127,12 +127,12 @@ bool SQLCacheColumn::SetFloat(const float value, const char* file, const int lin
         return false;
     }
 
-    if (value == _Float) {
+    if (value == _FloatValue) {
         _HasValue = true;
         return true;
     }
 
-    _Float = value;
+    _FloatValue = value;
     TraceLog(g_Engine, "Table %s SetColumn %s Value %s", _TableTemplate->_Name.c_str(), _Template->_Name.c_str(), GetValueString().c_str());
     _HasValue = true;
     return true;
@@ -145,7 +145,7 @@ bool SQLCacheColumn::SetString(const std::string& value, const char* file, const
         return false;
     }
 
-    if (value == _String) {
+    if (value == _StringValue) {
         _HasValue = true;
         return true;
     }
@@ -158,7 +158,7 @@ bool SQLCacheColumn::SetString(const std::string& value, const char* file, const
             }
         }
     }
-    _String = value;
+    _StringValue = value;
     TraceLog(g_Engine, "Table %s SetColumn %s Value %s", _TableTemplate->_Name.c_str(), _Template->_Name.c_str(), GetValueString().c_str());
     _HasValue = true;
     return true;
@@ -171,17 +171,17 @@ bool SQLCacheColumn::SetBool(const bool value, const char* file, const int line)
         return false;
     }
 
-    if (value == _Bool) {
+    if (value == _BoolValue) {
         _HasValue = true;
         return true;
     }
 
-    _Bool = value;
+    _BoolValue = value;
     TraceLog(g_Engine, "Table %s SetColumn %s Value %s", _TableTemplate->_Name.c_str(), _Template->_Name.c_str(), GetValueString().c_str());
     _HasValue = true;
     return true;
 }
 
 SQLCacheColumn::SQLCacheColumn(SQLCacheRow* const host, const TableTemplate* tableT, const ColumnTemplate* t, const char* file, const int line)
-    : _Host(host), _TableTemplate(tableT), _Template(t), _File(file), _Line(line), _UInt64(0), _HasValue(false) {
+    : _Host(host), _TableTemplate(tableT), _Template(t), _File(file), _Line(line), _UInt64Value(0), _HasValue(false) {
 }

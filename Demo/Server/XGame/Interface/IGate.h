@@ -4,6 +4,7 @@
 #include "iModule.h"
 #include "iNetApi.h"
 #include "FrameworkSession.h"
+#include "ProtobufBuffer.h"
 UsingXEngine;
 
 #define INVALID_ACCOUNT 0xFFFFFFFFFFFFFFFF
@@ -17,10 +18,9 @@ public:
     virtual bool IsLogined() const = 0;
 
     void SendProtobuf(const UInt16 id, const ::google::protobuf::Message& body) {
-        const int size = body.ByteSize();
-        void* temp = alloca(size);
-        if (body.SerializePartialToArray(temp, size)) {
-            SendMessage(id, temp, size);
+        std::vector<char> temp;
+        if (SerializeProtobufToBuffer(body, temp)) {
+            SendMessage(id, temp.empty() ? nullptr : temp.data(), static_cast<int>(temp.size()));
         }
     }
 

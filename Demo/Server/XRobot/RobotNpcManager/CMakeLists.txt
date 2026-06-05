@@ -31,7 +31,8 @@ add_library (RobotNpcManager SHARED
 
 set_property(TARGET RobotNpcManager PROPERTY FOLDER "GameRobot")
 
-target_link_libraries(RobotNpcManager "-Xlinker \"-(\"")
+target_link_libraries(RobotNpcManager ${XROBOT_LINK_GROUP_START})
 target_link_libraries(RobotNpcManager ${LibProtobuf})
-target_link_libraries(RobotNpcManager "-Xlinker \"-)\"")
+target_link_libraries(RobotNpcManager ${XROBOT_PLATFORM_LIBS})
+target_link_libraries(RobotNpcManager ${XROBOT_LINK_GROUP_END})
 

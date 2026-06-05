@@ -31,7 +31,8 @@ add_library (RobotGameObjectSync SHARED
 
 set_property(TARGET RobotGameObjectSync PROPERTY FOLDER "GameRobot")
 
-target_link_libraries(RobotGameObjectSync "-Xlinker \"-(\"")
+target_link_libraries(RobotGameObjectSync ${XROBOT_LINK_GROUP_START})
 target_link_libraries(RobotGameObjectSync ${LibProtobuf})
-target_link_libraries(RobotGameObjectSync "-Xlinker \"-)\"")
+target_link_libraries(RobotGameObjectSync ${XROBOT_PLATFORM_LIBS})
+target_link_libraries(RobotGameObjectSync ${XROBOT_LINK_GROUP_END})
 

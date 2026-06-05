@@ -68,7 +68,7 @@ namespace ExcelConfiger {
             const Int64 _Int;
             const float _Float;
             const char* _String;
-            const bool _Bool;
+            const bool _BoolValue;
 
             const Struct* const _Struct;
             const Array* const _Array;
@@ -82,7 +82,7 @@ namespace ExcelConfiger {
             strcpy((char*)_String, value.c_str());
         }
 
-        Value(const TypeInfo& info, const std::string& valueString, const std::string& desc, const bool value) : _Info(info), _ValueString(valueString), _Desc(desc), _Bool(value) {}
+        Value(const TypeInfo& info, const std::string& valueString, const std::string& desc, const bool value) : _Info(info), _ValueString(valueString), _Desc(desc), _BoolValue(value) {}
 
         Value(const TypeInfo& info, const std::string& valueString, const std::string& desc, const Struct* s) : _Info(info), _ValueString(valueString), _Desc(desc), _Struct(s) {}
         Value(const TypeInfo& info, const std::string& valueString, const std::string& desc, const Array* a) : _Info(info), _ValueString(valueString), _Desc(desc), _Array(a) {}

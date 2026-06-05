@@ -68,7 +68,7 @@ namespace ExcelConfiger {
                             break;
                         }
                         case eValueType::Bool: {
-                            script += SafeString::BoolToString(itorValue->second->_Array->GetValue(i)->_Bool) + ", ";
+                            script += SafeString::BoolToString(itorValue->second->_Array->GetValue(i)->_BoolValue) + ", ";
                             break;
                         }
                         case eValueType::Enum: {
@@ -101,7 +101,7 @@ namespace ExcelConfiger {
                         break;
                     }
                     case eValueType::Bool: {
-                        script += SafeString::BoolToString(itorValue->second->_Bool) + ", --" + itorValue->second->_Desc + "\n";
+                        script += SafeString::BoolToString(itorValue->second->_BoolValue) + ", --" + itorValue->second->_Desc + "\n";
                         break;
                     }
                     case eValueType::Enum: {
@@ -284,4 +284,3 @@ namespace ExcelConfiger {
     }
 
 }
-

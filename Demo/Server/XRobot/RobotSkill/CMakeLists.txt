@@ -31,7 +31,8 @@ add_library (RobotSkill SHARED
 
 set_property(TARGET RobotSkill PROPERTY FOLDER "GameRobot")
 
-target_link_libraries(RobotSkill "-Xlinker \"-(\"")
+target_link_libraries(RobotSkill ${XROBOT_LINK_GROUP_START})
 target_link_libraries(RobotSkill ${LibProtobuf})
-target_link_libraries(RobotSkill "-Xlinker \"-)\"")
+target_link_libraries(RobotSkill ${XROBOT_PLATFORM_LIBS})
+target_link_libraries(RobotSkill ${XROBOT_LINK_GROUP_END})
 

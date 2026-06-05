@@ -28,25 +28,25 @@ public:
     __forceinline const std::string GetValueString() const override {
         switch (_Template->_Type) {
         case eColumnType::__Int32__: {
-            return SafeString::Int32ToString(_Int32);
+            return SafeString::Int32ToString(_Int32Value);
         }
         case eColumnType::__UInt32__: {
-            return SafeString::UInt32ToString(_UInt32);
+            return SafeString::UInt32ToString(_UInt32Value);
         }
         case eColumnType::__Int64__: {
-            return SafeString::Int64ToString(_Int64);
+            return SafeString::Int64ToString(_Int64Value);
         }
         case eColumnType::__UInt64__: {
-            return SafeString::UInt64ToString(_UInt64);
+            return SafeString::UInt64ToString(_UInt64Value);
         }
         case eColumnType::__Float__: {
-            return SafeString::FloatToString(_Float);
+            return SafeString::FloatToString(_FloatValue);
         }
         case eColumnType::__String__: {
-            return _String;
+            return _StringValue;
         }
         case eColumnType::__Bool__: {
-            return _Bool ? "true" : "false";
+            return _BoolValue ? "true" : "false";
         }
         default:
             XASSERT(false, "wtf");
@@ -91,7 +91,7 @@ public:
     XASSERT(_Template->_Type == eColumnType::__##TYPE##__, "SQLCacheColumn::Get"#TYPE" Type Error %s:%d", file, line); \
     if (_Template->_Type != eColumnType::__##TYPE##__) \
         ErrorLog(g_Engine, "SQLCacheColumn::Get"#TYPE" Type Error %s:%d", file, line); \
-    return _##TYPE;
+    return _##TYPE##Value;
     __forceinline UInt32 GetUInt32(const char* file, const int line) const override { GetColumnValue(UInt32, file, line); }
     __forceinline Int32 GetInt32(const char* file, const int line) const override { GetColumnValue(Int32, file, line); }
     __forceinline UInt64 GetUInt64(const char* file, const int line) const override { GetColumnValue(UInt64, file, line); }
@@ -113,15 +113,15 @@ private:
 
 private:
     union {
-        Int32 _Int32;
-        UInt32 _UInt32;
-        Int64 _Int64;
-        UInt64 _UInt64;
-        float _Float;
-        bool _Bool;
+        Int32 _Int32Value;
+        UInt32 _UInt32Value;
+        Int64 _Int64Value;
+        UInt64 _UInt64Value;
+        float _FloatValue;
+        bool _BoolValue;
     };
 
-    std::string _String;
+    std::string _StringValue;
 
     bool _HasValue;
 };
