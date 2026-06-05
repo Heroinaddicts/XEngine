@@ -23,11 +23,9 @@ void ReciverSession::Release(ReciverSession* session) {
 }
 
 void ReciverSession::OnConnected() {
-    TraceLog(g_Engine, "Reciver accepted Forwarder %s:%d", RemoteIp().c_str(), RemotePort());
 }
 
 void ReciverSession::OnDisconnected() {
-    TraceLog(g_Engine, "Reciver Forwarder disconnected %s:%d", RemoteIp().c_str(), RemotePort());
 }
 
 int ReciverSession::OnReceive(const void* const content, const int size) {
@@ -45,7 +43,6 @@ bool Reciver::Initialize(Api::iEngine* const engine) {
 
 bool Reciver::Launch(Api::iEngine* const engine) {
     if (!engine->GetNetApi()->LaunchTcpServer(this, "0.0.0.0", GetReciverPort(), 8 * SafeSystem::Network::MB)) {
-        TraceLog(g_Engine, "Reciver LaunchTcpServer failed");
         return false;
     }
 
@@ -72,11 +69,11 @@ void Reciver::OnRelease() {
 void Reciver::OnTimer(const int id, const UInt64 context, const Int64 timestamp) {
     if (id == eReciverTimer::PrintQps) {
         const PerfTest::PacketStatsSnapshot stats = s_RecvStats.TakeSnapshotAndReset();
-        TraceLog(g_Engine, "Reciver recv qps %llu bytes/s %llu mb/s %.2f body[0] %llu body[1-512] %llu body[512-1024] %llu body[1024-2048] %llu body[2048-4096] %llu",
+        TraceLog(g_Engine, "QPS : %llu\nbytes/s : %llu\nmb/s : %.2f\ntotal count : %llu\n1-512 count : %llu\n513-1024 count : %llu\n1025-2048 count : %llu\n2049-4096 count : %llu",
             stats.Count,
             stats.Bytes,
             (double)stats.Bytes / 1024.0 / 1024.0,
-            stats.Zero,
+            stats.TotalCount,
             stats.Size1To512,
             stats.Size512To1024,
             stats.Size1024To2048,

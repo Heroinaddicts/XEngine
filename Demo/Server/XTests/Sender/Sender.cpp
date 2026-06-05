@@ -10,6 +10,8 @@ static SenderSession s_Session;
 static std::vector<char> s_Packet;
 static bool s_Connected = false;
 static UInt64 s_SendCount = 0;
+static Int64 s_LastSendTick = 0;
+static Int64 s_SendBudget = 0;
 
 enum eSenderTimer {
     SendPacket = 1,
@@ -31,24 +33,33 @@ static int GetSenderInterval() {
     return interval ? SafeString::StringToInt32(interval) : 2;
 }
 
+static int GetSenderQps() {
+    const char* qps = g_Engine->GetLaunchParameter("SenderQps");
+    return qps ? SafeString::StringToInt32(qps) : 0;
+}
+
 static bool IsSenderPrintQps() {
     const char* print = g_Engine->GetLaunchParameter("SenderPrintQps");
     return print && SafeString::StringToInt32(print) != 0;
 }
 
+static void SendOnePacket() {
+    const UInt16 bodySize = (UInt16)(rand() % (PerfTest::MaxBodySize + 1));
+    PerfTest::BuildPacket(s_Packet, bodySize);
+    s_Session.Send(s_Packet.data(), (int)s_Packet.size());
+    ++s_SendCount;
+}
+
 void SenderSession::OnConnected() {
     s_Connected = true;
-    TraceLog(g_Engine, "Sender connected to Forwarder %s:%d", RemoteIp().c_str(), RemotePort());
 }
 
 void SenderSession::OnConnectFailed() {
     s_Connected = false;
-    TraceLog(g_Engine, "Sender connect Forwarder failed");
 }
 
 void SenderSession::OnDisconnected() {
     s_Connected = false;
-    TraceLog(g_Engine, "Sender disconnected from Forwarder");
 }
 
 bool Sender::Initialize(Api::iEngine* const engine) {
@@ -60,11 +71,12 @@ bool Sender::Initialize(Api::iEngine* const engine) {
 
 bool Sender::Launch(Api::iEngine* const engine) {
     if (!engine->GetNetApi()->LaunchTcpSession(&s_Session, GetForwarderHost(), GetForwarderPort(), 8 * SafeSystem::Network::MB)) {
-        TraceLog(g_Engine, "Sender LaunchTcpSession failed");
         return false;
     }
 
-    START_TIMER(engine, this, eSenderTimer::SendPacket, GetSenderInterval(), Api::Unlimited, GetSenderInterval(), 0);
+    const int senderQps = GetSenderQps();
+    const int senderInterval = senderQps > 0 ? 1 : GetSenderInterval();
+    START_TIMER(engine, this, eSenderTimer::SendPacket, senderInterval, Api::Unlimited, senderInterval, 0);
     if (IsSenderPrintQps()) {
         START_TIMER(engine, this, eSenderTimer::PrintQps, 1000, Api::Unlimited, 1000, 0);
     }
@@ -82,17 +94,42 @@ void Sender::OnTimer(const int id, const UInt64 context, const Int64 timestamp) 
     switch (id) {
     case eSenderTimer::SendPacket: {
         if (!s_Connected) {
+            s_LastSendTick = timestamp;
+            s_SendBudget = 0;
             return;
         }
 
-        const UInt16 bodySize = (UInt16)(rand() % (PerfTest::MaxBodySize + 1));
-        PerfTest::BuildPacket(s_Packet, bodySize);
-        s_Session.Send(s_Packet.data(), (int)s_Packet.size());
-        ++s_SendCount;
+        const int senderQps = GetSenderQps();
+        if (senderQps <= 0) {
+            SendOnePacket();
+            break;
+        }
+
+        if (s_LastSendTick == 0) {
+            s_LastSendTick = timestamp;
+            return;
+        }
+
+        const Int64 elapsed = timestamp - s_LastSendTick;
+        s_LastSendTick = timestamp;
+        if (elapsed <= 0) {
+            return;
+        }
+
+        s_SendBudget += elapsed * senderQps;
+        Int64 sendCount = s_SendBudget / 1000;
+        s_SendBudget = s_SendBudget % 1000;
+        if (sendCount > 64) {
+            sendCount = 64;
+            s_SendBudget = 0;
+        }
+
+        for (Int64 index = 0; index < sendCount; ++index) {
+            SendOnePacket();
+        }
         break;
     }
     case eSenderTimer::PrintQps: {
-        TraceLog(g_Engine, "Sender send qps %llu", s_SendCount);
         s_SendCount = 0;
         break;
     }

@@ -35,11 +35,9 @@ void ForwarderSenderSession::Release(ForwarderSenderSession* session) {
 }
 
 void ForwarderSenderSession::OnConnected() {
-    TraceLog(g_Engine, "Forwarder accepted Sender %s:%d", RemoteIp().c_str(), RemotePort());
 }
 
 void ForwarderSenderSession::OnDisconnected() {
-    TraceLog(g_Engine, "Forwarder Sender disconnected %s:%d", RemoteIp().c_str(), RemotePort());
 }
 
 int ForwarderSenderSession::OnReceive(const void* const content, const int size) {
@@ -55,17 +53,14 @@ int ForwarderSenderSession::OnReceive(const void* const content, const int size)
 
 void ForwarderReciverSession::OnConnected() {
     s_ReciverConnected = true;
-    TraceLog(g_Engine, "Forwarder connected to Reciver %s:%d", RemoteIp().c_str(), RemotePort());
 }
 
 void ForwarderReciverSession::OnConnectFailed() {
     s_ReciverConnected = false;
-    TraceLog(g_Engine, "Forwarder connect Reciver failed");
 }
 
 void ForwarderReciverSession::OnDisconnected() {
     s_ReciverConnected = false;
-    TraceLog(g_Engine, "Forwarder disconnected from Reciver");
 }
 
 bool Forwarder::Initialize(Api::iEngine* const engine) {
@@ -75,12 +70,10 @@ bool Forwarder::Initialize(Api::iEngine* const engine) {
 
 bool Forwarder::Launch(Api::iEngine* const engine) {
     if (!engine->GetNetApi()->LaunchTcpServer(this, "0.0.0.0", GetForwarderPort(), 8 * SafeSystem::Network::MB)) {
-        TraceLog(g_Engine, "Forwarder LaunchTcpServer failed");
         return false;
     }
 
     if (!engine->GetNetApi()->LaunchTcpSession(&s_ReciverSession, GetReciverHost(), GetReciverPort(), 8 * SafeSystem::Network::MB)) {
-        TraceLog(g_Engine, "Forwarder LaunchTcpSession to Reciver failed");
         return false;
     }
 
@@ -108,15 +101,14 @@ void Forwarder::OnRelease() {
 void Forwarder::OnTimer(const int id, const UInt64 context, const Int64 timestamp) {
     if (id == eForwarderTimer::PrintQps) {
         const PerfTest::PacketStatsSnapshot stats = s_ForwardStats.TakeSnapshotAndReset();
-        TraceLog(g_Engine, "Forwarder forward qps %llu bytes/s %llu mb/s %.2f body[0] %llu body[1-512] %llu body[512-1024] %llu body[1024-2048] %llu body[2048-4096] %llu reciver %s",
+        TraceLog(g_Engine, "QPS : %llu\nbytes/s : %llu\nmb/s : %.2f\ntotal count : %llu\n1-512 count : %llu\n513-1024 count : %llu\n1025-2048 count : %llu\n2049-4096 count : %llu",
             stats.Count,
             stats.Bytes,
             (double)stats.Bytes / 1024.0 / 1024.0,
-            stats.Zero,
+            stats.TotalCount,
             stats.Size1To512,
             stats.Size512To1024,
             stats.Size1024To2048,
-            stats.Size2048To4096,
-            s_ReciverConnected ? "connected" : "disconnected");
+            stats.Size2048To4096);
     }
 }

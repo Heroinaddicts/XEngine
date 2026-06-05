@@ -49,6 +49,7 @@ __forceinline void BuildPacket(std::vector<char>& packet, const UInt16 bodySize)
 
 struct PacketStatsSnapshot {
     UInt64 Count = 0;
+    UInt64 TotalCount = 0;
     UInt64 Bytes = 0;
     UInt64 Zero = 0;
     UInt64 Size1To512 = 0;
@@ -61,6 +62,7 @@ class PacketStats {
 public:
     void Add(const UInt16 bodySize, const int packetSize) {
         _Count.fetch_add(1, std::memory_order_relaxed);
+        _TotalCount.fetch_add(1, std::memory_order_relaxed);
         _Bytes.fetch_add((UInt64)packetSize, std::memory_order_relaxed);
 
         if (bodySize == 0) {
@@ -79,6 +81,7 @@ public:
     PacketStatsSnapshot TakeSnapshotAndReset() {
         PacketStatsSnapshot snapshot;
         snapshot.Count = _Count.exchange(0, std::memory_order_relaxed);
+        snapshot.TotalCount = _TotalCount.load(std::memory_order_relaxed);
         snapshot.Bytes = _Bytes.exchange(0, std::memory_order_relaxed);
         snapshot.Zero = _Zero.exchange(0, std::memory_order_relaxed);
         snapshot.Size1To512 = _Size1To512.exchange(0, std::memory_order_relaxed);
@@ -90,6 +93,7 @@ public:
 
 private:
     std::atomic<UInt64> _Count{0};
+    std::atomic<UInt64> _TotalCount{0};
     std::atomic<UInt64> _Bytes{0};
     std::atomic<UInt64> _Zero{0};
     std::atomic<UInt64> _Size1To512{0};

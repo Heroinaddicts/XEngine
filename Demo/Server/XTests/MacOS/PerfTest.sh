@@ -6,6 +6,7 @@ BinPath="$CurrentPath/../../Bin/MacOS"
 ForwarderPort=${ForwarderPort:-7010}
 ReciverPort=${ReciverPort:-7020}
 SenderInterval=${SenderInterval:-2}
+SenderQps=${SenderQps:-500}
 SenderCount=${SenderCount:-1}
 SenderPrintQps=${SenderPrintQps:-0}
 
@@ -37,13 +38,14 @@ forwarder_pid=$!
 sleep 1
 
 for index in $(seq 1 "$SenderCount"); do
-    ./XEngine --name="SenderPerf${index}" --modules='Sender' --ForwarderHost=127.0.0.1 --ForwarderPort="$ForwarderPort" --SenderInterval="$SenderInterval" --SenderPrintQps="$SenderPrintQps" --log=./Log &
+    ./XEngine --name="SenderPerf${index}" --modules='Sender' --ForwarderHost=127.0.0.1 --ForwarderPort="$ForwarderPort" --SenderInterval="$SenderInterval" --SenderQps="$SenderQps" --SenderPrintQps="$SenderPrintQps" --log=./Log &
     sender_pids+=($!)
 done
 
 echo "ReciverPerf pid: $reciver_pid port: $ReciverPort"
 echo "ForwarderPerf pid: $forwarder_pid port: $ForwarderPort"
 echo "SenderPerf count: $SenderCount interval: ${SenderInterval}ms"
+echo "SenderQps: $SenderQps"
 echo "SenderPrintQps: $SenderPrintQps"
 if [ "$SenderCount" -le 20 ]; then
     echo "SenderPerf pids: $sender_pids"
